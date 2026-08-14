@@ -1,0 +1,41 @@
+GLAM CHATGPT LEARNING HUB — AI COACH SETUP
+
+FILES
+1. Your site HTML:
+   glam_chatgpt_learning_hub_v5_ai_coach.html
+   Rename this to index.html when it replaces your live page.
+
+2. Netlify Function:
+   Create this folder path inside the SAME website project:
+   netlify/functions/
+
+   Put coach.js inside:
+   netlify/functions/coach.js
+
+3. Put netlify.toml in the ROOT of the website folder, beside index.html.
+
+NETLIFY ENVIRONMENT VARIABLE
+Add this environment variable in Netlify:
+OPENAI_API_KEY = your OpenAI API key
+
+OPTIONAL MODEL OVERRIDE
+OPENAI_COACH_MODEL = gpt-5.6-luna
+
+IMPORTANT
+Never paste OPENAI_API_KEY into index.html or coach.js.
+The function reads it securely from Netlify's environment.
+
+WHAT THE AI COACH RETURNS
+- 0–100 score
+- Specific strengths from the exact learner attempt
+- What ChatGPT currently understands
+- Missing/unclear details that actually matter
+- Personalized coaching tips
+- A ready-to-copy improved prompt
+- Why the improved version is stronger
+- A next challenge
+
+BUDGET CONTROL
+The HTML currently limits the visible AI Coach to 20 coaching calls per browser per day.
+This is a convenience/budget guardrail, not strong anti-abuse protection.
+Also set an API project budget/usage alert in your OpenAI Platform account.

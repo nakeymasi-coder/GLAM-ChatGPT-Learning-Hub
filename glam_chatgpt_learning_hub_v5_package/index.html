@@ -1,0 +1,1904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLAM ChatGPT Learning Hub</title>
+<meta name="description" content="An interactive beginner-friendly academy for learning ChatGPT features, prompts, workflows, research, files, images, projects, tasks, apps, memory, and business use.">
+<style>
+:root{
+  --sapphire:#168FEA;
+  --deep:#103B63;
+  --black:#171A1E;
+  --white:#fff;
+  --soft:#f6f9fc;
+  --soft-blue:#edf7ff;
+  --silver:#cfd8e1;
+  --silver-light:#f0f4f7;
+  --ink:#18212b;
+  --muted:#687585;
+  --green:#14835d;
+  --amber:#a86500;
+  --red:#b64141;
+  --shadow:0 22px 65px rgba(12,43,68,.13);
+  --shadow-sm:0 10px 28px rgba(12,43,68,.08);
+  --border:1px solid rgba(16,59,99,.11);
+  --r:24px;
+  --rs:15px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;color:var(--ink);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:
+    radial-gradient(circle at 0 0,rgba(22,143,234,.14),transparent 28%),
+    linear-gradient(180deg,#fff 0,#f7fafc 50%,#fff 100%);
+}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+.hidden{display:none!important}
+
+.announce{
+  padding:9px 16px;text-align:center;color:#fff;
+  background:linear-gradient(90deg,var(--deep),#092a46);
+  font-size:12px;font-weight:750;letter-spacing:.04em
+}
+header{
+  position:sticky;top:0;z-index:70;
+  background:rgba(255,255,255,.9);backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(16,59,99,.08)
+}
+.nav{
+  max-width:1260px;margin:auto;padding:13px 20px;
+  display:flex;align-items:center;justify-content:space-between;gap:15px
+}
+.brand{display:flex;align-items:center;gap:11px;min-width:0}
+.logo{
+  width:44px;height:44px;border-radius:15px;display:grid;place-items:center;
+  font-weight:950;font-size:20px;color:var(--sapphire);
+  background:linear-gradient(145deg,#fff,#e8eef3);
+  border:1px solid rgba(22,143,234,.22);
+  box-shadow:inset 0 1px 8px #fff,0 8px 20px rgba(16,59,99,.1)
+}
+.brand-title{font-weight:950;letter-spacing:-.035em;white-space:nowrap}
+.brand-title span{color:var(--sapphire)}
+.nav-actions{display:flex;align-items:center;gap:9px}
+.btn,.icon-btn,.tab,.tiny-btn{
+  border:none;transition:.18s ease
+}
+.btn{
+  border-radius:999px;padding:13px 18px;font-weight:900
+}
+.btn.primary{
+  color:#fff;background:linear-gradient(180deg,#2ea5ff,var(--sapphire));
+  box-shadow:0 12px 28px rgba(22,143,234,.25)
+}
+.btn.primary:hover{transform:translateY(-2px);box-shadow:0 15px 34px rgba(22,143,234,.32)}
+.btn.secondary{background:#fff;color:var(--deep);border:var(--border)}
+.btn.secondary:hover{transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+.btn.dark{background:var(--black);color:white}
+.btn.dark:hover{background:#000}
+.icon-btn{
+  width:42px;height:42px;border-radius:50%;background:#fff;border:var(--border);
+  color:var(--deep);font-size:18px
+}
+.icon-btn:hover{box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+main{max-width:1260px;margin:auto;padding:0 20px 70px}
+
+.hero{
+  padding:72px 0 38px;display:grid;grid-template-columns:1.17fr .83fr;gap:32px;align-items:center
+}
+.eyebrow{
+  display:inline-flex;gap:8px;align-items:center;
+  padding:8px 11px;border-radius:999px;background:#fff;border:var(--border);
+  box-shadow:var(--shadow-sm);font-size:11px;font-weight:950;text-transform:uppercase;letter-spacing:.12em
+}
+.eyebrow .spark{width:8px;height:8px;border-radius:50%;background:var(--sapphire);box-shadow:0 0 16px var(--sapphire)}
+h1{
+  margin:17px 0 14px;font-size:clamp(48px,7.2vw,88px);line-height:.92;letter-spacing:-.066em;color:var(--black)
+}
+h1 .blue{color:var(--sapphire);text-shadow:0 11px 35px rgba(22,143,234,.2)}
+.hero-copy{font-size:18px;line-height:1.68;color:var(--muted);max-width:760px}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:23px}
+.hero-note{margin-top:13px;font-size:12px;color:#82909d}
+
+.dashboard{
+  background:linear-gradient(150deg,#fff 0,#f8fafc 52%,#eaf6ff 100%);
+  border:1px solid rgba(22,143,234,.19);border-radius:32px;padding:24px;box-shadow:var(--shadow);position:relative;overflow:hidden
+}
+.dashboard:after{
+  content:"";position:absolute;width:180px;height:180px;border-radius:50%;right:-72px;top:-72px;
+  background:rgba(22,143,234,.14);filter:blur(4px)
+}
+.dash-head{position:relative;display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.dash-head h3{margin:0;font-size:22px}
+.level-chip{font-size:11px;font-weight:950;color:var(--deep);padding:7px 9px;border-radius:999px;background:#fff;border:var(--border)}
+.stat-grid{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}
+.stat{background:#fff;border:var(--border);border-radius:17px;padding:13px}
+.stat strong{display:block;font-size:23px;letter-spacing:-.04em}
+.stat span{font-size:11px;color:var(--muted)}
+.progress-row{position:relative;display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:7px}
+.progress{position:relative;height:9px;background:#e5ebf0;border-radius:999px;overflow:hidden}
+.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--sapphire),#6bccff);transition:.3s}
+.next-card{position:relative;margin-top:16px;background:#fff;border:var(--border);border-radius:18px;padding:14px}
+.next-card small{font-weight:900;color:var(--sapphire);text-transform:uppercase;letter-spacing:.08em}
+.next-card strong{display:block;margin-top:4px}
+.next-card p{margin:5px 0 0;color:var(--muted);font-size:12px;line-height:1.5}
+
+.section-head{margin:54px 0 18px}
+.kicker{color:var(--sapphire);font-size:11px;text-transform:uppercase;font-weight:950;letter-spacing:.13em}
+.section-head h2{margin:5px 0 6px;font-size:clamp(31px,4vw,49px);letter-spacing:-.05em}
+.section-head p{margin:0;color:var(--muted);line-height:1.65;max-width:850px}
+
+.main-tabs{
+  display:flex;gap:9px;flex-wrap:wrap;margin:18px 0 24px
+}
+.tab{
+  padding:11px 15px;border-radius:999px;background:#fff;border:var(--border);
+  color:var(--deep);font-weight:850
+}
+.tab.active{background:var(--black);border-color:var(--black);color:#fff}
+.panel{display:none}
+.panel.active{display:block}
+
+.path-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:24px}
+.path{
+  background:#fff;border:var(--border);border-radius:22px;padding:18px;box-shadow:var(--shadow-sm)
+}
+.path .path-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.path .num{font-size:12px;color:var(--sapphire);font-weight:950;letter-spacing:.08em}
+.path .count{font-size:11px;color:var(--muted)}
+.path h3{margin:10px 0 6px;font-size:19px}
+.path p{color:var(--muted);font-size:13px;line-height:1.55}
+.path button{margin-top:8px}
+
+.filters{display:grid;grid-template-columns:1fr auto;gap:10px;margin:20px 0}
+.search,.field,textarea,select{
+  width:100%;border:1px solid rgba(16,59,99,.13);background:#fff;color:var(--ink);outline:none
+}
+.search,.field,select{border-radius:15px;padding:13px 15px}
+textarea{border-radius:18px;padding:15px;min-height:125px;resize:vertical}
+.search:focus,.field:focus,textarea:focus,select:focus{border-color:rgba(22,143,234,.55);box-shadow:0 0 0 4px rgba(22,143,234,.08)}
+
+.lesson-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.lesson-card{
+  background:#fff;border:var(--border);border-radius:22px;padding:18px;box-shadow:var(--shadow-sm);
+  transition:.18s;position:relative;overflow:hidden
+}
+.lesson-card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.lesson-card .done-dot{
+  position:absolute;top:14px;right:14px;width:29px;height:29px;border-radius:50%;display:grid;place-items:center;
+  border:2px solid #dbe4ea;color:#aeb8c1;background:#fff;font-weight:900
+}
+.lesson-card .done-dot.done{color:var(--green);border-color:#b8e6d4;background:#edf9f4}
+.chip{
+  display:inline-flex;align-items:center;padding:6px 9px;border-radius:999px;background:var(--soft-blue);
+  color:var(--deep);font-size:10px;font-weight:950;text-transform:uppercase;letter-spacing:.08em
+}
+.lesson-card h3{font-size:19px;margin:12px 40px 7px 0;letter-spacing:-.02em}
+.lesson-card p{font-size:13px;color:var(--muted);line-height:1.55;min-height:60px}
+.meta{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.meta span{font-size:10px;color:#748291;background:#f5f8fa;padding:5px 8px;border-radius:999px}
+.card-actions{display:flex;gap:8px;flex-wrap:wrap}
+.tiny-btn{
+  border-radius:999px;background:#f3f6f8;color:var(--deep);border:1px solid rgba(16,59,99,.07);
+  padding:9px 11px;font-weight:850;font-size:12px
+}
+.tiny-btn:hover{background:#eaf5fc}
+
+.finder,.box{
+  background:linear-gradient(145deg,#fff,#f7fafc);border:var(--border);border-radius:28px;padding:23px;box-shadow:var(--shadow)
+}
+.finder h3,.box h3{margin-top:0}
+.finder-grid{display:grid;grid-template-columns:1fr auto;gap:10px}
+.result{
+  margin-top:17px;background:#fff;border:1px solid rgba(22,143,234,.17);border-radius:22px;padding:18px;box-shadow:var(--shadow-sm)
+}
+.result h3{font-size:23px}
+.result-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.result-item{background:#f7fafc;border-radius:15px;padding:13px;border:1px solid rgba(16,59,99,.06)}
+.label{font-size:10px;color:var(--sapphire);font-weight:950;letter-spacing:.1em;text-transform:uppercase}
+.value{font-size:13px;line-height:1.55;margin-top:5px}
+.prompt{
+  margin-top:12px;background:var(--black);color:#fff;border-radius:17px;padding:15px;position:relative
+}
+.prompt pre{white-space:pre-wrap;font-family:inherit;line-height:1.55;margin:0;padding-right:42px;font-size:13px}
+.copy{
+  position:absolute;right:9px;top:9px;border:none;border-radius:9px;padding:7px 9px;background:#fff;color:var(--black);font-size:11px;font-weight:900
+}
+
+.coach-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.coach-grid .box{box-shadow:var(--shadow-sm)}
+.help{font-size:12px;color:var(--muted);line-height:1.55}
+.stack{display:grid;gap:10px}
+.output{margin-top:12px;background:#f7fafc;border-radius:16px;padding:14px;line-height:1.6;font-size:13px}
+
+.practice-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.challenge{background:#fff;border:var(--border);border-radius:21px;padding:18px;box-shadow:var(--shadow-sm)}
+.challenge h3{margin:7px 0}
+.challenge p{font-size:13px;line-height:1.55;color:var(--muted)}
+.challenge .diff{font-size:10px;color:var(--sapphire);font-weight:950;text-transform:uppercase;letter-spacing:.09em}
+
+.biz-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
+.biz{background:#fff;border:var(--border);border-radius:20px;padding:17px;box-shadow:var(--shadow-sm)}
+.biz .n{font-size:11px;font-weight:950;color:var(--sapphire)}
+.biz h3{margin:8px 0 5px;font-size:17px}
+.biz p{color:var(--muted);font-size:12px;line-height:1.5}
+.biz button{margin-top:7px}
+
+.quiz-wrap{display:grid;grid-template-columns:.9fr 1.1fr;gap:16px}
+.quiz-q{margin:14px 0}
+.quiz-q strong{display:block;margin-bottom:9px}
+.quiz-options{display:flex;flex-wrap:wrap;gap:8px}
+.quiz-option{
+  border:var(--border);background:#fff;border-radius:999px;padding:9px 11px;font-weight:800;font-size:12px
+}
+.quiz-option.selected{background:var(--black);color:#fff;border-color:var(--black)}
+.recommendation{background:#fff;border:var(--border);border-radius:22px;padding:18px;box-shadow:var(--shadow-sm)}
+.recommendation h3{margin-top:0}
+.recommendation-list{display:grid;gap:10px}
+.rec-item{padding:12px;background:#f7fafc;border-radius:14px}
+.rec-item strong{display:block}
+.rec-item span{font-size:12px;color:var(--muted)}
+
+.source-note{
+  margin-top:25px;padding:15px 17px;background:#f7fafc;border-radius:16px;border:1px solid rgba(16,59,99,.07);
+  font-size:11px;color:var(--muted);line-height:1.6
+}
+
+footer{
+  margin-top:60px;border-radius:30px;background:var(--black);color:#fff;padding:28px;
+  display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap
+}
+footer p{max-width:690px;color:#b7c1ca;line-height:1.6;font-size:13px}
+footer small{color:#8c99a5}
+
+.modal-bg{
+  position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:200;
+  padding:18px;background:rgba(7,17,27,.62)
+}
+.modal-bg.open{display:flex}
+.modal{
+  width:min(850px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:28px;padding:24px;box-shadow:0 32px 90px rgba(0,0,0,.3)
+}
+.modal-close{
+  float:right;position:sticky;top:0;width:40px;height:40px;border:none;border-radius:50%;background:#edf2f5;font-size:19px
+}
+.lesson-title{font-size:38px;letter-spacing:-.045em;margin:10px 50px 7px 0}
+.lesson-desc{color:var(--muted);line-height:1.65}
+.device-note{
+  margin:15px 0;padding:12px 14px;border-radius:14px;background:#fff8e9;border:1px solid #f2ddb2;color:#7c571b;font-size:12px;line-height:1.55
+}
+.walkthrough{margin-top:20px}
+.step{
+  display:grid;grid-template-columns:36px 1fr;gap:12px;margin:15px 0
+}
+.step-num{
+  width:34px;height:34px;border-radius:12px;display:grid;place-items:center;background:var(--soft-blue);
+  color:var(--sapphire);font-weight:950
+}
+.step h4{margin:1px 0 4px}
+.step p{margin:0;color:var(--muted);line-height:1.58;font-size:13px}
+.lesson-callout{margin:16px 0;border-left:3px solid var(--sapphire);padding:4px 0 4px 14px}
+.lesson-callout strong{display:block;margin-bottom:4px}
+.lesson-callout p{margin:0;color:var(--muted);line-height:1.6;font-size:13px}
+.lesson-prompt{margin:16px 0}
+.lesson-footer{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.toast{
+  position:fixed;right:18px;bottom:18px;background:var(--black);color:#fff;border-radius:13px;padding:11px 15px;
+  box-shadow:var(--shadow);opacity:0;transform:translateY(8px);pointer-events:none;transition:.2s;z-index:300;font-size:12px
+}
+.toast.show{opacity:1;transform:translateY(0)}
+
+@media(max-width:1000px){
+  .hero{grid-template-columns:1fr}
+  .lesson-grid,.path-grid{grid-template-columns:repeat(2,1fr)}
+  .biz-grid{grid-template-columns:repeat(2,1fr)}
+  .quiz-wrap{grid-template-columns:1fr}
+}
+@media(max-width:700px){
+  main{padding-left:14px;padding-right:14px}
+  .nav{padding:11px 14px}
+  .brand-title{font-size:15px}
+  .nav .btn{display:none}
+  .hero{padding-top:46px}
+  h1{font-size:52px}
+  .hero-copy{font-size:16px}
+  .stat-grid{grid-template-columns:1fr 1fr 1fr}
+  .main-tabs{flex-wrap:nowrap;overflow:auto;padding-bottom:4px}
+  .tab{white-space:nowrap}
+  .lesson-grid,.path-grid,.practice-grid,.biz-grid,.result-grid,.coach-grid{grid-template-columns:1fr}
+  .filters,.finder-grid{grid-template-columns:1fr}
+  .finder-grid .btn,.filters .btn{width:100%}
+  .lesson-card p{min-height:auto}
+  .lesson-title{font-size:31px}
+  footer{border-radius:23px}
+}
+
+.lesson-modes{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0 14px;padding:7px;background:#f2f6f9;border-radius:18px}
+.mode-btn{border:none;border-radius:12px;padding:10px 12px;background:transparent;color:var(--deep);font-weight:900;font-size:12px}
+.mode-btn.active{background:#fff;color:var(--black);box-shadow:0 5px 15px rgba(16,59,99,.09)}
+.mode-stage{background:#fff;border:var(--border);border-radius:20px;padding:18px;margin-top:8px}
+.mode-stage h3{margin-top:0}
+.demo-before,.demo-after{border-radius:14px;padding:13px;margin-top:10px;font-size:13px;line-height:1.55}
+.demo-before{background:#fff3f3;border:1px solid #f0d5d5}.demo-after{background:#effaf6;border:1px solid #ccebdd}
+.feedback{display:none;margin-top:10px;padding:13px;border-radius:14px;background:#f7fafc;border:var(--border);font-size:13px;line-height:1.55}
+.feedback.show{display:block}
+.mini-quiz{display:grid;gap:10px}.mini-quiz button{text-align:left;border:var(--border);background:#fff;border-radius:14px;padding:12px;font-weight:800}
+.mini-quiz button.correct{border-color:#9bd6bf;background:#effaf6}.mini-quiz button.wrong{border-color:#e3b1b1;background:#fff1f1}
+.stuck-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.stuck-card{padding:13px;background:#f7fafc;border-radius:14px;border:var(--border)}
+.stuck-card strong{display:block;margin-bottom:4px}.stuck-card span{font-size:12px;color:var(--muted);line-height:1.5}
+.scenario-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.scenario{background:#fff;border:var(--border);border-radius:21px;padding:18px;box-shadow:var(--shadow-sm)}
+.scenario .badge{font-size:10px;font-weight:950;color:var(--sapphire);text-transform:uppercase;letter-spacing:.08em}.scenario h3{margin:8px 0 6px}.scenario p{font-size:13px;color:var(--muted);line-height:1.55}
+.scenario-result{margin-top:14px;padding:15px;border-radius:16px;background:#f7fafc;border:var(--border)}
+.glossary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.term{background:#fff;border:var(--border);border-radius:18px;padding:16px;box-shadow:var(--shadow-sm)}
+.term strong{display:block;margin-bottom:5px}.term p{font-size:12px;line-height:1.55;color:var(--muted);margin:0}
+.playbook-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:16px}.playbook-list{display:grid;gap:10px}.saved-item{background:#fff;border:var(--border);border-radius:16px;padding:14px}
+.saved-item strong{display:block;margin-bottom:5px}.saved-item pre{white-space:pre-wrap;font:inherit;font-size:12px;color:var(--muted);line-height:1.5;margin:0}
+.saved-actions{display:flex;gap:7px;margin-top:9px;flex-wrap:wrap}.note-area{min-height:220px}.empty-state{padding:22px;text-align:center;color:var(--muted);background:#f7fafc;border-radius:18px}
+@media(max-width:700px){.scenario-grid,.glossary-grid,.playbook-grid,.stuck-grid{grid-template-columns:1fr}}
+
+
+/* ===== V4: POWER WORDS + PROMPT MASTERY ===== */
+.power-layout{display:grid;grid-template-columns:.78fr 1.22fr;gap:16px}
+.power-sidebar,.power-main{background:#fff;border:var(--border);border-radius:24px;padding:19px;box-shadow:var(--shadow-sm)}
+.power-sidebar h3,.power-main h3{margin-top:0}
+.category-list{display:grid;gap:7px;margin-top:14px}
+.category-btn{border:var(--border);background:#fff;border-radius:13px;padding:11px 12px;text-align:left;font-weight:850;color:var(--deep)}
+.category-btn.active{background:var(--black);color:#fff;border-color:var(--black)}
+.keyword-vault{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}
+.keyword-chip{border:1px solid rgba(22,143,234,.16);background:#f2f9ff;color:var(--deep);border-radius:999px;padding:8px 10px;font-size:12px;font-weight:850}
+.keyword-chip:hover,.keyword-chip.selected{background:var(--sapphire);color:#fff;border-color:var(--sapphire)}
+.keyword-explain{margin-top:13px;padding:13px;border-radius:15px;background:#f7fafc;border:var(--border);font-size:12px;color:var(--muted);line-height:1.55}
+.word-stack{min-height:58px;background:#f7fafc;border:1px dashed rgba(16,59,99,.2);border-radius:16px;padding:12px;margin-top:12px;display:flex;gap:7px;flex-wrap:wrap;align-items:flex-start}
+.stack-chip{background:#fff;border:var(--border);border-radius:999px;padding:7px 9px;font-size:11px;font-weight:850}
+.formula-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}
+.formula-output{margin-top:14px;background:var(--black);color:#fff;border-radius:18px;padding:16px;position:relative}
+.formula-output pre{white-space:pre-wrap;font:inherit;font-size:13px;line-height:1.6;margin:0;padding-right:45px}
+.formula-card{background:linear-gradient(145deg,#fff,#f6fafd);border:1px solid rgba(22,143,234,.13);border-radius:18px;padding:15px;margin-top:12px}
+.formula-card strong{display:block;margin-bottom:5px}
+.formula-card code{font-family:inherit;color:var(--deep);font-weight:850;font-size:12px;line-height:1.6}
+.anatomy-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-top:14px}
+.anatomy-item{border:var(--border);border-radius:17px;padding:14px;background:#fff}
+.anatomy-item .num{font-size:10px;color:var(--sapphire);font-weight:950}
+.anatomy-item strong{display:block;margin:5px 0}.anatomy-item p{margin:0;color:var(--muted);font-size:12px;line-height:1.5}
+.clinic-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:16px}
+.score-ring{width:120px;height:120px;border-radius:50%;display:grid;place-items:center;margin:8px auto 18px;background:conic-gradient(var(--sapphire) 0deg,#e7edf2 0deg);position:relative}
+.score-ring:after{content:"";position:absolute;inset:12px;border-radius:50%;background:#fff}
+.score-ring strong{position:relative;z-index:1;font-size:27px}
+.diagnostic-list{display:grid;gap:8px}.diag{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:10px 12px;border-radius:13px;background:#f7fafc}
+.diag span{font-size:12px}.diag b{font-size:11px}.yes{color:var(--green)}.no{color:var(--red)}
+.vague-list{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.vague{padding:6px 8px;border-radius:999px;background:#fff1f1;color:#9d4141;font-size:11px;font-weight:850}
+.upgrade-box{margin-top:13px;padding:15px;background:#f7fafc;border-radius:16px;border:var(--border)}
+.challenge-deck{display:grid;grid-template-columns:repeat(2,1fr);gap:13px}
+.word-challenge{background:#fff;border:var(--border);border-radius:20px;padding:17px;box-shadow:var(--shadow-sm)}
+.word-challenge h3{margin:7px 0}.word-challenge p{font-size:13px;color:var(--muted)}
+.challenge-answers{display:grid;gap:7px}.challenge-answers button{border:var(--border);background:#fff;border-radius:12px;padding:10px;text-align:left;font-weight:800;font-size:12px}
+.challenge-answers button.good{background:#effaf6;border-color:#9ed9c1}.challenge-answers button.bad{background:#fff1f1;border-color:#e1b0b0}
+.source-card{background:linear-gradient(145deg,#eef8ff,#fff);border:1px solid rgba(22,143,234,.18);border-radius:20px;padding:17px}
+.source-card h3{margin:0 0 6px}.source-card p{color:var(--muted);font-size:13px;line-height:1.6}
+@media(max-width:850px){.power-layout,.clinic-grid{grid-template-columns:1fr}.anatomy-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){.formula-grid,.anatomy-grid,.challenge-deck{grid-template-columns:1fr}}
+
+
+/* ===== V5 AI COACH ===== */
+.ai-coach-loading{
+  display:flex;align-items:center;gap:10px;margin-top:12px;padding:14px;
+  background:#eef8ff;border:1px solid rgba(22,143,234,.18);border-radius:15px;color:var(--deep);font-size:13px;font-weight:800
+}
+.ai-spinner{width:18px;height:18px;border:2px solid rgba(22,143,234,.22);border-top-color:var(--sapphire);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.coach-report{margin-top:12px;display:grid;gap:12px}
+.coach-score-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.coach-score{
+  width:78px;height:78px;border-radius:50%;display:grid;place-items:center;flex:0 0 auto;
+  background:conic-gradient(var(--sapphire) 0deg,#e7edf2 0deg);position:relative
+}
+.coach-score:after{content:"";position:absolute;inset:8px;background:#fff;border-radius:50%}
+.coach-score strong{position:relative;z-index:1;font-size:20px}
+.coach-summary{flex:1;min-width:220px}
+.coach-summary strong{font-size:16px}.coach-summary p{margin:5px 0 0;color:var(--muted);font-size:13px;line-height:1.55}
+.coach-columns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.coach-panel{padding:14px;border-radius:15px;background:#f7fafc;border:var(--border)}
+.coach-panel h4{margin:0 0 8px;font-size:13px}
+.coach-panel ul{margin:0;padding-left:18px}.coach-panel li{margin:6px 0;font-size:12px;line-height:1.5;color:var(--muted)}
+.coach-missing{display:grid;gap:7px}
+.missing-item{padding:10px;background:#fff;border:var(--border);border-radius:12px}
+.missing-item strong{display:block;font-size:12px}.missing-item span{font-size:11px;color:var(--muted);line-height:1.5}
+.ai-improved{background:var(--black);color:#fff;border-radius:16px;padding:15px;position:relative}
+.ai-improved pre{font:inherit;font-size:13px;line-height:1.6;white-space:pre-wrap;margin:0;padding-right:44px}
+.ai-why{padding:13px;background:#eef8ff;border-radius:14px;color:var(--deep);font-size:12px;line-height:1.55}
+.usage-note{font-size:11px;color:var(--muted);margin-top:8px}
+@media(max-width:700px){.coach-columns{grid-template-columns:1fr}}
+
+</style>
+</head>
+<body>
+<div class="announce">Current-feature learning hub • Updated August 14, 2026</div>
+<header>
+  <div class="nav">
+    <div class="brand">
+      <div class="logo">G</div>
+      <div class="brand-title">GLAM <span>ChatGPT Learning Hub</span></div>
+    </div>
+    <div class="nav-actions">
+      <button class="icon-btn" id="resetBtn" title="Reset learning progress">↺</button>
+      <button class="btn dark" onclick="goTab('academy')">Start Learning</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div>
+      <div class="eyebrow"><span class="spark"></span> ChatGPT without the confusing tech talk</div>
+      <h1>Stop guessing. <span class="blue">Learn the damn thing.</span></h1>
+      <p class="hero-copy">This is a hands-on ChatGPT training system. Learn the features, master the language behind stronger prompts, practice real scenarios, diagnose weak prompts, build reusable formulas, quiz yourself, troubleshoot problems, and save the workflows you actually use.</p>
+      <div class="hero-actions">
+        <button class="btn primary" onclick="goTab('academy')">Start My Learning Path</button>
+        <button class="btn secondary" onclick="goTab('finder')">What the Hell Do I Use? 😂</button>
+        <button class="btn secondary" onclick="goTab('quiz')">Take the Skill Check</button>
+      </div>
+      <div class="hero-note">Menu names can vary slightly by plan, device, and rollout. Lessons flag that when it matters.</div>
+    </div>
+
+    <aside class="dashboard">
+      <div class="dash-head">
+        <div><div class="kicker">Your dashboard</div><h3>Learning progress</h3></div>
+        <span class="level-chip" id="levelChip">Getting Started</span>
+      </div>
+      <div class="stat-grid">
+        <div class="stat"><strong id="doneCount">0</strong><span>Lessons done</span></div>
+        <div class="stat"><strong id="totalCount">0</strong><span>Total lessons</span></div>
+        <div class="stat"><strong id="pctCount">0%</strong><span>Complete</span></div>
+      </div>
+      <div class="progress-row"><span>Overall progress</span><span id="progressText">0%</span></div>
+      <div class="progress"><div id="progressFill"></div></div>
+      <div class="next-card">
+        <small>Recommended next</small>
+        <strong id="nextTitle">ChatGPT Basics</strong>
+        <p id="nextDesc">Learn how to talk to ChatGPT like an assistant instead of treating it like Google.</p>
+      </div>
+    </aside>
+  </section>
+
+  <section id="hub">
+    <div class="section-head">
+      <div class="kicker">Interactive Academy</div>
+      <h2>Learn it. Try it. Use it.</h2>
+      <p>Choose a guided path or jump directly to the feature you need. Progress is saved locally in your browser.</p>
+    </div>
+
+    <nav class="main-tabs">
+      <button class="tab active" data-tab="academy">Feature Academy</button>
+      <button class="tab" data-tab="finder">Feature Finder</button>
+      <button class="tab" data-tab="coach">Prompt Coach</button>
+      <button class="tab" data-tab="powerwords">Power Words Lab</button>
+      <button class="tab" data-tab="clinic">Prompt Clinic</button>
+      <button class="tab" data-tab="practice">Practice Lab</button>
+      <button class="tab" data-tab="scenarios">Scenario Coach</button>
+      <button class="tab" data-tab="business">Business Lab</button>
+      <button class="tab" data-tab="glossary">Glossary</button>
+      <button class="tab" data-tab="playbook">My Playbook</button>
+      <button class="tab" data-tab="quiz">Skill Check</button>
+    </nav>
+
+    <div class="panel active" id="panel-academy">
+      <div class="path-grid" id="pathGrid"></div>
+      <div class="filters">
+        <input id="lessonSearch" class="search" placeholder="Search: Projects, images, files, memory, tasks, research...">
+        <button class="btn secondary" id="clearSearch">Clear</button>
+      </div>
+      <div class="lesson-grid" id="lessonGrid"></div>
+      <div class="source-note">Feature guidance in this edition was checked against OpenAI Help Center documentation on August 13, 2026. Availability can differ by ChatGPT plan, workspace settings, device, and staged rollout.</div>
+    </div>
+
+    <div class="panel" id="panel-finder">
+      <div class="finder">
+        <div class="kicker">Decision helper</div>
+        <h3 style="font-size:26px">What the Hell Do I Use? 😂</h3>
+        <p class="help">Tell the app what you are trying to accomplish. It will recommend the feature or workflow, explain why, give you the steps, and build a starter prompt.</p>
+        <div class="finder-grid">
+          <textarea id="finderInput" placeholder="Example: I have a bunch of research, PDFs, and websites and I need a detailed report with sources."></textarea>
+          <button class="btn primary" id="finderBtn">Find My Feature</button>
+        </div>
+        <div id="finderResult"></div>
+      </div>
+    </div>
+
+    <div class="panel" id="panel-coach">
+      <div class="coach-grid">
+        <div class="box">
+          <div class="kicker">Build it right</div>
+          <h3>Prompt Coach</h3>
+          <p class="help">You do not need a 700-word “magic prompt.” Give ChatGPT the important information and tell it what finished looks like.</p>
+          <div class="stack">
+            <select id="promptType">
+              <option value="create">Create something</option>
+              <option value="learn">Teach me something</option>
+              <option value="research">Research something</option>
+              <option value="analyze">Analyze something</option>
+              <option value="plan">Plan something</option>
+              <option value="improve">Improve something I already have</option>
+            </select>
+            <input class="field" id="audience" placeholder="Who is this for? (optional)">
+            <input class="field" id="tone" placeholder="Tone/style? (optional)">
+            <textarea id="promptNeed" placeholder="What do you actually need ChatGPT to do?"></textarea>
+            <button class="btn primary" id="buildPrompt">Build My Prompt</button>
+          </div>
+        </div>
+        <div class="box">
+          <div class="kicker">Learn the structure</div>
+          <h3>Why your prompt works</h3>
+          <div class="output" id="coachOutput">Your improved prompt will appear here, along with the pieces that make it stronger.</div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="panel" id="panel-powerwords">
+      <div class="section-head" style="margin-top:0">
+        <div class="kicker">Prompt Language Lab</div>
+        <h2 style="font-size:36px">Words change the output.</h2>
+        <p>Build descriptive vocabulary intentionally. Learn what a word changes, combine words into a controlled stack, then turn that stack into a finished prompt formula.</p>
+      </div>
+
+      <div class="source-card">
+        <h3>The core lesson</h3>
+        <p>Do not stop at vague words like <strong>pretty</strong> or <strong>cute</strong>. Describe the rendering: lighting, finish, material, detail, hair, skin, eyes, and visual style. The goal is not keyword stuffing — it is giving the model useful visual direction.</p>
+      </div>
+
+      <div class="power-layout" style="margin-top:16px">
+        <aside class="power-sidebar">
+          <div class="kicker">Power Word Vault</div>
+          <h3>Choose a category</h3>
+          <div class="category-list" id="powerCategories"></div>
+        </aside>
+        <div class="power-main">
+          <div class="kicker" id="powerKicker">Rendering & Quality</div>
+          <h3 id="powerTitle">What do these words actually do?</h3>
+          <p class="help" id="powerDescription"></p>
+          <div class="keyword-vault" id="keywordVault"></div>
+          <div class="keyword-explain" id="keywordExplain">Click a keyword to see what it communicates, then add it to your stack.</div>
+          <div class="label" style="margin-top:16px">Your selected word stack</div>
+          <div class="word-stack" id="wordStack"></div>
+          <div class="card-actions" style="margin-top:10px">
+            <button class="tiny-btn" id="clearWordStack">Clear Stack</button>
+            <button class="tiny-btn" id="copyWordStack">Copy Stack</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="box" style="margin-top:16px">
+        <div class="kicker">Prompt Recipe Builder</div>
+        <h3>Build a formula instead of throwing adjectives at the wall.</h3>
+        <select id="formulaType">
+          <option value="glam">The GLAM Formula</option>
+          <option value="toy">Designer Toy Formula</option>
+          <option value="beauty">Luxury Beauty Formula</option>
+          <option value="general">General Image Formula</option>
+        </select>
+        <div class="formula-card" id="formulaRecipe"></div>
+        <div class="formula-grid" id="formulaFields"></div>
+        <div class="card-actions" style="margin-top:12px">
+          <button class="btn primary" id="buildFormula">Build My Prompt</button>
+          <button class="btn secondary" id="useWordStack">Add My Power Words</button>
+        </div>
+        <div id="formulaResult"></div>
+      </div>
+
+      <div class="box" style="margin-top:16px">
+        <div class="kicker">Prompt Anatomy</div>
+        <h3>The 6 layers of a controlled image prompt</h3>
+        <div class="anatomy-grid">
+          <div class="anatomy-item"><div class="num">01</div><strong>Subject</strong><p>Who or what should exist in the image.</p></div>
+          <div class="anatomy-item"><div class="num">02</div><strong>Features</strong><p>Appearance, clothing, expression, age, proportions, hair, makeup, object details.</p></div>
+          <div class="anatomy-item"><div class="num">03</div><strong>Composition</strong><p>Close-up, full body, centered, poster layout, negative space, camera angle.</p></div>
+          <div class="anatomy-item"><div class="num">04</div><strong>Rendering</strong><p>Illustration style, realism, material, texture, commercial or editorial treatment.</p></div>
+          <div class="anatomy-item"><div class="num">05</div><strong>Lighting & Finish</strong><p>Studio light, rim light, reflections, gloss, gradients, polished details.</p></div>
+          <div class="anatomy-item"><div class="num">06</div><strong>Guardrails</strong><p>Exact text, protected details, exclusions, aspect ratio, what must not change.</p></div>
+        </div>
+      </div>
+
+      <div class="box" style="margin-top:16px">
+        <div class="kicker">Skill Builder</div>
+        <h3>Word Power Challenges</h3>
+        <div class="challenge-deck" id="wordChallenges"></div>
+      </div>
+    </div>
+
+    <div class="panel" id="panel-clinic">
+      <div class="section-head" style="margin-top:0">
+        <div class="kicker">Prompt Diagnostic</div>
+        <h2 style="font-size:36px">Why is my prompt giving me basic results?</h2>
+        <p>Paste an image prompt. The clinic checks whether it gives the model enough useful direction — without rewarding pointless length.</p>
+      </div>
+      <div class="clinic-grid">
+        <div class="box">
+          <h3>Paste your prompt</h3>
+          <textarea id="clinicInput" style="min-height:220px" placeholder="Example: Make a cute cartoon girl with pretty hair."></textarea>
+          <button class="btn primary" id="analyzePrompt" style="margin-top:10px">Analyze My Prompt</button>
+          <button class="btn secondary" id="loadClinicExample" style="margin-top:10px">Load Weak Example</button>
+        </div>
+        <div class="box">
+          <div class="kicker">Prompt Strength</div>
+          <div class="score-ring" id="scoreRing"><strong id="scoreValue">0</strong></div>
+          <div class="diagnostic-list" id="diagnosticList">
+            <div class="empty-state">Your diagnostic will appear here.</div>
+          </div>
+          <div id="vagueWords"></div>
+        </div>
+      </div>
+      <div class="box" id="clinicUpgrade" style="margin-top:16px;display:none">
+        <div class="kicker">Training Upgrade</div>
+        <h3>What I would add — and why</h3>
+        <div class="upgrade-box" id="upgradeAdvice"></div>
+        <div class="prompt" style="margin-top:12px">
+          <button class="copy" id="copyUpgradedPrompt">Copy</button>
+          <pre id="upgradedPrompt"></pre>
+        </div>
+        <button class="tiny-btn" id="saveClinicPrompt" style="margin-top:10px">Save to My Playbook</button>
+      </div>
+    </div>
+
+    <div class="panel" id="panel-practice">
+      <div class="practice-grid" id="practiceGrid"></div>
+    </div>
+
+    <div class="panel" id="panel-scenarios">
+      <div class="section-head" style="margin-top:0"><div class="kicker">Real-world decision practice</div>
+      <h2 style="font-size:34px">Which feature would you use?</h2>
+      <p>Choose first, then reveal the answer. This trains the skill beginners struggle with most: matching the job to the right tool.</p></div>
+      <div class="scenario-grid" id="scenarioGrid"></div>
+    </div>
+    <div class="panel" id="panel-business">
+      <div class="biz-grid" id="bizGrid"></div>
+    </div>
+
+    <div class="panel" id="panel-glossary">
+      <div class="box"><div class="kicker">No tech dictionary required</div><h3>ChatGPT in Plain English</h3>
+      <p class="help">Search the words people throw around like everybody was born knowing them.</p>
+      <input class="search" id="glossarySearch" placeholder="Search: model, prompt, project, context, research..."></div>
+      <div class="glossary-grid" id="glossaryGrid" style="margin-top:14px"></div>
+    </div>
+    <div class="panel" id="panel-playbook">
+      <div class="playbook-grid">
+        <div class="box"><div class="kicker">Your reusable system</div><h3>My Playbook</h3>
+        <p class="help">Save lesson prompts and your own notes so you stop rebuilding the same instructions.</p>
+        <textarea class="note-area" id="playbookNotes" placeholder="My notes, shortcuts, rules, things I learned..."></textarea>
+        <button class="btn primary" id="saveNotes" style="margin-top:10px">Save My Notes</button></div>
+        <div class="box"><div class="kicker">Saved items</div><h3>Prompts & Workflows</h3><div class="playbook-list" id="playbookList"></div></div>
+      </div>
+    </div>
+    <div class="panel" id="panel-quiz">
+      <div class="quiz-wrap">
+        <div class="box">
+          <div class="kicker">Personalized path</div>
+          <h3>What should I learn first?</h3>
+          <p class="help">Pick what sounds most like you. The app will recommend a starting path instead of making you take every lesson in order.</p>
+          <div id="quizQuestions"></div>
+          <button class="btn primary" id="quizBtn" style="margin-top:10px">Build My Learning Path</button>
+        </div>
+        <div class="recommendation" id="quizResult">
+          <div class="kicker">Your results</div>
+          <h3>No result yet</h3>
+          <p class="help">Answer the questions and your recommended lessons will show here.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div>
+      <strong style="font-size:21px">GLAM ChatGPT Learning Hub</strong>
+      <p>A practical learning experience for people who want to actually use ChatGPT—not memorize a bunch of technical vocabulary.</p>
+    </div>
+    <small>We don’t just look GLAM. We live GLAM.<br>Grace. Leadership. Ambition. Momentum.</small>
+  </footer>
+</main>
+
+<div class="modal-bg" id="lessonModal">
+  <div class="modal">
+    <button class="modal-close" id="closeModal">×</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const lessons = [
+{
+ id:"basics", path:"Start Here", level:"Beginner", time:"5 min", title:"ChatGPT Basics",
+ desc:"Learn how conversations work, why follow-ups matter, and how to correct ChatGPT without starting over.",
+ tags:["beginner","chat","conversation","basics"],
+ note:"Your exact composer buttons can vary by device and plan.",
+ steps:[
+   ["Start a chat","Open ChatGPT and tap or click the message box. Type what you need in normal language. You do not need special prompt syntax."],
+   ["Give the goal","Tell ChatGPT what you want to accomplish, not only the topic. “Help me plan a workshop” is more useful than “workshop.”"],
+   ["Add context","Give the details that affect the answer: who it is for, what you already have, limits, tone, deadline, format, or what to avoid."],
+   ["Follow up","If the answer is close but not right, correct it in the same chat: “Make this shorter,” “Do not change the prices,” or “Explain step 2 more simply.”"],
+   ["Use the conversation","Treat the chat like working with an assistant. The useful skill is refining, not writing one perfect prompt."]
+ ],
+ use:"Everyday questions, ideas, explanations, planning, writing, troubleshooting, brainstorming, and learning.",
+ mistake:"Starting a brand-new chat every time the answer needs one correction.",
+ prompt:"Help me with this goal: [GOAL]. Here is the context you need: [CONTEXT]. Give me the result in this format: [FORMAT]. Do not [WHAT TO AVOID]."
+},
+{
+ id:"prompting", path:"Start Here", level:"Beginner", time:"7 min", title:"Prompting Without the Nonsense",
+ desc:"Use a simple prompt formula that gives ChatGPT enough direction without writing a novel.",
+ tags:["prompt","prompting","instructions","beginner"],
+ steps:[
+   ["Name the outcome","Start with the finished result you want: write, compare, explain, analyze, plan, create, rewrite, or teach."],
+   ["Give only useful context","Include facts that would change the answer. Skip decorative instructions that do not affect the result."],
+   ["Define the audience","Tell ChatGPT who will read, watch, use, or learn from the output."],
+   ["Set boundaries","State important limits such as word count, reading level, price, platform, tools, or what must stay unchanged."],
+   ["Name the format","Ask for a checklist, short post, table, step-by-step guide, script, lesson, or finished code when format matters."]
+ ],
+ use:"Any time ChatGPT is giving answers that feel generic, too long, off-brand, or incomplete.",
+ mistake:"Believing longer prompts are automatically better. Clear beats long.",
+ prompt:"[ACTION] this for [AUDIENCE]. My goal is [GOAL]. Important context: [CONTEXT]. Keep [REQUIREMENTS]. Avoid [LIMITS]. Give me the finished result as [FORMAT]."
+},
+{
+ id:"search", path:"Research & Learn", level:"Beginner", time:"6 min", title:"Web Search",
+ desc:"Know when ChatGPT should use fresh web information instead of answering from general knowledge.",
+ tags:["web","search","internet","current","sources"],
+ steps:[
+   ["Use it for changing information","Search matters for news, prices, laws, schedules, current product details, current people in roles, recommendations, and anything that may have changed."],
+   ["Ask for current sources","Tell ChatGPT to search the web or use current sources. If accuracy matters, ask it to prioritize official or primary sources."],
+   ["Check citations","Use the citations or source links attached to the answer to see where important claims came from."],
+   ["Refine the search","If results are broad, narrow by date, location, source type, product, audience, or specific question."],
+   ["Do not overuse it","If the truth lives in a file you already have, use the file. If you only need brainstorming, web search may be unnecessary."]
+ ],
+ use:"Current facts, verification, recommendations, trend checks, changing rules, recent information, or source-backed answers.",
+ mistake:"Asking for “the latest” without making sure current sources are being used.",
+ prompt:"Search the web for the most current reliable information about [TOPIC]. Prioritize official or primary sources where possible. Summarize what matters for [MY GOAL] and cite the claims I should verify."
+},
+{
+ id:"deepresearch", path:"Research & Learn", level:"Intermediate", time:"9 min", title:"Deep Research",
+ desc:"Use multi-source research when a quick search is not enough and you need a documented, synthesized report.",
+ tags:["deep research","research","report","sources","citations"],
+ note:"Deep Research availability and usage limits depend on your ChatGPT plan.",
+ steps:[
+   ["Choose Deep Research","Start Deep Research from the available tools in ChatGPT, or use the Deep Research entry point available in your interface."],
+   ["Describe the outcome","Explain the question, decision, comparison, or report you need—not just a broad topic."],
+   ["Choose sources","Deep Research can work with public web sources, uploaded files, and supported connected apps when enabled."],
+   ["Review the plan","ChatGPT can propose a research plan. Review it and change the focus or source choices before proceeding when needed."],
+   ["Read the final report","Use the structured report and citations to verify important claims. Deep Research is for synthesis, not just collecting links."]
+ ],
+ use:"Market research, competitive analysis, complex purchase decisions, literature-style reviews, multi-source reports, strategy, and detailed comparisons.",
+ mistake:"Using Deep Research for a tiny lookup that normal chat or web search could answer faster.",
+ prompt:"Use Deep Research to help me answer [QUESTION]. My decision or outcome is [GOAL]. Focus on [PRIORITIES]. Use [SOURCE TYPES / FILES / APPS] where available. Give me a structured report with citations, key findings, conflicts between sources, and a clear conclusion."
+},
+{
+ id:"studymode", path:"Research & Learn", level:"Beginner", time:"7 min", title:"Study Mode",
+ desc:"Learn with guided questions, step-by-step explanations, practice, and checks for understanding instead of only getting an answer.",
+ tags:["study","study mode","learn","quiz","homework"],
+ note:"Study Mode is available across ChatGPT plans, but your interface may show it in a tools menu or composer option.",
+ steps:[
+   ["Turn on Study Mode","In a new chat, open the available tools or study option and choose Study Mode."],
+   ["Tell it your level","Say what you already understand and where you are stuck. Study Mode can adjust explanations to your level."],
+   ["Let it guide you","It may ask questions instead of immediately giving the final answer. Answer them so it can find your weak spots."],
+   ["Use your materials","Upload notes, slides, PDFs, a syllabus, worksheet, or a photo of a problem and tell Study Mode what section to focus on."],
+   ["Check understanding","Ask it to quiz you one question at a time, wait for your answer, explain mistakes, and tell you what to review next."]
+ ],
+ use:"Learning a new skill, studying course materials, exam prep, concept review, practice problems, and self-paced learning.",
+ mistake:"Using Study Mode when you only want the finished answer and do not want the teaching process.",
+ prompt:"Use Study Mode to teach me [TOPIC]. Assume I am at [LEVEL]. Start by checking what I already know, teach one concept at a time, and quiz me before moving to the next concept."
+},
+{
+ id:"files", path:"Files & Data", level:"Beginner", time:"8 min", title:"Files & PDFs",
+ desc:"Upload documents and ask questions from the actual source instead of trying to copy everything into the chat.",
+ tags:["file","pdf","docx","pptx","txt","upload","document"],
+ note:"Supported file types and limits can vary. Common text, spreadsheet, presentation, and document formats are supported.",
+ steps:[
+   ["Attach the file","Use the attachment or plus control in the composer and choose your file."],
+   ["Say what you need","Do not stop at “summarize this.” Tell ChatGPT what you are trying to learn, locate, compare, rewrite, or verify."],
+   ["Point to the right section","For long files, name the page, heading, topic, question, or type of information you care about."],
+   ["Ask for evidence","When precision matters, ask ChatGPT to identify the section, page, quote, or source passage supporting its answer."],
+   ["Continue working","After the first answer, ask follow-ups such as “turn those findings into a checklist” or “compare section 2 with section 7.”"]
+ ],
+ use:"PDFs, Word documents, text files, presentations, spreadsheets, notes, policies, guides, reports, and course material.",
+ mistake:"Assuming a long file was interpreted perfectly without asking ChatGPT to point back to the relevant source section.",
+ prompt:"Use the file I uploaded as the source of truth. My goal is [GOAL]. Focus on [SECTIONS / TOPICS]. Give me [OUTPUT]. Point me to the part of the file supporting each important conclusion."
+},
+{
+ id:"library", path:"Files & Data", level:"Intermediate", time:"6 min", title:"File Library",
+ desc:"Understand how uploaded and created files can be stored and found again instead of disappearing into old chats.",
+ tags:["library","files","storage","find files"],
+ note:"Library availability can vary by account or rollout.",
+ steps:[
+   ["Open Library if available","Use the Library area in ChatGPT to browse files saved from uploads and generated work."],
+   ["Search instead of hunting chats","Use file search when you remember the topic or name but not the conversation where the file appeared."],
+   ["Know what gets stored","Uploaded files and files created in ChatGPT may appear in Library depending on your account and feature availability."],
+   ["Keep names useful","Clear file names make later retrieval easier, especially when you create many versions of the same product or document."],
+   ["Clean up intentionally","Delete or manage files you no longer need according to the controls available in your account."]
+ ],
+ use:"People who upload or generate lots of PDFs, documents, spreadsheets, presentations, and project files.",
+ mistake:"Creating fifteen files called final-final-new-final and then wondering why nothing is findable.",
+ prompt:"Help me create a clear file naming system for [TYPE OF WORK] so I can quickly find versions, dates, and final files later."
+},
+{
+ id:"data", path:"Files & Data", level:"Intermediate", time:"9 min", title:"Data Analysis",
+ desc:"Use ChatGPT to understand spreadsheets, calculate results, clean data, create tables, and visualize patterns.",
+ tags:["data","spreadsheet","csv","xlsx","charts","analysis"],
+ steps:[
+   ["Upload the data","Attach your CSV, XLSX, or supported data file."],
+   ["Explain the decision","Say what you are trying to understand: sales trends, top products, missing data, averages, changes, outliers, or customer behavior."],
+   ["Ask it to inspect first","Have ChatGPT explain the columns and identify obvious quality issues before jumping to conclusions."],
+   ["Analyze","Request calculations, comparisons, filters, summaries, or patterns tied to your question."],
+   ["Visualize when useful","Ask for a table or chart only when it helps answer the question—not just because charts look impressive."]
+ ],
+ use:"Sales reports, survey results, product data, budgets, content performance, inventory, logs, and structured datasets.",
+ mistake:"Asking for conclusions before checking whether columns, dates, or missing values were interpreted correctly.",
+ prompt:"Analyze the uploaded data for [GOAL]. First explain the columns and flag data-quality problems. Then calculate the metrics that matter, identify patterns or outliers, and show a table or chart only where it improves understanding."
+},
+{
+ id:"images", path:"Create", level:"Beginner", time:"8 min", title:"Create Images",
+ desc:"Generate original images by describing the subject, style, composition, lighting, colors, text, and format you want.",
+ tags:["image","images","create","design","graphic"],
+ note:"You can ask for an image directly in chat; some interfaces also show Images under More or a creation menu.",
+ steps:[
+   ["Describe the subject","Say exactly what should be in the image: person, product, object, scene, background, clothing, expression, or environment."],
+   ["Direct the composition","Tell it whether you want a portrait, close-up, full body, product hero, centered layout, negative space, poster, or social format."],
+   ["Set the visual direction","Add colors, lighting, material, texture, realism, era, editorial feel, or other art direction that affects the finished image."],
+   ["Handle text carefully","If words must appear, give the exact short wording and state that it must be fully visible and correctly spelled."],
+   ["Refine the same image","If the image is close, ask for a targeted change instead of redesigning every detail."]
+ ],
+ use:"Social graphics, mockups, visual concepts, characters, product ideas, backgrounds, illustrations, flyers, covers, and marketing creative.",
+ mistake:"Stuffing the scene with so many unrelated objects that the main subject and wording lose hierarchy.",
+ prompt:"Create a [FORMAT] image featuring [SUBJECT]. Visual direction: [STYLE]. Composition: [COMPOSITION]. Colors: [COLORS]. Lighting/materials: [DETAILS]. Exact visible wording: “[TEXT].” Keep the wording fully visible and correctly spelled. Do not add [UNWANTED ELEMENTS]."
+},
+{
+ id:"imageedit", path:"Create", level:"Intermediate", time:"6 min", title:"Edit an Existing Image",
+ desc:"Upload an image and make targeted changes while protecting the parts you already like.",
+ tags:["edit image","image edit","replace","remove","change"],
+ steps:[
+   ["Upload the exact image","Use the actual image you want changed so ChatGPT has a clear edit target."],
+   ["Name what stays","State the elements that must remain unchanged: face, body type, logo, wording, layout, colors, product, or background."],
+   ["Name the exact edit","Say what should be changed, removed, added, corrected, resized, recolored, or repositioned."],
+   ["Protect identity and layout","For characters or branded creative, explicitly say to preserve the subject’s identifying features and all unrelated approved details."],
+   ["Review wording","If the image contains text, check every visible word after editing."]
+ ],
+ use:"Fixing spelling, replacing an object, changing colors, removing clutter, adjusting clothing, changing backgrounds, or targeted redesigns.",
+ mistake:"Saying “make this better” when you actually want one specific thing fixed.",
+ prompt:"Edit the image I uploaded. Change only [EXACT CHANGE]. Keep [PROTECTED DETAILS] exactly as they are. Do not redesign or add unrelated elements. Preserve all visible wording except [TEXT CHANGE, IF ANY]."
+},
+{
+ id:"voice", path:"Everyday Tools", level:"Beginner", time:"5 min", title:"Voice & Dictation",
+ desc:"Know the difference between talking with ChatGPT and using the microphone to turn your speech into editable text.",
+ tags:["voice","dictation","microphone","talk"],
+ note:"Voice controls differ across mobile, web, and desktop experiences.",
+ steps:[
+   ["Use dictation for typing by voice","Tap the microphone used for dictation, speak your message, review the transcription, edit it if needed, then send."],
+   ["Use voice conversation when available","Open the voice experience when you want an ongoing spoken conversation instead of typing each turn."],
+   ["Brain-dump naturally","You can speak messily and ask ChatGPT to organize your thoughts after you finish."],
+   ["Give a listening instruction","Before a long brain dump, say: “Let me finish first. Then organize this into...”"],
+   ["Check sensitive details","Review transcribed names, prices, links, and unusual words because speech-to-text can mishear them."]
+ ],
+ use:"Brainstorming, hands-free planning, practicing explanations, capturing ideas, or talking through a problem.",
+ mistake:"Sending an unreviewed dictation with misheard names, prices, or instructions.",
+ prompt:"I am going to explain this idea out loud. Do not organize it until I say I am finished. Then turn it into [OUTPUT] while preserving the important details I said."
+},
+{
+ id:"memory", path:"Personalize", level:"Beginner", time:"7 min", title:"Memory",
+ desc:"Teach ChatGPT useful long-term preferences so you do not have to repeat the same information in every conversation.",
+ tags:["memory","remember","personalization","preferences"],
+ note:"Memory controls are managed under Settings → Personalization. Available options can vary by plan.",
+ steps:[
+   ["Decide what is worth remembering","Good memories are stable preferences, goals, recurring context, or rules that will matter in future chats."],
+   ["Ask directly","You can tell ChatGPT to remember a useful preference when you want it saved."],
+   ["Review Memory settings","Open Settings → Personalization → Memory to review or control memory behavior available to your account."],
+   ["Correct outdated information","If a long-term preference changes, tell ChatGPT the new preference or remove the old one."],
+   ["Separate temporary from permanent","A one-week launch detail usually belongs in the conversation or project, not long-term memory."]
+ ],
+ use:"Brand preferences, communication style, long-term goals, recurring constraints, and stable personal preferences.",
+ mistake:"Saving every temporary fact until memory becomes a junk drawer.",
+ prompt:"Remember this for future conversations: [STABLE PREFERENCE OR RULE]. Use it when relevant, but do not apply it when I explicitly give different instructions."
+},
+{
+ id:"custominstructions", path:"Personalize", level:"Beginner", time:"6 min", title:"Custom Instructions",
+ desc:"Set account-level guidance for how ChatGPT should respond so your basic preferences follow you into new chats.",
+ tags:["custom instructions","settings","personalization","style"],
+ note:"OpenAI currently places Custom Instructions in Settings → Personalization.",
+ steps:[
+   ["Open Settings","Open your profile or settings menu in ChatGPT."],
+   ["Choose Personalization","Go to Personalization and find Custom Instructions or customization controls available to your account."],
+   ["Write reusable rules","Add preferences that should usually apply, such as response style, background context, or formatting habits."],
+   ["Avoid task-specific clutter","Do not put one product launch, one client project, or one temporary deadline into account-wide instructions."],
+   ["Override when needed","Specific instructions in a conversation can be used when a particular task needs something different."]
+ ],
+ use:"Preferred tone, beginner-friendly explanations, recurring formatting, business context, and stable response preferences.",
+ mistake:"Turning Custom Instructions into a giant rulebook full of temporary project details.",
+ prompt:"Help me turn these recurring ChatGPT preferences into short, clear Custom Instructions: [PASTE PREFERENCES]. Separate stable rules from details that belong in individual projects."
+},
+{
+ id:"projects", path:"Organize", level:"Beginner", time:"8 min", title:"Projects",
+ desc:"Keep related chats, files, and project instructions together so ongoing work does not get scattered across random conversations.",
+ tags:["project","projects","organize","files","instructions"],
+ note:"Projects are available across ChatGPT plans, though tools available inside them may depend on plan.",
+ steps:[
+   ["Create or open a Project","Use the Projects area in ChatGPT and create a project for one ongoing body of work."],
+   ["Name it clearly","Use a specific project name such as “Website Workshop” instead of “Stuff.”"],
+   ["Add project context","Upload relevant files and add project-level instructions when you want conversations in that project to share consistent context."],
+   ["Keep related chats inside","Start new conversations from the Project when they belong to that project so the work stays organized."],
+   ["Use built-in tools","Depending on availability, project chats can use tools such as web search, images, files, voice, and deeper research."]
+ ],
+ use:"Courses, websites, product launches, client work, research projects, content systems, workshops, and any work spanning multiple chats.",
+ mistake:"Creating a separate Project for every tiny one-off task instead of grouping related work.",
+ prompt:"Help me set up a ChatGPT Project for [PROJECT]. Tell me what files to add, what project instructions would be useful, and what should stay out because it is temporary or unrelated."
+},
+{
+ id:"tasks", path:"Everyday Tools", level:"Intermediate", time:"7 min", title:"Scheduled Tasks",
+ desc:"Ask ChatGPT to remind you later, repeat something on a schedule, or check periodically for an important change.",
+ tags:["task","tasks","scheduled","reminder","automation","monitor"],
+ note:"Scheduled Tasks are plan-dependent. The Scheduled page and controls may differ by platform.",
+ steps:[
+   ["Create a one-time reminder","Tell ChatGPT what to remind you about and when, or create it from the Scheduled area if available."],
+   ["Create recurring work","Use a repeating schedule for things like weekly planning, recurring summaries, or routine reminders."],
+   ["Use monitoring for conditions","For changing information, ask ChatGPT to check periodically and notify you only when something meaningful changes."],
+   ["Manage your tasks","Use the Scheduled page to review, edit, pause, resume, or delete tasks available to your account."],
+   ["Be specific about the trigger","For monitoring, define what counts as meaningful so you do not get useless notifications."]
+ ],
+ use:"Reminders, weekly planning, recurring briefings, release checks, availability checks, and condition-based monitoring.",
+ mistake:"Creating a recurring task when you only needed one reminder—or asking for monitoring without defining what change matters.",
+ prompt:"Create a scheduled task for [GOAL]. Timing/condition: [WHEN OR WHAT TO WATCH]. Only notify me when [IMPORTANT CONDITION], and keep the update focused on [WHAT I NEED]."
+},
+{
+ id:"apps", path:"Organize", level:"Intermediate", time:"8 min", title:"Apps in ChatGPT",
+ desc:"Connect supported services so ChatGPT can search, reference, and sometimes act on information from tools you already use.",
+ tags:["apps","connectors","gmail","calendar","drive","github","canva"],
+ note:"Which apps and actions are available depends on your plan, workspace, app permissions, and the specific connected service.",
+ steps:[
+   ["Find Apps","Open Settings → Apps or the app directory/Apps area available in your ChatGPT experience."],
+   ["Connect a service","Choose the supported app and review the permissions before connecting it."],
+   ["Use connected information","Ask ChatGPT questions that require information from the connected service, such as your files, messages, calendar, or other supported content."],
+   ["Understand actions","Some apps can only search/read; others may support creating or updating information. Important external actions may require confirmation."],
+   ["Manage permissions","Review or disconnect apps when you no longer want ChatGPT to access that service."]
+ ],
+ use:"Working with connected email, calendars, cloud files, repositories, design tools, and other supported services without manually copying everything.",
+ mistake:"Assuming every connected app can take every action. Capabilities differ by app and permission.",
+ prompt:"Use my connected [APP] to help with [GOAL]. Use only the information relevant to this task. Before any action that changes or sends something externally, show me exactly what will happen."
+},
+{
+ id:"work", path:"Organize", level:"Advanced", time:"8 min", title:"ChatGPT Work",
+ desc:"Use a persistent work-focused environment for larger deliverables and ongoing artifact creation when it is available on your plan.",
+ tags:["work","workspace","artifact","project","documents"],
+ note:"Work is a newer ChatGPT experience. Availability and controls vary by plan, platform, and rollout.",
+ steps:[
+   ["Open Work if available","Use the Chat/Work control or Work entry point shown in your ChatGPT interface."],
+   ["Describe the deliverable","Give the outcome, files, constraints, review criteria, and anything that must stay unchanged."],
+   ["Use project context","When starting Work from a Project, use the project’s existing context when it belongs to the deliverable."],
+   ["Review the result","Treat the first result as a working artifact. Ask for targeted changes instead of rebuilding unrelated parts."],
+   ["Keep the thread focused","Use the same Work conversation for iterative changes to the same deliverable."]
+ ],
+ use:"Larger work products, persistent artifact editing, ongoing professional deliverables, and projects needing more than a quick chat.",
+ mistake:"Using a heavy work environment for a simple one-sentence question.",
+ prompt:"In Work, create/update [DELIVERABLE]. Use these files/context: [CONTEXT]. Requirements: [RULES]. Preserve [APPROVED PARTS]. Before changing anything unrelated, leave it as-is."
+},
+{
+ id:"gpts", path:"Understand ChatGPT", level:"Intermediate", time:"7 min", title:"GPTs / Custom GPTs",
+ desc:"Understand what purpose-built GPTs are, what they can contain, and why using one is different from changing your whole ChatGPT account.",
+ tags:["gpt","custom gpt","gpts","knowledge","instructions"],
+ note:"OpenAI's current availability for creating/publishing GPTs can differ from older tutorials and depends on account/workspace eligibility.",
+ steps:[
+   ["Understand the idea","A GPT is a version of ChatGPT configured for a specific purpose."],
+   ["Know the ingredients","A GPT can combine instructions, conversation starters, uploaded knowledge, and selected capabilities."],
+   ["Use one when purpose matters","A focused GPT can be useful when the same specialized behavior or knowledge should repeat across conversations."],
+   ["Check current creation availability","Do not rely on old tutorials about who can build or publish GPTs. Check your current account experience and OpenAI guidance."],
+   ["Do not confuse with Memory","A GPT’s configuration is purpose-specific; account Memory and Custom Instructions serve different personalization roles."]
+ ],
+ use:"Specialized assistants, repeated workflows, purpose-specific knowledge, or shared experiences when supported.",
+ mistake:"Following an old tutorial that assumes the GPT Builder works exactly the same today.",
+ prompt:"Help me decide whether this idea should be a normal chat workflow, a Project, a reusable prompt, or a GPT: [IDEA]. Compare the options based on how often I will use it, whether it needs files, and whether other people need access."
+},
+{
+ id:"models", path:"Understand ChatGPT", level:"Beginner", time:"6 min", title:"Instant, Thinking & Pro",
+ desc:"Understand when everyday work needs a fast answer and when a harder problem deserves deeper reasoning.",
+ tags:["model","models","instant","thinking","pro","reasoning"],
+ note:"Model choices depend on plan and may change over time. Eligible paid plans can show simplified choices such as Instant, Thinking, and Pro.",
+ steps:[
+   ["Use Instant for everyday work","Use the fast everyday option for straightforward writing, explanations, brainstorming, summaries, and routine questions."],
+   ["Use Thinking for harder reasoning","Use deeper reasoning when the task has several constraints, technical logic, difficult analysis, or a decision where missing a step matters."],
+   ["Use Pro only when it earns its keep","On plans where Pro is available, reserve it for the most demanding reasoning work rather than every caption or quick edit."],
+   ["Let automatic routing help when available","Some experiences can automatically choose between faster and deeper reasoning based on the task."],
+   ["Fix the prompt before blaming the model","No model can reliably guess facts or requirements you never supplied."]
+ ],
+ use:"Choosing an appropriate reasoning level for simple versus complex tasks.",
+ mistake:"Using the most advanced mode for every tiny request and assuming heavier always means better.",
+ prompt:"Look at this task and decide whether it needs everyday reasoning or deeper reasoning: [TASK]. Briefly explain the choice, then complete the task."
+},
+{
+ id:"sites", path:"Create", level:"Intermediate", time:"8 min", title:"ChatGPT Sites",
+ desc:"Use the newer Work/Sites experience to build and refine websites, dashboards, trackers, portals, prototypes, and reports when available.",
+ tags:["sites","website","dashboard","portal","prototype","work"],
+ note:"Sites is tied to the newer Work experience, so availability and entry points can vary by plan and platform.",
+ steps:[
+   ["Start in Work","Open Work on a supported ChatGPT experience and describe what you want to build."],
+   ["Bring the real material","Include the copy, files, data, links, brand rules, required sections, and constraints the site should use."],
+   ["Review the private preview","Inspect the generated site instead of assuming the first version is ready."],
+   ["Make targeted changes","Ask for exact edits and clearly list approved elements that must stay unchanged."],
+   ["Test before publish","Check mobile layout, wording, links, buttons, forms, and important interactions before treating the build as final."]
+ ],
+ use:"Websites, launch pages, dashboards, project trackers, internal portals, prototypes, and interactive reports.",
+ mistake:"Saying “make the whole thing better” when one section needs fixing and accidentally inviting a full redesign.",
+ prompt:"Build or update this Site: [GOAL]. Use [FILES/CONTENT]. Required sections: [SECTIONS]. Preserve [APPROVED PARTS]. Change only [REQUESTED CHANGES]. Test wording, links, buttons, and mobile layout before calling it complete."
+},
+{
+ id:"powerwords", path:"Create", level:"Beginner", time:"8 min", title:"Power Words: Describe the Finish",
+ desc:"Learn why vague adjectives give vague direction and how descriptive rendering words change the visual treatment.",
+ tags:["power words","keywords","image prompt","rendering","finish","lighting"],
+ steps:[
+   ["Separate subject from finish","The subject tells ChatGPT what exists. Rendering words tell it how that subject should look."],
+   ["Replace vague adjectives","Swap words such as pretty, cute, nice, or cool for concrete visual direction: material, finish, lighting, texture, style, and detail."],
+   ["Know what a word changes","A lighting word changes illumination. A material word changes surface behavior. A finish word changes polish and reflections."],
+   ["Combine compatible words","Use small stacks that support the same visual goal instead of dumping dozens of unrelated keywords."],
+   ["Protect the composition","Power words should enhance the hero subject, not overwhelm it with clutter or competing effects."]
+ ],
+ use:"Image prompts where the concept is correct but the final look feels flat, generic, cheap, or inconsistent.",
+ mistake:"Believing a giant list of luxury words automatically creates a luxury image. The words must describe the same visual direction.",
+ prompt:"Create [SUBJECT]. Rendering direction: [STYLE/RENDERING]. Materials/finish: [MATERIALS]. Lighting: [LIGHTING]. Detail level: [DETAIL]. Composition: [COMPOSITION]. Preserve [IMPORTANT DETAILS]. Do not add [EXCLUSIONS]."
+},
+{
+ id:"formulas", path:"Create", level:"Intermediate", time:"9 min", title:"Build Prompt Formulas",
+ desc:"Turn visual prompting into repeatable building blocks: subject + features + rendering + lighting + finish + guardrails.",
+ tags:["formula","prompt formula","image prompt","builder","structure"],
+ steps:[
+   ["Choose the subject block","Define the character, product, object, or scene."],
+   ["Add feature blocks","Use only appearance details that affect the result: hair, eyes, makeup, clothing, expression, object shape, colors."],
+   ["Add the rendering block","Choose the intended visual language such as commercial illustration, designer toy, editorial realism, glossy 3D, or another clear treatment."],
+   ["Add lighting and finish","Direct highlights, reflections, diffusion, rim light, polish, gradients, surface finish, and detail."],
+   ["Finish with guardrails","Add exact text, aspect ratio, protected details, exclusions, and what must stay unchanged."]
+ ],
+ use:"Building reusable generators, consistent character prompts, commercial visual systems, and teaching beginners how prompts are constructed.",
+ mistake:"Treating every category as mandatory. A formula is a framework, not a requirement to fill every box.",
+ prompt:"Use this formula: [SUBJECT] + [FEATURES] + [COMPOSITION] + [RENDERING] + [LIGHTING] + [FINISH] + [GUARDRAILS]. Build one clean prompt for: [CONCEPT]."
+}
+];
+
+const paths = [
+ {name:"Start Here",num:"01",desc:"Learn the conversation and prompting skills everything else builds on."},
+ {name:"Research & Learn",num:"02",desc:"Search, Deep Research, and Study Mode for finding and understanding information."},
+ {name:"Files & Data",num:"03",desc:"Work with PDFs, documents, file storage, spreadsheets, and analysis."},
+ {name:"Create",num:"04",desc:"Create and edit visuals without wrecking the parts you already like."},
+ {name:"Personalize",num:"05",desc:"Use Memory and Custom Instructions intentionally instead of repeating yourself."},
+ {name:"Organize",num:"06",desc:"Projects, Apps, and Work for bigger ongoing workflows."},
+ {name:"Understand ChatGPT",num:"07",desc:"Models and purpose-built GPTs so you understand what is happening under the hood without the jargon."}
+];
+
+const practices = [
+ ["Beginner","Turn a weak prompt into a useful one","Take “Write me a post” and rewrite it with a goal, audience, context, format, and one important limit."],
+ ["Beginner","Upload and interrogate a PDF","Upload a PDF. Ask for five takeaways, where each appears, and three questions the document does not answer."],
+ ["Beginner","Use Study Mode","Pick one thing you keep avoiding because it feels confusing. Have Study Mode teach it one piece at a time."],
+ ["Beginner","Create a controlled image prompt","Write an image request with subject, composition, lighting, colors, exact text, and a short “do not add” list."],
+ ["Intermediate","Compare Search vs Deep Research","Ask one small current question with web search, then use Deep Research for a multi-source decision. Notice the difference in depth."],
+ ["Intermediate","Build a Project","Choose one real ongoing project. Add only the files and instructions that should stay relevant across its chats."],
+ ["Intermediate","Analyze a spreadsheet","Upload a CSV/XLSX. Have ChatGPT inspect columns first, then answer one real business question from the data."],
+ ["Intermediate","Create a useful scheduled task","Set a reminder or recurring task tied to something you would otherwise forget or manually check."],
+ ["Intermediate","Audit your Memory","Ask what ChatGPT remembers, identify what is still useful, and remove or correct anything outdated."],
+ ["Advanced","Design a repeatable workflow","Choose one business task you repeat. Build a sequence that uses the right feature at each stage instead of one giant prompt."]
+];
+
+const biz = [
+ ["01","Content System","Idea → research → hook → post → caption → video script → repurpose → schedule."],
+ ["02","Digital Product Builder","Audience problem → offer idea → product outline → instructions → listing → FAQ → launch content."],
+ ["03","Workshop Builder","Learning outcome → agenda → teaching points → practice → handout → replay summary → follow-up."],
+ ["04","Website Workflow","Plan structure → prepare content → build → inspect code → test links → mobile review → publish."],
+ ["05","Customer Support","Collect common questions → group issues → draft answers → create FAQ → build troubleshooting flow."],
+ ["06","Research Workflow","Define decision → Search for quick facts → Deep Research for synthesis → verify sources → action plan."],
+ ["07","Content Analysis","Upload performance data → inspect columns → identify winners → find patterns → plan next experiments."],
+ ["08","Brand Assistant","Memory for stable preferences → Project for active brand work → files for brand guides → reusable prompts."],
+ ["09","Launch Assistant","Project → offer files → timeline → scheduled reminders → content generation → live launch checklist."],
+ ["10","Client Workflow","Separate Project per client → client files/instructions → research → deliverable → revision → final asset."]
+];
+
+
+const lessonExamples = {
+ basics:["Weak request","Tell me about marketing.","Better request","Help me plan a 7-day Facebook launch for a beginner workshop. My audience is women 40+ who feel intimidated by tech. Give me one post idea per day and keep the language simple."],
+ prompting:["Too vague","Make this better.","Clear instruction","Rewrite this product description for first-time buyers. Keep the price and product features unchanged. Make it warmer, clearer, and under 120 words."],
+ search:["Wrong fit","Just guess what changed recently.","Better use","Search current official sources for the latest information, tell me what changed, and cite the current source."],
+ deepresearch:["Quick lookup","What does this company sell?","Deep Research job","Compare three competitors across pricing, audience, positioning, customer complaints, and product gaps. Use multiple credible sources and produce a cited market report."],
+ studymode:["Answer-only","Give me the answer.","Learning approach","Teach me how to solve this type of problem. Ask me one question at a time and do not reveal the final answer until I try."],
+ files:["Vague","Summarize this 60-page PDF.","Focused","Find the cancellation policy, deadlines, refund rules, and anything that could cost me money. Point me to the section supporting each item."],
+ data:["Risky request","Tell me what this spreadsheet means.","Better analysis","First identify each column and missing values. Then show monthly revenue, top 5 products, and unusual drops."],
+ images:["Overstuffed","Add every object and effect I can think of.","Controlled","Editorial portrait with one hero subject, clean negative space, strong lighting, intentional colors, and no unrelated clutter."],
+ imageedit:["Dangerous edit","Make this image better.","Targeted edit","Change only the background. Preserve the subject, pose, proportions, logo, layout, and all wording exactly."],
+ memory:["Bad memory","Remember something temporary for this week.","Good memory","Remember a stable preference that should matter in future chats."],
+ custominstructions:["Too temporary","Put Friday's launch details in account-wide instructions.","Stable","Use beginner-friendly explanations and preserve approved work unless I ask for a redesign."],
+ projects:["Scattered","Ten unrelated chats for one workshop.","Organized","One Project containing the files, approved structure, decisions, and related chats."],
+ tasks:["Too broad","Keep me updated.","Specific","Every Monday morning, send me a short update covering only changes that could affect my workflow."],
+ apps:["Manual copying","Copy everything from another service by hand.","Connected workflow","Use a supported connected app to retrieve only the information needed for the task."],
+ work:["Tiny task","Use Work to rewrite one sentence.","Good fit","Use Work to create and iteratively refine a complete deliverable from files, instructions, and feedback."],
+ gpts:["Wrong assumption","I need a GPT because I have one reusable prompt.","Decision","Compare whether this belongs in a normal chat, saved prompt, Project, or GPT before building it."],
+ models:["Overkill","Use the strongest reasoning for one typo.","Right-sized","Use fast everyday reasoning for the typo and deeper reasoning for the multi-step business decision."],
+ sites:["Redesign risk","Make my whole site better.","Protected change","Fix only the mobile hero cropping and preserve every approved section, button, link, review, and navigation item."]
+};
+
+const troubleshooting = {
+ files:[["The answer looks wrong","Ask ChatGPT to point to the exact section or page supporting the claim."],["It cannot find something","Search for an exact phrase, heading, name, date, or keyword."],["The file is huge","Narrow the question or work section-by-section."]],
+ images:[["The image is cluttered","Reduce the number of focal subjects and remove unrelated decorative objects."],["It changed something I liked","Name the protected details and request only one targeted change."],["The wording is wrong","Shorten visible text and provide the exact wording again."]],
+ projects:[["It keeps missing context","Confirm the chat is inside the Project and the right files/instructions are there."],["There is conflicting information","Update or remove stale project instructions instead of stacking contradictions."],["I cannot find the project","Check the Projects area and confirm you are in the correct account/workspace."]],
+ apps:[["It cannot do an action","Some apps can only read/search. Capabilities and permissions differ."],["It cannot see my data","Confirm the app is connected to the correct account and has the needed permission."],["I am nervous about sending something","Ask for a draft or preview first, then confirm only after you inspect it."]],
+ tasks:[["Too many notifications","Define exactly what condition deserves a notification."],["Wrong time","Edit the schedule and include a precise time/time zone when timing matters."],["I only need one reminder","Use a one-time task, not a recurring one."]],
+ prompting:[["The answer is generic","Add the goal, audience, useful context, and desired format."],["It changed facts","Protect names, prices, links, or details that must remain unchanged."],["It is too long","Set a length or output format."]]
+};
+
+const scenarios = [
+ {title:"40-page policy PDF",text:"You need refund rules, deadlines, and anything that could cost you money.",choices:["Web Search","Files & PDFs","Study Mode"],answer:"Files & PDFs",why:"The source of truth is the document you already have."},
+ {title:"Current platform changes",text:"You need to know what changed this week and want reliable sources.",choices:["Memory","Web Search","Image Creation"],answer:"Web Search",why:"The answer can change, so fresh sources matter."},
+ {title:"Full competitor report",text:"You need pricing, positioning, reviews, gaps, and a cited comparison across several competitors.",choices:["Deep Research","Voice","Custom Instructions"],answer:"Deep Research",why:"This requires multi-source synthesis and a documented report."},
+ {title:"Workshop you build for months",text:"You have files, decisions, notes, and multiple conversations that all belong together.",choices:["Project","Scheduled Task","Image Editing"],answer:"Project",why:"Projects keep related chats, files, and instructions together."},
+ {title:"Weekly creator briefing",text:"You want the same useful update every Monday without manually asking each week.",choices:["Study Mode","Scheduled Task","File Library"],answer:"Scheduled Task",why:"The recurrence is the reason this belongs in a scheduled task."},
+ {title:"Learn Excel formulas",text:"You want ChatGPT to teach you, make you practice, and check your understanding.",choices:["Study Mode","Deep Research","Apps"],answer:"Study Mode",why:"You want guided learning, not just the answer."},
+ {title:"Sales spreadsheet",text:"You have an XLSX and want revenue trends, top products, and unusual drops.",choices:["Data Analysis","Memory","Voice"],answer:"Data Analysis",why:"The answer depends on structured data and calculations."},
+ {title:"Fix one website section",text:"Your mobile hero is cropped, but approved buttons, links, sections, and reviews must stay.",choices:["Targeted edit","Start over","Memory"],answer:"Targeted edit",why:"A scoped edit protects approved work and fixes only the problem."}
+];
+
+const glossary = [
+ ["Prompt","The instruction or request you give ChatGPT."],
+ ["Context","Information ChatGPT needs to understand your situation."],
+ ["Model","The underlying AI system producing the response."],
+ ["Project","A place that keeps related chats, files, and project instructions together."],
+ ["Memory","Long-term context or preferences ChatGPT can use in future conversations when enabled."],
+ ["Custom Instructions","Account-level guidance for how you generally want ChatGPT to respond."],
+ ["Web Search","Using current internet sources when information may have changed."],
+ ["Deep Research","A multi-source research workflow that synthesizes information into a documented report."],
+ ["Study Mode","A teaching experience that guides you with explanations, questions, and practice."],
+ ["App","A supported connection between ChatGPT and another service, data source, or action."],
+ ["File Library","A place to find and reuse files uploaded to or created in ChatGPT when available."],
+ ["Data Analysis","Using ChatGPT to inspect, calculate, summarize, and visualize structured data."],
+ ["Voice","An ongoing spoken conversation with ChatGPT."],
+ ["Dictation","Turning speech into editable text before sending it."],
+ ["Work","A work-focused experience for larger, more involved deliverables on eligible plans."],
+ ["GPT","A purpose-built version of ChatGPT configured for a specific use."],
+ ["Citation","A source reference attached to a claim."],
+ ["Hallucination","When AI gives information that sounds plausible but is wrong or unsupported."],
+ ["Source of truth","The file, official page, or other authoritative material an answer should rely on."],
+ ["Iteration","Improving a result through follow-up changes instead of expecting perfection on the first try."],
+ ["Guardrail","A clear limit such as “do not change the price” or “preserve these sections.”"]
+];
+
+let playbook = JSON.parse(localStorage.getItem("glamPlaybook")||"[]");
+
+
+const powerWordData = {
+ "Rendering & Quality":{
+   description:"Words that push the image toward polished illustration, advertising, packaging, or high-detail rendering.",
+   words:[
+    ["Luxury commercial illustration","Premium advertising-style rendering"],
+    ["Designer toy aesthetic","Collectible vinyl / art-toy treatment"],
+    ["Hyper-gloss finish","Highly reflective polished surfaces"],
+    ["Airbrushed rendering","Smooth, controlled skin and shading"],
+    ["Ultra smooth gradients","Cleaner tonal transitions"],
+    ["HDR","Richer contrast and dynamic-looking light"],
+    ["Soft bloom","A soft glow around highlights"],
+    ["Crisp details","Sharper fine visual features"],
+    ["Premium commercial artwork","Professional marketing-style finish"],
+    ["Hyper polished","Highly refined packaging-quality treatment"]
+   ]
+ },
+ "Lighting":{
+   description:"Lighting words tell the model where the glow, contrast, reflections, softness, and dimensionality should come from.",
+   words:[
+    ["Luxury cosmetic advertising lighting","Bright polished beauty-ad lighting"],
+    ["Soft rim lighting","A gentle outline of light around the subject"],
+    ["Studio lighting","Controlled professional illumination"],
+    ["Volumetric lighting","Visible dimensional beams and atmospheric light"],
+    ["HDR lighting","Strong highlight/shadow range"],
+    ["Bright beauty lighting","Clean flattering facial illumination"],
+    ["Reflective lighting","Emphasizes shiny surfaces and reflections"],
+    ["Ambient glow","Soft surrounding illumination"],
+    ["Soft diffusion","Smooth, low-harshness lighting"],
+    ["Luminous highlights","Bright glowing highlight accents"]
+   ]
+ },
+ "Skin & Beauty":{
+   description:"Use these when skin finish is a deliberate part of the visual style, especially beauty, doll, toy, or glossy character work.",
+   words:[
+    ["Flawless airbrushed skin","Smooth polished complexion treatment"],
+    ["Luminous skin","Soft internal-looking glow"],
+    ["Radiant complexion","Bright healthy-looking finish"],
+    ["Reflective highlights","Controlled shine on high points"],
+    ["Glass skin","Very smooth glossy skincare-style finish"],
+    ["Velvety complexion","Soft matte-smooth skin treatment"],
+    ["Ultra smooth complexion","Minimized rough texture"]
+   ]
+ },
+ "Eyes":{
+   description:"Eye words control scale, reflectivity, expression, stylization, and catchlights.",
+   words:[
+    ["Oversized expressive eyes","Large stylized eyes with emotion"],
+    ["Multiple catchlights","More than one reflected light point"],
+    ["Glossy eyes","Shiny reflective eye surfaces"],
+    ["Luminous irises","Bright glowing-looking iris color"],
+    ["Sparkling pupils","High-sparkle eye detail"],
+    ["Designer toy eyes","Stylized collectible-character eye treatment"],
+    ["Deep eye reflections","More pronounced reflective depth"]
+   ]
+ },
+ "Lips":{
+   description:"Lip terms control shine, translucency, finish, shape, and cosmetic treatment.",
+   words:[
+    ["Glossy lips","High-shine cosmetic finish"],
+    ["Glass lips","Very reflective glass-like gloss"],
+    ["Candy gloss","Bright sweet lacquer-like shine"],
+    ["Lacquered lips","Smooth coated reflective finish"],
+    ["Full pout","Fuller stylized lip shape"],
+    ["Ombre lips","Gradient lip color"],
+    ["Soft highlights","Controlled reflective accents"]
+   ]
+ },
+ "Hair":{
+   description:"Hair words communicate shine, strand finish, grooming, parting, edges, and salon polish.",
+   words:[
+    ["Mirror-shine hair","Strong reflective glossy finish"],
+    ["Silky hair","Smooth soft strand texture"],
+    ["Luxury blowout","Polished voluminous salon styling"],
+    ["Glass hair","Ultra-sleek reflective straight hair"],
+    ["High-shine strands","Visible glossy strand highlights"],
+    ["Salon finish","Professionally styled appearance"],
+    ["Precision part","Clean deliberate hair parting"],
+    ["Ultra sleek","Very smooth controlled styling"]
+   ]
+ },
+ "Materials & Finish":{
+   description:"Material words tell the model how surfaces should behave: reflective, translucent, pearly, soft, hard, coated, or glass-like.",
+   words:[
+    ["Glossy plastic","Smooth reflective plastic"],
+    ["Vinyl","Collectible-toy plastic surface"],
+    ["Chrome","Mirror-like metallic surface"],
+    ["Pearlescent","Soft iridescent pearl sheen"],
+    ["Lacquer","Smooth coated high-gloss finish"],
+    ["Mirror finish","Highly reflective surface"],
+    ["High polish","Strong refined shine"],
+    ["Resin","Solid polished collectible material"],
+    ["Transparent acrylic","Clear hard transparent material"],
+    ["Candy finish","Bright glossy confection-like coating"],
+    ["Glass finish","Hard clear reflective appearance"],
+    ["Iridescent coating","Color-shifting reflective surface"]
+   ]
+ },
+ "Detail & Output":{
+   description:"These terms communicate edge cleanup, focus, texture detail, and production polish. They do not replace a well-built prompt.",
+   words:[
+    ["Professional rendering","Polished professional execution"],
+    ["Ultra detailed","More fine visual detail"],
+    ["Intricate textures","More complex surface texture"],
+    ["Clean edge rendering","Cleaner subject boundaries"],
+    ["Sharp focus","Sharper focal detail"],
+    ["Commercial quality","Marketing-ready visual treatment"],
+    ["Luxury packaging quality","Highly refined product-packaging finish"],
+    ["Print quality","Output intended to read cleanly at larger sizes"]
+   ]
+ },
+ "Style":{
+   description:"Style words identify the overall visual family. Pick one or two that actually agree with each other.",
+   words:[
+    ["Collectible vinyl figure","Art-toy collectible character style"],
+    ["Designer toy","Stylized premium toy aesthetic"],
+    ["Premium mascot","Commercial mascot treatment"],
+    ["Sticker art","Clean simplified cut-friendly illustration"],
+    ["Toy packaging","Retail collectible packaging visual language"],
+    ["Fashion doll","Stylized fashion-doll presentation"],
+    ["Hyper-realistic caricature","Exaggerated features with realistic rendering"],
+    ["Luxury cartoon","Polished premium cartoon aesthetic"],
+    ["Commercial illustration","Professional advertising illustration"],
+    ["Editorial toy design","Fashion/editorial art-toy direction"]
+   ]
+ }
+};
+
+let selectedPowerWords = [];
+
+const formulaConfigs = {
+ glam:{
+   recipe:"[Character] + [beauty features] + [hair] + [makeup] + [luxury rendering] + [lighting] + [finish]",
+   fields:[["Character","A glamorous adult woman"],["Beauty features","deep skin tone, expressive eyes, glossy lips"],["Hair","sleek dark glass hair"],["Makeup","precision makeup and dramatic lashes"],["Luxury rendering","luxury commercial illustration"],["Lighting","bright beauty studio lighting"],["Finish","reflective highlights, crisp polished details"]]
+ },
+ toy:{
+   recipe:"[Character] + [exaggeration] + [material] + [rendering] + [lighting] + [details]",
+   fields:[["Character","an adult fashion character"],["Exaggeration","oversized expressive eyes and animated features"],["Material","luxury vinyl materials"],["Rendering","collectible designer toy aesthetic"],["Lighting","soft studio lighting"],["Details","luminous reflections, smooth gradients, clean edges"]]
+ },
+ beauty:{
+   recipe:"[Skin] + [eyes] + [lips] + [hair] + [makeup] + [lighting]",
+   fields:[["Skin","flawless airbrushed skin with luminous highlights"],["Eyes","oversized glossy eyes with multiple catchlights"],["Lips","full glass-like lips"],["Hair","mirror-shine hair"],["Makeup","precision makeup and dramatic lashes"],["Lighting","luxury cosmetic advertising lighting with soft rim light"]]
+ },
+ general:{
+   recipe:"[Subject] + [features] + [composition] + [rendering] + [lighting] + [finish] + [guardrails]",
+   fields:[["Subject",""],["Features",""],["Composition",""],["Rendering",""],["Lighting",""],["Finish",""],["Guardrails",""]]
+ }
+};
+
+const wordChallengeData = [
+ {q:"You want the character to look expensive and professionally rendered. Which phrase gives the clearest direction?",answers:[["Make it pretty",false],["Premium commercial illustration with hyper-polished finish",true],["Make it better",false]]},
+ {q:"You want a shiny collectible-toy surface. Which term is most useful?",answers:[["Vinyl",true],["Cute",false],["Amazing",false]]},
+ {q:"You want a soft outline of light around the subject. Which lighting phrase fits?",answers:[["Soft rim lighting",true],["Nice lighting",false],["More bright",false]]},
+ {q:"You want very sleek reflective hair. Which description is strongest?",answers:[["Pretty black hair",false],["Mirror-shine glass hair with precision part",true],["Good hair",false]]}
+];
+
+const finderRules = [
+ {keys:["multi source","many sources","full report","detailed report","deep research","literature","competitor","competitive","market research"],
+  feature:"Deep Research",why:"You need synthesis across multiple sources, not a quick lookup.",
+  steps:"Start Deep Research → describe the decision/outcome → choose allowed sources → review the research plan → verify the final citations.",
+  lesson:"deepresearch",
+  prompt:"Use Deep Research for this goal: [PASTE YOUR GOAL]. Build a research plan first. Focus on the sources and criteria that affect my decision, then give me a structured cited report with key findings, disagreements between sources, and a clear conclusion."},
+ {keys:["pdf","document","file","docx","slides","presentation","notes","upload","pages"],
+  feature:"Files & PDFs",why:"The answer should come from material you already have, so the file should be the source of truth.",
+  steps:"Attach the file → state your goal → point to relevant sections → ask for evidence or page/section references.",
+  lesson:"files",
+  prompt:"Use the file I upload as the source of truth. My goal is [GOAL]. Focus on [TOPIC/SECTION]. Give me [OUTPUT] and point me to the part of the file supporting each important conclusion."},
+ {keys:["spreadsheet","csv","xlsx","sales data","data","numbers","chart","rows","columns"],
+  feature:"Data Analysis",why:"You need structured analysis rather than a normal text response.",
+  steps:"Upload the data → inspect columns and quality → define the business question → analyze → visualize only if useful.",
+  lesson:"data",
+  prompt:"Analyze my uploaded data for [GOAL]. First explain the columns and flag quality issues. Then calculate the metrics that matter, identify patterns or outliers, and explain what action the findings suggest."},
+ {keys:["remember","memory","every chat","keep telling","brand preferences","my preferences"],
+  feature:"Memory / Custom Instructions",why:"This is recurring context that may need to follow you across conversations.",
+  steps:"Use Memory for stable facts/preferences; use Custom Instructions for recurring response rules; use a Project for context specific to one body of work.",
+  lesson:"memory",
+  prompt:"Help me decide which of these details belong in Memory, Custom Instructions, or a Project: [DETAILS]. Explain why and rewrite each item into the shortest useful instruction."},
+ {keys:["organize chats","same project","project","keep files together","ongoing work","client work"],
+  feature:"Projects",why:"Your work spans multiple chats/files and needs shared context.",
+  steps:"Create a Project → name it clearly → add only relevant files → add project instructions → start related chats inside it.",
+  lesson:"projects",
+  prompt:"Help me structure a ChatGPT Project for [PROJECT]. Tell me what files to include, what project instructions should be persistent, and what temporary information should stay in individual chats."},
+ {keys:["remind","reminder","every week","weekly","daily","monthly","notify","watch for","when available","goes on sale","price drop"],
+  feature:"Scheduled Tasks",why:"You need something to happen later, repeatedly, or only when a future condition changes.",
+  steps:"Create a Scheduled Task → define the time or condition → define what counts as important → manage it from Scheduled.",
+  lesson:"tasks",
+  prompt:"Create a scheduled task for [GOAL]. Run/check it [WHEN]. Notify me only if [CONDITION]. Keep each update focused on [INFORMATION I NEED]."},
+ {keys:["latest","current","today","news","price","law","schedule","verify","sources","recent","recommendation"],
+  feature:"Web Search",why:"The answer could have changed, so current web sources matter.",
+  steps:"Ask ChatGPT to search current sources → specify official/primary sources where useful → read citations → refine by date/location/source.",
+  lesson:"search",
+  prompt:"Search the web for the most current reliable information about [TOPIC]. Prioritize official or primary sources where possible. Summarize what matters for [GOAL] and cite the claims I should verify."},
+ {keys:["study","learn","teach me","quiz me","exam","homework","course","understand"],
+  feature:"Study Mode",why:"You want to learn the material, not just receive a finished answer.",
+  steps:"Turn on Study Mode → tell it your level → add course material if relevant → answer its questions → request a quiz/check for understanding.",
+  lesson:"studymode",
+  prompt:"Use Study Mode to teach me [TOPIC] at a [LEVEL] level. Check what I know first, teach one concept at a time, and quiz me before moving forward."},
+ {keys:["image","picture","graphic","flyer","mockup","photo","cover","visual","poster"],
+  feature:"Image Creation",why:"Your final result is visual, so image generation is the right tool.",
+  steps:"Describe subject → composition → visual style → colors/lighting → exact text → exclusions.",
+  lesson:"images",
+  prompt:"Create a [FORMAT] image featuring [SUBJECT]. Style: [STYLE]. Composition: [COMPOSITION]. Colors/lighting: [DETAILS]. Exact visible wording: “[TEXT].” Keep it readable and correctly spelled. Do not add [EXCLUSIONS]."},
+ {keys:["edit image","change this image","remove from photo","fix spelling image","recolor image"],
+  feature:"Image Editing",why:"You already have the visual and need a targeted change rather than a new design.",
+  steps:"Upload the image → protect approved details → state the exact edit → check the result for unwanted changes.",
+  lesson:"imageedit",
+  prompt:"Edit the uploaded image. Change only [CHANGE]. Preserve [APPROVED DETAILS]. Do not redesign or add unrelated elements."},
+ {keys:["gmail","calendar","google drive","github","connected","app","connector","canva"],
+  feature:"Apps in ChatGPT",why:"The information or action lives in another service and a supported connected app may save you from copying it manually.",
+  steps:"Open Apps/Settings → connect the service → review permissions → ask ChatGPT to use that app → confirm important external actions.",
+  lesson:"apps",
+  prompt:"Use my connected [APP] for [GOAL]. Use only relevant information. Before any action that changes or sends something externally, show me what will happen."},
+ {keys:["write","caption","post","email","rewrite","script","description","plan"],
+  feature:"Normal Chat + Better Prompt",why:"You probably do not need a special feature; you need a clear instruction and useful context.",
+  steps:"State the outcome → audience → context → important limits → desired format → refine in follow-ups.",
+  lesson:"prompting",
+  prompt:"Create [OUTPUT] for [AUDIENCE]. Goal: [GOAL]. Context: [DETAILS]. Keep [REQUIREMENTS]. Avoid [LIMITS]. Give me the finished result in [FORMAT]."}
+];
+
+let completed = JSON.parse(localStorage.getItem("glamHubCompleted")||"[]");
+let quizAnswers = {};
+
+function toast(msg){
+ const el=document.getElementById("toast"); el.textContent=msg; el.classList.add("show");
+ setTimeout(()=>el.classList.remove("show"),1700);
+}
+function copyText(text){
+ navigator.clipboard.writeText(text).then(()=>toast("Copied!")).catch(()=>toast("Copy is not available here."));
+}
+function escapeAttr(s){return s.replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+function goTab(name){
+ document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.tab===name));
+ document.querySelectorAll(".panel").forEach(x=>x.classList.toggle("active",x.id==="panel-"+name));
+ document.getElementById("hub").scrollIntoView({behavior:"smooth",block:"start"});
+}
+document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>goTab(t.dataset.tab)));
+
+function renderPaths(){
+ document.getElementById("pathGrid").innerHTML=paths.map(p=>{
+   const count=lessons.filter(l=>l.path===p.name).length;
+   return `<article class="path">
+     <div class="path-top"><span class="num">${p.num}</span><span class="count">${count} lesson${count===1?"":"s"}</span></div>
+     <h3>${p.name}</h3><p>${p.desc}</p>
+     <button class="tiny-btn" onclick="filterPath('${p.name.replace(/'/g,"\\'")}')">Show this path</button>
+   </article>`
+ }).join("");
+}
+function filterPath(path){
+ document.getElementById("lessonSearch").value=path;
+ renderLessons(path);
+ document.getElementById("lessonGrid").scrollIntoView({behavior:"smooth",block:"start"});
+}
+function renderLessons(filter=""){
+ const q=filter.trim().toLowerCase();
+ const list=lessons.filter(l=>!q||[l.title,l.desc,l.path,l.level,...l.tags].join(" ").toLowerCase().includes(q));
+ document.getElementById("lessonGrid").innerHTML=list.map(l=>`
+   <article class="lesson-card">
+     <div class="done-dot ${completed.includes(l.id)?"done":""}">${completed.includes(l.id)?"✓":"○"}</div>
+     <span class="chip">${l.path}</span>
+     <h3>${l.title}</h3>
+     <p>${l.desc}</p>
+     <div class="meta"><span>${l.level}</span><span>${l.time}</span></div>
+     <div class="card-actions">
+       <button class="tiny-btn" onclick="openLesson('${l.id}')">Open Lesson</button>
+       <button class="tiny-btn" onclick="toggleComplete('${l.id}')">${completed.includes(l.id)?"Undo":"Mark Complete"}</button>
+     </div>
+   </article>
+ `).join("") || `<div class="box"><h3>No lessons found</h3><p class="help">Try another word such as files, images, research, projects, tasks, memory, or apps.</p></div>`;
+}
+function updateProgress(){
+ const done=completed.length, total=lessons.length, pct=Math.round(done/total*100);
+ document.getElementById("doneCount").textContent=done;
+ document.getElementById("totalCount").textContent=total;
+ document.getElementById("pctCount").textContent=pct+"%";
+ document.getElementById("progressText").textContent=pct+"%";
+ document.getElementById("progressFill").style.width=pct+"%";
+ document.getElementById("levelChip").textContent=pct>=85?"Power User":pct>=55?"Building Skills":pct>=25?"Learning the Tools":"Getting Started";
+ const next=lessons.find(l=>!completed.includes(l.id));
+ document.getElementById("nextTitle").textContent=next?next.title:"You finished the academy!";
+ document.getElementById("nextDesc").textContent=next?next.desc:"Use the Practice Lab and Business Lab to keep applying what you learned.";
+}
+function toggleComplete(id){
+ completed=completed.includes(id)?completed.filter(x=>x!==id):[...completed,id];
+ localStorage.setItem("glamHubCompleted",JSON.stringify(completed));
+ renderLessons(document.getElementById("lessonSearch").value);
+ updateProgress();
+ const modal=document.getElementById("lessonModal");
+ if(modal.classList.contains("open")) openLesson(id);
+ toast(completed.includes(id)?"Lesson complete.":"Lesson marked incomplete.");
+}
+function openLesson(id){
+ const l=lessons.find(x=>x.id===id);
+ document.getElementById("modalContent").innerHTML=`
+   <span class="chip">${l.path} • ${l.level}</span>
+   <h2 class="lesson-title">${l.title}</h2>
+   <p class="lesson-desc">${l.desc}</p>
+   ${l.note?`<div class="device-note"><strong>Heads up:</strong> ${l.note}</div>`:""}
+   <div class="lesson-modes">
+     <button class="mode-btn active" onclick="renderLessonMode('${l.id}','learn',this)">Learn It</button>
+     <button class="mode-btn" onclick="renderLessonMode('${l.id}','show',this)">Show Me</button>
+     <button class="mode-btn" onclick="renderLessonMode('${l.id}','try',this)">Try It</button>
+     <button class="mode-btn" onclick="renderLessonMode('${l.id}','quiz',this)">Quiz Me</button>
+     <button class="mode-btn" onclick="renderLessonMode('${l.id}','stuck',this)">I'm Stuck</button>
+   </div>
+   <div id="lessonModeStage"></div>
+   <div class="lesson-footer">
+     <button class="btn primary" onclick="toggleComplete('${l.id}')">${completed.includes(l.id)?"Mark Incomplete":"Mark Lesson Complete"}</button>
+     <button class="btn secondary" onclick="saveToPlaybook('${l.id}',lessons.find(x=>x.id==='${l.id}').title,lessons.find(x=>x.id==='${l.id}').prompt)">Save Prompt</button>
+     <button class="btn secondary" onclick="document.getElementById('lessonModal').classList.remove('open')">Back to Academy</button>
+   </div>`;
+ document.getElementById("lessonModal").classList.add("open");
+ renderLessonMode(id,"learn");
+}
+function renderLessonMode(id,mode,btn){
+ const l=lessons.find(x=>x.id===id),stage=document.getElementById("lessonModeStage");
+ if(btn){document.querySelectorAll(".mode-btn").forEach(x=>x.classList.remove("active"));btn.classList.add("active")}
+ if(mode==="learn"){
+   stage.innerHTML=`<div class="mode-stage"><h3>Learn It</h3>
+   ${l.steps.map((s,i)=>`<div class="step"><div class="step-num">${i+1}</div><div><h4>${s[0]}</h4><p>${s[1]}</p></div></div>`).join("")}
+   <div class="lesson-callout"><strong>When to use it</strong><p>${l.use}</p></div>
+   <div class="lesson-callout"><strong>Common mistake</strong><p>${l.mistake}</p></div>
+   <div class="prompt"><button class="copy" onclick="copyText(document.getElementById('lp-${l.id}').innerText)">Copy</button><pre id="lp-${l.id}">${l.prompt}</pre></div></div>`;
+ }
+ if(mode==="show"){
+   const ex=lessonExamples[id]||["Less useful","A vague request with missing context.","Better","A focused request that names the goal, source, constraints, and finished result."];
+   stage.innerHTML=`<div class="mode-stage"><h3>Show Me</h3><p class="help">See the difference in a real request.</p>
+   <strong>${ex[0]}</strong><div class="demo-before">${ex[1]}</div><strong style="display:block;margin-top:12px">${ex[2]}</strong><div class="demo-after">${ex[3]}</div>
+   <p class="help"><strong style="color:var(--ink)">Why the second one works:</strong> it gives ChatGPT enough information to choose the right workflow and protects what matters.</p></div>`;
+ }
+ if(mode==="try"){
+   stage.innerHTML=`<div class="mode-stage"><h3>Try It Yourself</h3><p class="help">Write how you would use ${l.title} for something real.</p>
+   <textarea id="tryInput-${id}" placeholder="I would use this when... / My request would be..."></textarea>
+   <button class="btn primary" style="margin-top:10px" onclick="checkPractice('${id}')">Coach My Attempt</button>
+   <div class="usage-note">AI Coach reads this exact attempt and responds to what you wrote. Up to 20 coaching sessions per day on this browser.</div>
+   <div class="feedback" id="tryFeedback-${id}"></div></div>`;
+ }
+ if(mode==="quiz"){
+   const answers=[
+    {t:`Use ${l.title} for a task that matches: ${l.use}`,ok:true},
+    {t:"Always choose the most advanced feature even when a simpler tool fits.",ok:false},
+    {t:"Start over with no context whenever the first answer is imperfect.",ok:false}
+   ].sort(()=>Math.random()-.5);
+   stage.innerHTML=`<div class="mode-stage"><h3>Quiz Me</h3><p class="help"><strong>Which choice best matches this lesson?</strong></p>
+   <div class="mini-quiz">${answers.map(a=>`<button onclick="answerMiniQuiz(this,${a.ok},'${l.title.replace(/'/g,"")}')">${a.t}</button>`).join("")}</div>
+   <div class="feedback"></div></div>`;
+ }
+ if(mode==="stuck"){
+   const common=troubleshooting[id]||[
+    ["I cannot find the feature","Menu location and availability can differ by plan, device, or rollout. Check Tools, Settings, or the relevant feature area."],
+    ["I do not know what to type","Start with the lesson prompt and replace the bracketed parts with your real details."],
+    ["The result is wrong","Narrow the request and identify the exact fact, source, section, or approved detail that must be corrected."],
+    ["I do not know if this is the right tool","Use Feature Finder or Scenario Coach and compare the simplest options first."]
+   ];
+   stage.innerHTML=`<div class="mode-stage"><h3>I'm Stuck</h3><p class="help">Find the problem closest to what is happening.</p>
+   <div class="stuck-grid">${common.map(c=>`<div class="stuck-card"><strong>${c[0]}</strong><span>${c[1]}</span></div>`).join("")}</div></div>`;
+ }
+}
+async function checkPractice(id){
+ const inputEl=document.getElementById("tryInput-"+id);
+ const input=inputEl.value.trim();
+ const box=document.getElementById("tryFeedback-"+id);
+ if(!input){toast("Write your attempt first.");return}
+
+ // Local daily guardrail. This is a user-friendly budget control, not server-grade abuse protection.
+ const today=new Date().toISOString().slice(0,10);
+ const usage=JSON.parse(localStorage.getItem("glamAICoachUsage")||"{}");
+ const used=usage.date===today?(usage.count||0):0;
+ const DAILY_LIMIT=20;
+ if(used>=DAILY_LIMIT){
+   box.classList.add("show");
+   box.innerHTML=`<strong>Daily AI coaching limit reached.</strong><br>You have used ${DAILY_LIMIT} AI coaching sessions today. Your lessons and local practice tools still work normally.`;
+   return;
+ }
+
+ const l=lessons.find(x=>x.id===id);
+ box.classList.add("show");
+ box.innerHTML=`<div class="ai-coach-loading"><span class="ai-spinner"></span>Reading what you actually wrote and coaching this attempt…</div>`;
+
+ try{
+   const res=await fetch("/.netlify/functions/coach",{
+     method:"POST",
+     headers:{"Content-Type":"application/json"},
+     body:JSON.stringify({
+       attempt:input,
+       lesson:{
+         id:l.id,
+         title:l.title,
+         description:l.desc,
+         use:l.use,
+         commonMistake:l.mistake,
+         lessonSteps:l.steps,
+         examplePrompt:l.prompt
+       }
+     })
+   });
+   const data=await res.json();
+   if(!res.ok)throw new Error(data.error||"AI coach unavailable.");
+
+   usage.date=today;usage.count=used+1;
+   localStorage.setItem("glamAICoachUsage",JSON.stringify(usage));
+   renderAICoaching(box,data,DAILY_LIMIT-(used+1),id,input);
+ }catch(err){
+   box.innerHTML=`<strong>I couldn't reach the AI Coach.</strong><br>
+   <span style="color:var(--muted)">Your lesson is still working. Once the Netlify Function and API key are connected, this button will give personalized coaching. Error: ${escapeAttr(err.message)}</span>`;
+ }
+}
+function renderAICoaching(box,data,remaining,id,originalAttempt){
+ const score=Math.max(0,Math.min(100,Number(data.score)||0));
+ const strengths=Array.isArray(data.strengths)?data.strengths:[];
+ const missing=Array.isArray(data.missing)?data.missing:[];
+ const tips=Array.isArray(data.coachingTips)?data.coachingTips:[];
+ box.innerHTML=`<div class="coach-report">
+   <div class="coach-score-row">
+     <div class="coach-score" style="background:conic-gradient(var(--sapphire) ${score*3.6}deg,#e7edf2 0deg)"><strong>${score}</strong></div>
+     <div class="coach-summary"><strong>${escapeAttr(data.headline||"Your coaching")}</strong><p>${escapeAttr(data.summary||"")}</p></div>
+   </div>
+
+   <div class="coach-columns">
+     <div class="coach-panel">
+       <h4>✓ What you did right</h4>
+       ${strengths.length?`<ul>${strengths.map(x=>`<li>${escapeAttr(x)}</li>`).join("")}</ul>`:`<p class="help">There is not enough direction yet to identify a strong prompt component.</p>`}
+     </div>
+     <div class="coach-panel">
+       <h4>What ChatGPT understands</h4>
+       <p class="help" style="margin:0">${escapeAttr(data.interpretation||"")}</p>
+     </div>
+   </div>
+
+   <div class="coach-panel">
+     <h4>What is missing or unclear</h4>
+     <div class="coach-missing">
+       ${missing.length?missing.map(x=>`<div class="missing-item"><strong>${escapeAttr(x.item||"Missing detail")}</strong><span>${escapeAttr(x.why||"")}</span></div>`).join(""):`<div class="missing-item"><strong>Nothing major</strong><span>The prompt already gives enough useful direction for this task.</span></div>`}
+     </div>
+   </div>
+
+   <div class="coach-panel">
+     <h4>How I would coach you</h4>
+     ${tips.length?`<ul>${tips.map(x=>`<li>${escapeAttr(x)}</li>`).join("")}</ul>`:""}
+   </div>
+
+   <div>
+     <div class="label">Stronger version</div>
+     <div class="ai-improved"><button class="copy" onclick="copyText(document.getElementById('aiImproved-${id}').innerText)">Copy</button><pre id="aiImproved-${id}"></pre></div>
+   </div>
+   <div class="ai-why"><strong>Why this is stronger:</strong> ${escapeAttr(data.whyBetter||"")}</div>
+   <div class="card-actions">
+     <button class="tiny-btn" onclick="document.getElementById('tryInput-${id}').value='';document.getElementById('tryInput-${id}').focus()">Let Me Try Again</button>
+     <button class="tiny-btn" onclick="document.getElementById('tryInput-${id}').value=document.getElementById('aiImproved-${id}').innerText">Edit the Better Version</button>
+     <button class="tiny-btn" onclick="saveCustomPlaybookV4('AI Coach: '+lessons.find(x=>x.id==='${id}').title,document.getElementById('aiImproved-${id}').innerText)">Save to Playbook</button>
+   </div>
+   ${data.nextChallenge?`<div class="coach-panel"><h4>Next challenge</h4><p class="help" style="margin:0">${escapeAttr(data.nextChallenge)}</p></div>`:""}
+   <div class="usage-note">${remaining} AI coaching session${remaining===1?"":"s"} remaining today on this browser.</div>
+ </div>`;
+ document.getElementById("aiImproved-"+id).textContent=data.improvedPrompt||originalAttempt;
+}
+function answerMiniQuiz(btn,ok,title){
+ const stage=btn.closest(".mode-stage");stage.querySelectorAll(".mini-quiz button").forEach(x=>x.disabled=true);
+ btn.classList.add(ok?"correct":"wrong");
+ const fb=stage.querySelector(".feedback");fb.classList.add("show");
+ fb.innerHTML=ok?`<strong>Correct.</strong> You matched the tool to the job.`:`<strong>Not quite.</strong> The best tool is usually the simplest one that actually fits the task.`;
+}
+document.getElementById("closeModal").onclick=()=>document.getElementById("lessonModal").classList.remove("open");
+document.getElementById("lessonModal").addEventListener("click",e=>{if(e.target.id==="lessonModal")e.currentTarget.classList.remove("open")});
+document.getElementById("lessonSearch").addEventListener("input",e=>renderLessons(e.target.value));
+document.getElementById("clearSearch").onclick=()=>{document.getElementById("lessonSearch").value="";renderLessons()};
+document.getElementById("resetBtn").onclick=()=>{
+ completed=[];localStorage.removeItem("glamHubCompleted");renderLessons(document.getElementById("lessonSearch").value);updateProgress();toast("Learning progress reset.");
+};
+
+document.getElementById("finderBtn").onclick=()=>{
+ const raw=document.getElementById("finderInput").value.trim();
+ if(!raw){toast("Tell me what you're trying to do first.");return}
+ const text=raw.toLowerCase();
+ let best=null,score=0;
+ finderRules.forEach(r=>{
+   const s=r.keys.reduce((n,k)=>n+(text.includes(k)?1:0),0);
+   if(s>score){score=s;best=r}
+ });
+ if(!best) best={
+   feature:"Normal Chat + Clear Prompt",
+   why:"Nothing in your request clearly requires a specialized feature yet.",
+   steps:"State the outcome → give useful context → define the format → refine in the same conversation.",
+   lesson:"basics",
+   prompt:`Help me accomplish this goal: ${raw}. First identify the simplest useful approach. Then give me the clearest next step. Do not add tools or complexity unless they materially help.`
+ };
+ document.getElementById("finderResult").innerHTML=`
+   <div class="result">
+     <div class="kicker">Best match</div><h3>${best.feature}</h3>
+     <div class="result-grid">
+       <div class="result-item"><div class="label">Why</div><div class="value">${best.why}</div></div>
+       <div class="result-item"><div class="label">Do this</div><div class="value">${best.steps}</div></div>
+     </div>
+     <div class="prompt"><button class="copy" onclick="copyText(document.getElementById('finderPrompt').innerText)">Copy</button><pre id="finderPrompt">${best.prompt}</pre></div>
+     <div class="card-actions" style="margin-top:12px"><button class="tiny-btn" onclick="openLesson('${best.lesson}')">Teach Me This Feature</button></div>
+   </div>`;
+};
+
+document.getElementById("buildPrompt").onclick=()=>{
+ const need=document.getElementById("promptNeed").value.trim();
+ if(!need){toast("Tell me what you need ChatGPT to do.");return}
+ const type=document.getElementById("promptType").value;
+ const audience=document.getElementById("audience").value.trim();
+ const tone=document.getElementById("tone").value.trim();
+ const actions={
+   create:"Create the finished result",
+   learn:"Teach me this clearly",
+   research:"Research this carefully",
+   analyze:"Analyze this and explain what matters",
+   plan:"Build a practical plan",
+   improve:"Improve the material I provide"
+ };
+ const prompt=`${actions[type]}.
+
+My goal:
+${need}
+
+${audience?`Audience:\n${audience}\n\n`:""}${tone?`Tone/style:\n${tone}\n\n`:""}Requirements:
+- Use the facts and constraints I provide; do not invent important details.
+- Keep the result practical and organized.
+- Choose the clearest useful format for the task unless I specify one.
+- If something is uncertain or depends on current information, say so and use the appropriate source/tool when available.
+- Give me the finished result, not just generic advice.`;
+
+ document.getElementById("coachOutput").innerHTML=`
+   <div class="label">Your improved prompt</div>
+   <div class="prompt"><button class="copy" onclick="copyText(document.getElementById('coachPrompt').innerText)">Copy</button><pre id="coachPrompt">${prompt}</pre></div>
+   <div style="margin-top:14px">
+     <strong>Why it works</strong>
+     <p class="help">It gives ChatGPT an outcome, context, audience/style when relevant, guardrails against invented details, and a clear instruction to deliver the finished result.</p>
+     <strong>What you did NOT need</strong>
+     <p class="help">Fake expert titles, giant walls of rules, “magic words,” or 40 unnecessary constraints.</p>
+   </div>`;
+};
+
+function renderPractice(){
+ document.getElementById("practiceGrid").innerHTML=practices.map((p,i)=>`
+ <article class="challenge"><div class="diff">${p[0]} • Challenge ${i+1}</div><h3>${p[1]}</h3><p>${p[2]}</p>
+ <button class="tiny-btn" onclick="copyText('${p[2].replace(/'/g,"\\'")}')">Copy Challenge</button></article>`).join("");
+}
+function renderBiz(){
+ document.getElementById("bizGrid").innerHTML=biz.map(i=>`
+ <article class="biz"><div class="n">${i[0]}</div><h3>${i[1]}</h3><p>${i[2]}</p>
+ <button class="tiny-btn" onclick="copyText('${i[2].replace(/'/g,"\\'")}')">Copy Workflow</button></article>`).join("");
+}
+
+const quizQs=[
+ {id:"experience",q:"How comfortable are you with ChatGPT?",options:[["new","Brand new"],["basic","I use basic chat"],["confident","Pretty comfortable"]]},
+ {id:"goal",q:"What do you most want ChatGPT to help with?",options:[["create","Create content/visuals"],["research","Research & learn"],["business","Run my business"],["organize","Organize bigger projects"]]},
+ {id:"pain",q:"What frustrates you most?",options:[["prompt","I don't know what to type"],["feature","I don't know which feature to use"],["files","I don't know what to do with files/data"],["context","I repeat myself constantly"]]}
+];
+function renderQuiz(){
+ document.getElementById("quizQuestions").innerHTML=quizQs.map(q=>`
+ <div class="quiz-q"><strong>${q.q}</strong><div class="quiz-options">
+ ${q.options.map(o=>`<button class="quiz-option" data-q="${q.id}" data-v="${o[0]}">${o[1]}</button>`).join("")}
+ </div></div>`).join("");
+ document.querySelectorAll(".quiz-option").forEach(b=>b.onclick=()=>{
+   quizAnswers[b.dataset.q]=b.dataset.v;
+   document.querySelectorAll(`.quiz-option[data-q="${b.dataset.q}"]`).forEach(x=>x.classList.toggle("selected",x===b));
+ });
+}
+document.getElementById("quizBtn").onclick=()=>{
+ if(Object.keys(quizAnswers).length<3){toast("Answer all three questions first.");return}
+ let ids=["basics","prompting"];
+ if(quizAnswers.goal==="research") ids.push("search","studymode","deepresearch");
+ if(quizAnswers.goal==="create") ids.push("images","imageedit");
+ if(quizAnswers.goal==="business") ids.push("projects","files","tasks","apps");
+ if(quizAnswers.goal==="organize") ids.push("projects","apps","work");
+ if(quizAnswers.pain==="files") ids.push("files","data","library");
+ if(quizAnswers.pain==="context") ids.push("memory","custominstructions","projects");
+ if(quizAnswers.pain==="feature") ids.push("search","files","projects","tasks");
+ ids=[...new Set(ids)].slice(0,6);
+ const rec=ids.map(id=>lessons.find(l=>l.id===id)).filter(Boolean);
+ document.getElementById("quizResult").innerHTML=`
+   <div class="kicker">Your recommended path</div>
+   <h3>${quizAnswers.experience==="new"?"Start simple and build confidence":"Focus on the features that solve your real work"}</h3>
+   <p class="help">You do not need every lesson first. Start with these:</p>
+   <div class="recommendation-list">${rec.map((l,i)=>`<div class="rec-item"><strong>${i+1}. ${l.title}</strong><span>${l.desc}</span><br><button class="tiny-btn" style="margin-top:7px" onclick="openLesson('${l.id}')">Open lesson</button></div>`).join("")}</div>`;
+};
+
+
+function renderScenarios(){
+ document.getElementById("scenarioGrid").innerHTML=scenarios.map((s,i)=>`
+ <article class="scenario"><div class="badge">Scenario ${i+1}</div><h3>${s.title}</h3><p>${s.text}</p>
+ <select id="scenario-${i}"><option value="">Choose the feature...</option>${s.choices.map(c=>`<option>${c}</option>`).join("")}</select>
+ <button class="tiny-btn" style="margin-top:9px" onclick="checkScenario(${i})">Check My Choice</button>
+ <div id="scenarioResult-${i}"></div></article>`).join("");
+}
+function checkScenario(i){
+ const s=scenarios[i],choice=document.getElementById("scenario-"+i).value;
+ if(!choice){toast("Choose an answer first.");return}
+ document.getElementById("scenarioResult-"+i).innerHTML=`<div class="scenario-result"><strong>${choice===s.answer?"Correct ✓":"Best answer: "+s.answer}</strong><br><span style="font-size:12px;color:var(--muted)">${s.why}</span></div>`;
+}
+function renderGlossary(filter=""){
+ const q=filter.trim().toLowerCase();
+ const list=glossary.filter(g=>!q||(g[0]+" "+g[1]).toLowerCase().includes(q));
+ document.getElementById("glossaryGrid").innerHTML=list.map(g=>`<div class="term"><strong>${g[0]}</strong><p>${g[1]}</p></div>`).join("")||`<div class="empty-state">No matching term.</div>`;
+}
+function saveToPlaybook(id,title,content){
+ if(playbook.some(x=>x.id===id)){toast("Already saved in your Playbook.");return}
+ playbook.unshift({id,title,content});
+ localStorage.setItem("glamPlaybook",JSON.stringify(playbook));renderPlaybook();toast("Saved to My Playbook.");
+}
+function removePlaybook(id){
+ playbook=playbook.filter(x=>x.id!==id);
+ localStorage.setItem("glamPlaybook",JSON.stringify(playbook));renderPlaybook();toast("Removed.");
+}
+function renderPlaybook(){
+ const list=document.getElementById("playbookList");
+ if(!list)return;
+ if(!playbook.length){list.innerHTML=`<div class="empty-state">Nothing saved yet. Open a lesson and tap <strong>Save Prompt</strong>.</div>`}
+ else{
+   list.innerHTML=playbook.map(x=>`<div class="saved-item"><strong>${x.title}</strong><pre></pre><div class="saved-actions">
+   <button class="tiny-btn" data-copy="${x.id}">Copy</button><button class="tiny-btn" onclick="removePlaybook('${x.id}')">Remove</button></div></div>`).join("");
+   [...list.querySelectorAll(".saved-item")].forEach((el,i)=>el.querySelector("pre").textContent=playbook[i].content);
+   list.querySelectorAll("[data-copy]").forEach(btn=>btn.onclick=()=>{const item=playbook.find(x=>x.id===btn.dataset.copy);if(item)copyText(item.content)});
+ }
+ document.getElementById("playbookNotes").value=localStorage.getItem("glamPlaybookNotes")||"";
+}
+document.getElementById("saveNotes").onclick=()=>{
+ localStorage.setItem("glamPlaybookNotes",document.getElementById("playbookNotes").value);toast("Notes saved.");
+};
+document.getElementById("glossarySearch").addEventListener("input",e=>renderGlossary(e.target.value));
+
+
+function renderPowerCategories(){
+ const holder=document.getElementById("powerCategories");
+ const names=Object.keys(powerWordData);
+ holder.innerHTML=names.map((n,i)=>`<button class="category-btn ${i===0?"active":""}" onclick="showPowerCategory('${n.replace(/'/g,"\\'")}',this)">${n}</button>`).join("");
+ showPowerCategory(names[0]);
+}
+function showPowerCategory(name,btn){
+ if(btn){document.querySelectorAll(".category-btn").forEach(x=>x.classList.remove("active"));btn.classList.add("active")}
+ const data=powerWordData[name];
+ document.getElementById("powerKicker").textContent=name;
+ document.getElementById("powerDescription").textContent=data.description;
+ document.getElementById("keywordVault").innerHTML=data.words.map((w,i)=>`<button class="keyword-chip ${selectedPowerWords.includes(w[0])?"selected":""}" onclick="inspectPowerWord('${name.replace(/'/g,"\\'")}',${i},this)">${w[0]}</button>`).join("");
+}
+function inspectPowerWord(cat,index,btn){
+ const word=powerWordData[cat].words[index];
+ document.getElementById("keywordExplain").innerHTML=`<strong style="color:var(--ink)">${word[0]}</strong><br>${word[1]}<br><button class="tiny-btn" style="margin-top:8px" onclick="togglePowerWord('${word[0].replace(/'/g,"\\'")}')">${selectedPowerWords.includes(word[0])?"Remove from stack":"Add to stack"}</button>`;
+}
+function togglePowerWord(word){
+ selectedPowerWords=selectedPowerWords.includes(word)?selectedPowerWords.filter(x=>x!==word):[...selectedPowerWords,word];
+ renderWordStack();
+ const active=[...document.querySelectorAll(".category-btn")].find(x=>x.classList.contains("active"));
+ if(active)showPowerCategory(active.textContent);
+}
+function renderWordStack(){
+ const el=document.getElementById("wordStack");
+ el.innerHTML=selectedPowerWords.length?selectedPowerWords.map(w=>`<span class="stack-chip">${w}</span>`).join(""):`<span class="help">No words selected yet. Pick words that support the same visual direction.</span>`;
+}
+document.getElementById("clearWordStack").onclick=()=>{selectedPowerWords=[];renderWordStack();renderPowerCategories();};
+document.getElementById("copyWordStack").onclick=()=>selectedPowerWords.length?copyText(selectedPowerWords.join(", ")):toast("Your word stack is empty.");
+
+function renderFormulaFields(){
+ const type=document.getElementById("formulaType").value,cfg=formulaConfigs[type];
+ document.getElementById("formulaRecipe").innerHTML=`<strong>Formula</strong><code>${cfg.recipe}</code>`;
+ document.getElementById("formulaFields").innerHTML=cfg.fields.map((f,i)=>`<div><div class="label">${f[0]}</div><input class="field formula-field" data-label="${f[0]}" value="${f[1].replace(/"/g,"&quot;")}" placeholder="${f[0]}"></div>`).join("");
+}
+document.getElementById("formulaType").onchange=renderFormulaFields;
+document.getElementById("useWordStack").onclick=()=>{
+ if(!selectedPowerWords.length){toast("Choose some Power Words first.");return}
+ const fields=[...document.querySelectorAll(".formula-field")];
+ const target=fields[fields.length-1];
+ target.value=[target.value,selectedPowerWords.join(", ")].filter(Boolean).join(", ");
+ toast("Power Words added to the last formula block.");
+};
+document.getElementById("buildFormula").onclick=()=>{
+ const fields=[...document.querySelectorAll(".formula-field")];
+ const parts=fields.map(f=>f.value.trim()).filter(Boolean);
+ if(!parts.length){toast("Fill in at least one formula field.");return}
+ const prompt=parts.join(", ")+". Keep the composition intentional, preserve the requested subject details, and do not add unrelated clutter.";
+ document.getElementById("formulaResult").innerHTML=`<div class="formula-output"><button class="copy" onclick="copyText(document.getElementById('builtFormulaPrompt').innerText)">Copy</button><pre id="builtFormulaPrompt"></pre></div><div class="card-actions" style="margin-top:10px"><button class="tiny-btn" onclick="saveCustomPlaybookV4('Prompt Formula',document.getElementById('builtFormulaPrompt').innerText)">Save to Playbook</button></div>`;
+ document.getElementById("builtFormulaPrompt").textContent=prompt;
+};
+
+function renderWordChallenges(){
+ document.getElementById("wordChallenges").innerHTML=wordChallengeData.map((c,i)=>`<article class="word-challenge"><div class="kicker">Challenge ${i+1}</div><h3>${c.q}</h3><div class="challenge-answers">${c.answers.map((a,j)=>`<button onclick="answerWordChallenge(this,${a[1]})">${a[0]}</button>`).join("")}</div></article>`).join("");
+}
+function answerWordChallenge(btn,good){
+ const parent=btn.closest(".challenge-answers");parent.querySelectorAll("button").forEach(x=>x.disabled=true);btn.classList.add(good?"good":"bad");
+ if(!good){const buttons=[...parent.querySelectorAll("button")];const cardIndex=[...document.querySelectorAll(".word-challenge")].indexOf(btn.closest(".word-challenge"));const correctIndex=wordChallengeData[cardIndex].answers.findIndex(a=>a[1]);buttons[correctIndex].classList.add("good")}
+}
+
+function analyzeClinicPrompt(){
+ const raw=document.getElementById("clinicInput").value.trim();
+ if(!raw){toast("Paste a prompt first.");return}
+ const t=raw.toLowerCase();
+ const checks=[
+  ["Subject",/\b(woman|man|girl|boy|character|product|object|scene|room|car|shirt|logo|poster|flyer|portrait|image|photo|toy|mascot)\b/i.test(raw)],
+  ["Specific features",/\b(hair|eyes|skin|lips|clothing|dress|shirt|expression|pose|features|makeup|color|wearing)\b/i.test(raw)],
+  ["Composition",/\b(close-up|full body|portrait|centered|negative space|camera|angle|vertical|horizontal|poster|layout|foreground|background)\b/i.test(raw)],
+  ["Rendering / style",/\b(realistic|illustration|cartoon|editorial|commercial|designer toy|vinyl|3d|glossy|photoreal|caricature|sticker)\b/i.test(raw)],
+  ["Lighting",/\b(lighting|rim light|studio light|glow|bloom|diffusion|highlights|golden hour|ambient)\b/i.test(raw)],
+  ["Material / finish",/\b(vinyl|chrome|pearlescent|lacquer|resin|acrylic|glass|polish|gloss|matte|finish|texture)\b/i.test(raw)],
+  ["Guardrails",/\b(do not|don't|avoid|preserve|keep|exact text|fully visible|aspect ratio|unchanged|no )\b/i.test(raw)]
+ ];
+ const vague=["pretty","cute","nice","cool","amazing","beautiful","good","better","fancy"];
+ const foundVague=vague.filter(w=>new RegExp("\\b"+w+"\\b","i").test(raw));
+ let score=checks.filter(x=>x[1]).length*12;
+ if(raw.length>80)score+=8;
+ if(foundVague.length)score-=Math.min(foundVague.length*4,16);
+ score=Math.max(0,Math.min(100,score));
+ document.getElementById("scoreValue").textContent=score;
+ document.getElementById("scoreRing").style.background=`conic-gradient(var(--sapphire) ${score*3.6}deg,#e7edf2 0deg)`;
+ document.getElementById("diagnosticList").innerHTML=checks.map(c=>`<div class="diag"><span>${c[0]}</span><b class="${c[1]?"yes":"no"}">${c[1]?"PRESENT":"MISSING"}</b></div>`).join("");
+ document.getElementById("vagueWords").innerHTML=foundVague.length?`<div class="label" style="margin-top:12px">Vague words to tighten</div><div class="vague-list">${foundVague.map(w=>`<span class="vague">${w}</span>`).join("")}</div>`:"";
+ const missing=checks.filter(x=>!x[1]).map(x=>x[0]);
+ const additions=[];
+ if(missing.includes("Rendering / style"))additions.push("name the visual treatment (for example commercial illustration, glossy 3D, editorial realism, designer toy)");
+ if(missing.includes("Lighting"))additions.push("add a deliberate lighting direction");
+ if(missing.includes("Material / finish"))additions.push("describe surface/material/finish only if it matters");
+ if(missing.includes("Composition"))additions.push("control framing or layout");
+ if(missing.includes("Guardrails"))additions.push("protect important details and state what not to add");
+ const upgraded=raw.replace(/\bpretty\b/gi,"polished").replace(/\bcute\b/gi,"stylized").replace(/\bnice\b/gi,"refined").replace(/\bbetter\b/gi,"more intentional");
+ const tail=[
+  !checks[3][1]?"premium commercial rendering with intentional visual styling":"",
+  !checks[4][1]?"controlled studio lighting with luminous highlights":"",
+  !checks[5][1]?"polished materials and clean surface finish":"",
+  !checks[2][1]?"clear hero composition with strong visual hierarchy":"",
+  !checks[6][1]?"do not add unrelated clutter; preserve all specifically requested subject details":""
+ ].filter(Boolean).join(", ");
+ document.getElementById("clinicUpgrade").style.display="block";
+ document.getElementById("upgradeAdvice").innerHTML=`<strong>Your biggest opportunities:</strong><br>${additions.length?additions.map(x=>"• "+x).join("<br>"):"Your prompt already covers the main structural layers. Tighten conflicting or unnecessary words instead of adding more."}<br><br><strong>Important:</strong> Specificity is not the same as length. Add only details that should actually change the image.`;
+ document.getElementById("upgradedPrompt").textContent=upgraded+(tail?", "+tail:"")+".";
+}
+document.getElementById("analyzePrompt").onclick=analyzeClinicPrompt;
+document.getElementById("loadClinicExample").onclick=()=>{document.getElementById("clinicInput").value="Make a cute cartoon girl with pretty hair and makeup. Make it nice and luxury.";};
+document.getElementById("copyUpgradedPrompt").onclick=()=>copyText(document.getElementById("upgradedPrompt").innerText);
+document.getElementById("saveClinicPrompt").onclick=()=>saveCustomPlaybookV4("Prompt Clinic Upgrade",document.getElementById("upgradedPrompt").innerText);
+
+function saveCustomPlaybookV4(title,content){
+ const id="v4-"+Date.now();
+ playbook.unshift({id,title,content});
+ localStorage.setItem("glamPlaybook",JSON.stringify(playbook));renderPlaybook();toast("Saved to My Playbook.");
+}
+
+renderPaths();renderLessons();renderPractice();renderBiz();renderQuiz();renderScenarios();renderGlossary();renderPlaybook();renderPowerCategories();renderWordStack();renderFormulaFields();renderWordChallenges();updateProgress();
+</script>
+</body>
+</html>
