@@ -5540,6 +5540,220 @@ ${audience ? `Audience:\n${audience}\n\n` : ""}${tone ? `Tone/style:\n${tone}\n\
         toast("Saved to My Playbook.");
       }
 
+      function renderSimulator() {
+        const s = simulatorScenarios[simulatorIndex];
+        document.getElementById("simTask").textContent = s.task;
+        document.getElementById("simStatus").textContent =
+          `Scenario ${simulatorIndex + 1} of ${simulatorScenarios.length}`;
+        document.getElementById("simInput").value = "";
+        document.getElementById("simFeedback").innerHTML = "";
+        document.getElementById("simChat").innerHTML =
+          `<div class="sim-bubble system">Write the prompt you would actually send to ChatGPT. Focus on the task, useful context, constraints, and finished result.</div>`;
+      }
+
+      document.getElementById("nextScenario").onclick = () => {
+        simulatorIndex = (simulatorIndex + 1) % simulatorScenarios.length;
+        renderSimulator();
+      };
+
+      document.getElementById("resetScenario").onclick = renderSimulator;
+
+      document.getElementById("simCoachBtn").onclick = async () => {
+        const attempt = document.getElementById("simInput").value.trim();
+        if (!attempt) {
+          toast("Write your prompt first.");
+          return;
+        }
+
+        const s = simulatorScenarios[simulatorIndex];
+        const l = lessons.find((x) => x.id === s.lesson) || lessons[0];
+        const fb = document.getElementById("simFeedback");
+
+        const bubble = document.createElement("div");
+        bubble.className = "sim-bubble user";
+        bubble.textContent = attempt;
+        document.getElementById("simChat").appendChild(bubble);
+
+        fb.innerHTML = `<div class="ai-coach-loading"><span class="ai-spinner"></span>AI Coach is reviewing this exact prompt…</div>`;
+
+        try {
+          const res = await fetch("/.netlify/functions/coach", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              attempt,
+              lesson: {
+                id: l.id,
+                title: l.title,
+                description: l.desc,
+                use: l.use,
+                commonMistake: l.mistake,
+                lessonSteps: l.steps,
+                examplePrompt: l.prompt,
+              },
+            }),
+          });
+
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || "AI Coach unavailable.");
+
+          const score = Math.max(0, Math.min(100, Number(data.score) || 0));
+          fb.innerHTML = `<div class="coach-report">
+     <div class="coach-score-row">
+       <div class="coach-score" style="background:conic-gradient(var(--sapphire) ${score * 3.6}deg,#e7edf2 0deg)"><strong>${score}</strong></div>
+       <div class="coach-summary"><strong>${escapeAttr(data.headline || "Coaching")}</strong><p>${escapeAttr(data.summary || "")}</p></div>
+     </div>
+     <div class="coach-panel"><h4>What ChatGPT understands</h4><p class="help" style="margin:0">${escapeAttr(data.interpretation || "")}</p></div>
+     <div class="coach-panel"><h4>How to improve it</h4><ul>${(data.coachingTips || []).map((x) => `<li>${escapeAttr(x)}</li>`).join("")}</ul></div>
+     <div class="label">Stronger version</div>
+     <div class="ai-improved"><button class="copy" onclick="copyText(document.getElementById('simImproved').innerText)">Copy</button><pre id="simImproved"></pre></div>
+   </div>`;
+          document.getElementById("simImproved").textContent =
+            data.improvedPrompt || attempt;
+        } catch (e) {
+          fb.innerHTML = `<div class="coach-panel"><strong>AI Coach unavailable.</strong><p class="help">${escapeAttr(e.message)}</p></div>`;
+        }
+      };
+
+      function renderAssessment() {
+        document.getElementById("assessmentQuestions").innerHTML =
+          finalAssessment
+            .map(
+              (q, i) => `
+   <div class="assess-q">
+     <strong>${i + 1}. ${q.q}</strong>
+     <div class="assess-options">
+       ${q.a.map((a, j) => `<button class="assess-option" data-q="${i}" data-a="${j}">${a}</button>`).join("")}
+     </div>
+   </div>`,
+            )
+            .join("");
+
+        document.querySelectorAll(".assess-option").forEach(
+          (btn) =>
+            (btn.onclick = () => {
+              assessmentAnswers[btn.dataset.q] = Number(btn.dataset.a);
+              document
+                .querySelectorAll(`.assess-option[data-q="${btn.dataset.q}"]`)
+                .forEach((x) => x.classList.toggle("selected", x === btn));
+            }),
+        );
+
+        const saved = JSON.parse(
+          localStorage.getItem("glamFinalAssessment") || "null",
+        );
+        if (saved) showAssessmentResult(saved.score, saved.correct);
+      }
+
+      document.getElementById("submitAssessment").onclick = () => {
+        if (Object.keys(assessmentAnswers).length < finalAssessment.length) {
+          toast("Answer all 10 questions first.");
+          return;
+        }
+
+        let correct = 0;
+        finalAssessment.forEach((q, i) => {
+          if (assessmentAnswers[i] === q.correct) correct++;
+        });
+
+        const score = Math.round((correct / finalAssessment.length) * 100);
+        localStorage.setItem(
+          "glamFinalAssessment",
+          JSON.stringify({
+            score,
+            correct,
+            date: new Date().toISOString(),
+          }),
+        );
+
+        showAssessmentResult(score, correct);
+        renderCertificateGate();
+      };
+
+      function showAssessmentResult(score, correct) {
+        document.getElementById("finalAssessmentScore").textContent =
+          score + "%";
+        document.getElementById("assessmentHeadline").textContent =
+          score >= 80 ? "Assessment passed ✓" : "Keep practicing";
+        document.getElementById("assessmentSummary").textContent =
+          score >= 80
+            ? `You answered ${correct} of ${finalAssessment.length} correctly.`
+            : `You answered ${correct} of ${finalAssessment.length} correctly. Review the related lessons, then retake it.`;
+
+        const pct = Math.round((completed.length / lessons.length) * 100);
+        document.getElementById("assessmentMilestones").innerHTML = `
+   <div class="milestone"><span>Final assessment 80%+</span><b class="${score >= 80 ? "yes" : "no"}">${score >= 80 ? "COMPLETE" : "NOT YET"}</b></div>
+   <div class="milestone"><span>Academy lessons 80%+</span><b class="${pct >= 80 ? "yes" : "no"}">${pct}% COMPLETE</b></div>`;
+      }
+
+      function renderCertificateGate() {
+        const gate = document.getElementById("certificateGate");
+        if (!gate) return;
+
+        const lessonPct = Math.round((completed.length / lessons.length) * 100);
+        const assess = JSON.parse(
+          localStorage.getItem("glamFinalAssessment") || "null",
+        );
+        const assessScore = assess ? assess.score : 0;
+        const unlocked = lessonPct >= 80 && assessScore >= 80;
+
+        if (!unlocked) {
+          gate.innerHTML = `<div class="unlock-note">
+     <strong>Certificate locked.</strong><br>
+     Complete at least 80% of lessons and score at least 80% on the final assessment.<br><br>
+     Current progress: <strong>${lessonPct}% lessons</strong> • <strong>${assessScore}% assessment</strong>
+   </div>`;
+          return;
+        }
+
+        const savedName = localStorage.getItem("glamCertificateName") || "";
+        gate.innerHTML = `<div class="box">
+   <div class="kicker">Certificate unlocked</div>
+   <h3>Add your name</h3>
+   <input class="field" id="certName" value="${escapeAttr(savedName)}" placeholder="Name for certificate">
+   <button class="btn primary" id="makeCertificate" style="margin-top:10px">Create Certificate</button>
+ </div>
+ <div id="certificateHolder"></div>`;
+
+        document.getElementById("makeCertificate").onclick = () => {
+          const name = document.getElementById("certName").value.trim();
+          if (!name) {
+            toast("Enter the name for the certificate.");
+            return;
+          }
+
+          localStorage.setItem("glamCertificateName", name);
+          const date = new Date().toLocaleDateString(undefined, {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          });
+
+          document.getElementById("certificateHolder").innerHTML =
+            `<div class="certificate" id="certificateArea">
+     <div class="cert-inner">
+       <div class="cert-brand">GLAM ChatGPT Learning Hub</div>
+       <h2>Certificate of Completion</h2>
+       <p>This certifies that</p>
+       <div class="cert-name"></div>
+       <p>has completed the GLAM ChatGPT Learning Hub curriculum and demonstrated practical understanding of ChatGPT features, prompting, research, files, projects, image prompting, and workflow selection.</p>
+       <div class="cert-meta">
+         <div><strong>${lessonPct}%</strong>Academy completion</div>
+         <div><strong>${assessScore}%</strong>Final assessment</div>
+         <div><strong>${date}</strong>Date completed</div>
+       </div>
+       <div style="margin-top:20px;font-weight:900;color:var(--deep)">Grace • Leadership • Ambition • Momentum</div>
+     </div>
+   </div>
+   <div class="card-actions" style="margin-top:12px">
+     <button class="btn primary" onclick="window.print()">Print / Save as PDF</button>
+   </div>`;
+
+          document.querySelector("#certificateArea .cert-name").textContent =
+            name;
+        };
+      }
+
       renderPaths();
       renderLessons();
       renderPractice();
@@ -5552,6 +5766,8 @@ ${audience ? `Audience:\n${audience}\n\n` : ""}${tone ? `Tone/style:\n${tone}\n\
       renderWordStack();
       renderFormulaFields();
       renderWordChallenges();
+      renderSimulator();
+      renderAssessment();
       updateProgress();
     </script>
   </body>
