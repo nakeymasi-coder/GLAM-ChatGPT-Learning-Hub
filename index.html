@@ -2028,6 +2028,151 @@
           box-shadow: none;
         }
       }
+
+      /* ===== BUSINESS LAB SMART WORKFLOW COACH ===== */
+      .biz-coach {
+        background: linear-gradient(145deg, #fff, #eef8ff);
+        border: 1px solid rgba(22, 143, 234, 0.18);
+        border-radius: 26px;
+        padding: 20px;
+        box-shadow: var(--shadow);
+        margin-bottom: 18px;
+      }
+      .biz-coach h3 {
+        margin: 5px 0 8px;
+        font-size: 24px;
+      }
+      .biz-coach p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.6;
+      }
+      .biz-coach-grid {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 10px;
+        margin-top: 14px;
+      }
+      .biz-result {
+        margin-top: 16px;
+        background: #fff;
+        border: var(--border);
+        border-radius: 20px;
+        padding: 18px;
+        box-shadow: var(--shadow-sm);
+      }
+      .biz-result h3 {
+        margin: 5px 0 7px;
+      }
+      .biz-why {
+        padding: 12px;
+        background: #f7fafc;
+        border-radius: 14px;
+        border: var(--border);
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+      .workflow-steps {
+        display: grid;
+        gap: 9px;
+        margin-top: 13px;
+      }
+      .workflow-step {
+        display: grid;
+        grid-template-columns: 34px 1fr;
+        gap: 10px;
+        align-items: flex-start;
+        padding: 11px;
+        background: #f7fafc;
+        border-radius: 14px;
+      }
+      .workflow-step .step-num {
+        width: 30px;
+        height: 30px;
+        border-radius: 10px;
+        background: #eef8ff;
+        color: var(--sapphire);
+        display: grid;
+        place-items: center;
+        font-size: 12px;
+        font-weight: 950;
+      }
+      .workflow-step strong {
+        display: block;
+        font-size: 13px;
+        margin-bottom: 3px;
+      }
+      .workflow-step span {
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.45;
+      }
+      .active-workflow {
+        margin-top: 16px;
+        background: #fff;
+        border: 1px solid rgba(22, 143, 234, 0.18);
+        border-radius: 22px;
+        padding: 18px;
+        box-shadow: var(--shadow-sm);
+      }
+      .active-workflow h3 {
+        margin-top: 0;
+      }
+      .workflow-progress {
+        height: 9px;
+        background: #e6edf2;
+        border-radius: 999px;
+        overflow: hidden;
+        margin: 9px 0 14px;
+      }
+      .workflow-progress > div {
+        height: 100%;
+        background: linear-gradient(90deg, var(--sapphire), #6bc7ff);
+        width: 0;
+        transition: 0.25s;
+      }
+      .workflow-task {
+        padding: 13px;
+        border: var(--border);
+        border-radius: 15px;
+        margin: 9px 0;
+        background: #fff;
+      }
+      .workflow-task.done {
+        background: #effaf6;
+        border-color: #bfe5d4;
+      }
+      .workflow-task-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        align-items: flex-start;
+      }
+      .workflow-task strong {
+        font-size: 13px;
+      }
+      .workflow-task p {
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.5;
+        margin: 5px 0 0;
+      }
+      .workflow-task button {
+        margin-top: 9px;
+      }
+      .biz-card-action {
+        display: flex;
+        gap: 7px;
+        flex-wrap: wrap;
+        margin-top: 9px;
+      }
+      @media (max-width: 700px) {
+        .biz-coach-grid {
+          grid-template-columns: 1fr;
+        }
+      }
     </style>
   </head>
   <body>
@@ -2499,7 +2644,36 @@
           <div class="scenario-grid" id="scenarioGrid"></div>
         </div>
         <div class="panel" id="panel-business">
+          <div class="biz-coach">
+            <div class="kicker">Business Workflow Coach</div>
+            <h3>What are you trying to get done?</h3>
+            <p>
+              Tell the app your goal. It will recommend the best workflow,
+              explain why it fits, and break the work into steps you can
+              actually follow.
+            </p>
+            <div class="biz-coach-grid">
+              <textarea
+                id="businessGoal"
+                placeholder="Example: I'm launching a new digital product next week and I need the product page, launch posts, email, FAQ, and a plan for what to do each day."
+              ></textarea>
+              <button class="btn primary" id="recommendWorkflow">
+                Find My Workflow
+              </button>
+            </div>
+            <div id="businessRecommendation"></div>
+          </div>
+
+          <div class="section-head" style="margin-top: 30px">
+            <div class="kicker">Workflow Library</div>
+            <h2 style="font-size: 34px">Or choose a workflow yourself.</h2>
+            <p>
+              Each workflow now opens into a step-by-step plan instead of only
+              giving you a line to copy.
+            </p>
+          </div>
           <div class="biz-grid" id="bizGrid"></div>
+          <div id="activeWorkflowHolder"></div>
         </div>
 
         <div class="panel" id="panel-glossary">
@@ -3622,56 +3796,427 @@
       ];
 
       const biz = [
-        [
-          "01",
-          "Content System",
-          "Idea → research → hook → post → caption → video script → repurpose → schedule.",
-        ],
-        [
-          "02",
-          "Digital Product Builder",
-          "Audience problem → offer idea → product outline → instructions → listing → FAQ → launch content.",
-        ],
-        [
-          "03",
-          "Workshop Builder",
-          "Learning outcome → agenda → teaching points → practice → handout → replay summary → follow-up.",
-        ],
-        [
-          "04",
-          "Website Workflow",
-          "Plan structure → prepare content → build → inspect code → test links → mobile review → publish.",
-        ],
-        [
-          "05",
-          "Customer Support",
-          "Collect common questions → group issues → draft answers → create FAQ → build troubleshooting flow.",
-        ],
-        [
-          "06",
-          "Research Workflow",
-          "Define decision → Search for quick facts → Deep Research for synthesis → verify sources → action plan.",
-        ],
-        [
-          "07",
-          "Content Analysis",
-          "Upload performance data → inspect columns → identify winners → find patterns → plan next experiments.",
-        ],
-        [
-          "08",
-          "Brand Assistant",
-          "Memory for stable preferences → Project for active brand work → files for brand guides → reusable prompts.",
-        ],
-        [
-          "09",
-          "Launch Assistant",
-          "Project → offer files → timeline → scheduled reminders → content generation → live launch checklist.",
-        ],
-        [
-          "10",
-          "Client Workflow",
-          "Separate Project per client → client files/instructions → research → deliverable → revision → final asset.",
-        ],
+        {
+          id: "content",
+          num: "01",
+          title: "Content System",
+          desc: "Turn one idea into a complete content cycle.",
+          keys: [
+            "content",
+            "post",
+            "posts",
+            "caption",
+            "video",
+            "social",
+            "reels",
+            "tiktok",
+            "facebook",
+            "instagram",
+            "content plan",
+          ],
+          steps: [
+            [
+              "Define the content goal",
+              "Decide what the content should accomplish: educate, build trust, promote, launch, or sell.",
+            ],
+            [
+              "Create the core idea",
+              "Write the main message or teaching point before creating platform versions.",
+            ],
+            [
+              "Build the hook",
+              "Create 3–5 hook options that match the audience and goal.",
+            ],
+            [
+              "Create the main content",
+              "Write the primary post, script, or long-form version.",
+            ],
+            [
+              "Repurpose it",
+              "Turn the core idea into captions, short posts, carousel ideas, email copy, or video variations.",
+            ],
+            [
+              "Schedule and review",
+              "Choose when each piece will be posted and track what performs best.",
+            ],
+          ],
+        },
+        {
+          id: "product",
+          num: "02",
+          title: "Digital Product Builder",
+          desc: "Go from audience problem to finished product and listing.",
+          keys: [
+            "digital product",
+            "ebook",
+            "guide",
+            "template",
+            "generator",
+            "product",
+            "create a product",
+            "sell",
+          ],
+          steps: [
+            [
+              "Define the buyer problem",
+              "Name the specific problem the product solves and who it is for.",
+            ],
+            [
+              "Choose the product format",
+              "Decide whether the solution works best as a guide, template, generator, workbook, prompt pack, or another format.",
+            ],
+            [
+              "Outline the deliverable",
+              "Create the sections, pages, features, or outputs the buyer will receive.",
+            ],
+            [
+              "Build the product",
+              "Create the actual content and review it for usefulness and clarity.",
+            ],
+            [
+              "Write the listing",
+              "Create the title, product description, benefits, FAQ, and buyer instructions.",
+            ],
+            [
+              "Prepare launch content",
+              "Create promotional posts, email copy, visuals, and buyer questions before launch.",
+            ],
+          ],
+        },
+        {
+          id: "workshop",
+          num: "03",
+          title: "Workshop Builder",
+          desc: "Plan, teach, support, and follow up on a workshop.",
+          keys: [
+            "workshop",
+            "class",
+            "training",
+            "teach",
+            "students",
+            "lesson",
+            "course",
+          ],
+          steps: [
+            [
+              "Set the learning outcome",
+              "Decide what students should be able to do by the end.",
+            ],
+            [
+              "Build the agenda",
+              "Break the outcome into teachable sections in the right order.",
+            ],
+            [
+              "Create demonstrations",
+              "Prepare the examples, screens, prompts, or files you will show live.",
+            ],
+            [
+              "Add practice",
+              "Give students a small action after each major concept.",
+            ],
+            [
+              "Prepare support material",
+              "Create checklists, guides, resources, or replay notes.",
+            ],
+            [
+              "Plan follow-up",
+              "Prepare replay access, support instructions, FAQ, and next-step communication.",
+            ],
+          ],
+        },
+        {
+          id: "website",
+          num: "04",
+          title: "Website Workflow",
+          desc: "Plan, build, test, and publish a business website.",
+          keys: [
+            "website",
+            "site",
+            "web page",
+            "landing page",
+            "html",
+            "netlify",
+            "github",
+          ],
+          steps: [
+            [
+              "Plan the structure",
+              "List the page sections and what each one needs to accomplish.",
+            ],
+            [
+              "Prepare content",
+              "Gather copy, product links, images, contact details, and brand rules.",
+            ],
+            [
+              "Build the page",
+              "Create the structure and styling while preserving approved sections.",
+            ],
+            [
+              "Connect actions",
+              "Add buttons, links, forms, products, and navigation.",
+            ],
+            [
+              "Test everything",
+              "Check mobile layout, links, wording, buttons, and interactions.",
+            ],
+            [
+              "Publish and verify",
+              "Deploy the site, refresh the live version, and test the production page.",
+            ],
+          ],
+        },
+        {
+          id: "support",
+          num: "05",
+          title: "Customer Support System",
+          desc: "Turn repeated customer questions into a support workflow.",
+          keys: [
+            "customer",
+            "support",
+            "faq",
+            "questions",
+            "buyers",
+            "help desk",
+            "customer service",
+          ],
+          steps: [
+            [
+              "Collect common questions",
+              "List the issues customers repeatedly ask about.",
+            ],
+            [
+              "Group the problems",
+              "Separate access, payment, product-use, technical, and policy questions.",
+            ],
+            [
+              "Write clear answers",
+              "Create short helpful answers that solve the problem without unnecessary back-and-forth.",
+            ],
+            [
+              "Build an FAQ",
+              "Turn recurring answers into a searchable FAQ or help section.",
+            ],
+            [
+              "Create troubleshooting flows",
+              "For common technical problems, build step-by-step decision paths.",
+            ],
+            [
+              "Review gaps",
+              "Track new questions and update the support system when patterns appear.",
+            ],
+          ],
+        },
+        {
+          id: "research",
+          num: "06",
+          title: "Research Workflow",
+          desc: "Find current facts, compare sources, and turn research into a decision.",
+          keys: [
+            "research",
+            "compare",
+            "competitor",
+            "market",
+            "sources",
+            "current",
+            "information",
+          ],
+          steps: [
+            [
+              "Define the decision",
+              "Write the actual question the research needs to answer.",
+            ],
+            [
+              "Choose the research depth",
+              "Use Web Search for current facts or Deep Research for multi-source synthesis.",
+            ],
+            [
+              "Set source standards",
+              "Decide whether official, primary, industry, or customer sources matter most.",
+            ],
+            [
+              "Collect findings",
+              "Gather the information tied directly to the decision criteria.",
+            ],
+            [
+              "Compare and verify",
+              "Identify conflicts, missing information, and claims that need verification.",
+            ],
+            [
+              "Turn it into action",
+              "Summarize what the research means and what you should do next.",
+            ],
+          ],
+        },
+        {
+          id: "analysis",
+          num: "07",
+          title: "Content & Sales Analysis",
+          desc: "Use your data to decide what to do more, less, or differently.",
+          keys: [
+            "sales",
+            "analytics",
+            "data",
+            "spreadsheet",
+            "revenue",
+            "performance",
+            "metrics",
+          ],
+          steps: [
+            [
+              "Upload or gather the data",
+              "Bring in the spreadsheet, platform export, or performance numbers.",
+            ],
+            [
+              "Inspect the data first",
+              "Check columns, dates, missing values, and what each metric actually represents.",
+            ],
+            [
+              "Ask one business question",
+              "Focus the analysis: what sells, what dropped, what content wins, or what needs attention.",
+            ],
+            [
+              "Find patterns",
+              "Compare periods, products, formats, or audiences.",
+            ],
+            [
+              "Identify outliers",
+              "Look for unusual spikes, drops, or results worth investigating.",
+            ],
+            [
+              "Choose the next action",
+              "Turn the findings into one or two concrete experiments or decisions.",
+            ],
+          ],
+        },
+        {
+          id: "brand",
+          num: "08",
+          title: "Brand Assistant",
+          desc: "Keep brand preferences, files, and active work organized.",
+          keys: [
+            "brand",
+            "branding",
+            "brand voice",
+            "colors",
+            "style",
+            "identity",
+          ],
+          steps: [
+            [
+              "Separate stable from temporary",
+              "Put long-term preferences in Memory or Custom Instructions; keep campaign details elsewhere.",
+            ],
+            [
+              "Create a brand Project",
+              "Keep active brand files, approved messaging, and related chats together.",
+            ],
+            [
+              "Add source files",
+              "Include brand guides, logos, product information, and approved examples.",
+            ],
+            [
+              "Create reusable instructions",
+              "Build prompts for common brand tasks such as posts, product listings, and visuals.",
+            ],
+            [
+              "Protect approved details",
+              "State what should not be changed when editing existing brand assets.",
+            ],
+            [
+              "Review consistency",
+              "Periodically check whether outputs still match the current brand direction.",
+            ],
+          ],
+        },
+        {
+          id: "launch",
+          num: "09",
+          title: "Launch Assistant",
+          desc: "Plan and execute a product, workshop, or offer launch.",
+          keys: [
+            "launch",
+            "launching",
+            "new product",
+            "new workshop",
+            "release",
+            "promotion",
+            "promote",
+            "next week",
+          ],
+          steps: [
+            [
+              "Define the offer",
+              "Confirm what is launching, who it is for, price, date, and buyer outcome.",
+            ],
+            [
+              "Prepare the sales assets",
+              "Finish the product page, checkout link, visuals, FAQ, and buyer instructions.",
+            ],
+            [
+              "Build the launch timeline",
+              "Map what needs to happen before, during, and after launch.",
+            ],
+            [
+              "Create promotional content",
+              "Prepare posts, emails, video hooks, announcements, and reminders.",
+            ],
+            [
+              "Schedule key actions",
+              "Use tasks/reminders for deadlines, live events, or follow-ups.",
+            ],
+            [
+              "Launch and monitor",
+              "Publish, answer questions, check links, and track early results.",
+            ],
+            [
+              "Follow up",
+              "Send reminders, replay/access instructions, testimonials requests, or post-launch content.",
+            ],
+          ],
+        },
+        {
+          id: "client",
+          num: "10",
+          title: "Client Workflow",
+          desc: "Keep client work separate, organized, and easy to revise.",
+          keys: [
+            "client",
+            "clients",
+            "customer project",
+            "freelance",
+            "service",
+          ],
+          steps: [
+            [
+              "Create a separate Project",
+              "Keep each client’s files, instructions, and conversations isolated from unrelated work.",
+            ],
+            [
+              "Collect requirements",
+              "Confirm the goal, deliverables, deadline, audience, brand rules, and protected details.",
+            ],
+            [
+              "Gather source material",
+              "Add the files, copy, links, references, and approved examples.",
+            ],
+            [
+              "Create the deliverable",
+              "Build the work based on the client’s requirements.",
+            ],
+            [
+              "Review against the brief",
+              "Check every requirement before showing the client.",
+            ],
+            [
+              "Handle revisions carefully",
+              "Change only what the client asks to revise and preserve approved work.",
+            ],
+            [
+              "Finalize and deliver",
+              "Prepare the final version, file names, and delivery instructions.",
+            ],
+          ],
+        },
       ];
 
       const lessonExamples = {
@@ -5082,6 +5627,162 @@ ${audience ? `Audience:\n${audience}\n\n` : ""}${tone ? `Tone/style:\n${tone}\n\
    </div>`;
       };
 
+      function scoreWorkflow(goal, w) {
+        const t = goal.toLowerCase();
+        let score = 0;
+        w.keys.forEach((k) => {
+          if (t.includes(k.toLowerCase())) score += 3;
+        });
+        const titleWords = w.title.toLowerCase().split(/\s+/);
+        titleWords.forEach((k) => {
+          if (k.length > 4 && t.includes(k)) score += 1;
+        });
+        return score;
+      }
+      function recommendBusinessWorkflow() {
+        const goal = document.getElementById("businessGoal").value.trim();
+        if (!goal) {
+          toast("Tell me what you're trying to accomplish first.");
+          return;
+        }
+        let ranked = biz
+          .map((w) => ({ w, score: scoreWorkflow(goal, w) }))
+          .sort((a, b) => b.score - a.score);
+        let best = ranked[0];
+        if (!best || best.score === 0) {
+          // Default based on broad intent clues.
+          if (/sell|offer|new|release|promot/i.test(goal))
+            best = { w: biz.find((x) => x.id === "launch"), score: 1 };
+          else if (/make|create|build/i.test(goal))
+            best = { w: biz.find((x) => x.id === "product"), score: 1 };
+          else best = { w: biz.find((x) => x.id === "content"), score: 1 };
+        }
+        const w = best.w;
+        document.getElementById("businessRecommendation").innerHTML = `
+   <div class="biz-result">
+     <div class="kicker">Recommended Workflow</div>
+     <h3>${w.title}</h3>
+     <div class="biz-why"><strong>Why this fits:</strong> Your goal sounds closest to a ${w.title.toLowerCase()} because the work involves ${escapeAttr(w.desc.toLowerCase())}</div>
+     <div class="workflow-steps">${w.steps.map((s, i) => `<div class="workflow-step"><div class="step-num">${i + 1}</div><div><strong>${s[0]}</strong><span>${s[1]}</span></div></div>`).join("")}</div>
+     <div class="card-actions" style="margin-top:13px">
+       <button class="btn primary" onclick="startWorkflow('${w.id}')">Start This Workflow</button>
+       <button class="btn secondary" onclick="copyWorkflow('${w.id}')">Copy Full Workflow</button>
+       <button class="btn secondary" onclick="coachWorkflow('${w.id}')">Coach Me Through It</button>
+     </div>
+   </div>`;
+      }
+      document.getElementById("recommendWorkflow").onclick =
+        recommendBusinessWorkflow;
+
+      function workflowText(w) {
+        return (
+          `${w.title}\n\n${w.desc}\n\n` +
+          w.steps.map((s, i) => `${i + 1}. ${s[0]}\n${s[1]}`).join("\n\n")
+        );
+      }
+      function copyWorkflow(id) {
+        const w = biz.find((x) => x.id === id);
+        if (w) copyText(workflowText(w));
+      }
+      function showWorkflow(id) {
+        const w = biz.find((x) => x.id === id);
+        if (!w) return;
+        document.getElementById("businessRecommendation").innerHTML = `
+   <div class="biz-result">
+     <div class="kicker">Workflow Library</div><h3>${w.title}</h3><div class="biz-why">${w.desc}</div>
+     <div class="workflow-steps">${w.steps.map((s, i) => `<div class="workflow-step"><div class="step-num">${i + 1}</div><div><strong>${s[0]}</strong><span>${s[1]}</span></div></div>`).join("")}</div>
+     <div class="card-actions" style="margin-top:13px"><button class="btn primary" onclick="startWorkflow('${w.id}')">Start This Workflow</button><button class="btn secondary" onclick="copyWorkflow('${w.id}')">Copy Full Workflow</button><button class="btn secondary" onclick="coachWorkflow('${w.id}')">Coach Me Through It</button></div>
+   </div>`;
+        document
+          .getElementById("businessRecommendation")
+          .scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      function startWorkflow(id) {
+        const w = biz.find((x) => x.id === id);
+        if (!w) return;
+        const saved = JSON.parse(
+          localStorage.getItem("glamActiveWorkflow") || "null",
+        );
+        const state = saved && saved.id === id ? saved : { id, done: [] };
+        localStorage.setItem("glamActiveWorkflow", JSON.stringify(state));
+        renderActiveWorkflow();
+        document
+          .getElementById("activeWorkflowHolder")
+          .scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      function toggleWorkflowTask(index) {
+        const state = JSON.parse(
+          localStorage.getItem("glamActiveWorkflow") || "null",
+        );
+        if (!state) return;
+        state.done = state.done.includes(index)
+          ? state.done.filter((x) => x !== index)
+          : [...state.done, index];
+        localStorage.setItem("glamActiveWorkflow", JSON.stringify(state));
+        renderActiveWorkflow();
+      }
+      function renderActiveWorkflow() {
+        const holder = document.getElementById("activeWorkflowHolder");
+        if (!holder) return;
+        const state = JSON.parse(
+          localStorage.getItem("glamActiveWorkflow") || "null",
+        );
+        if (!state) {
+          holder.innerHTML = "";
+          return;
+        }
+        const w = biz.find((x) => x.id === state.id);
+        if (!w) return;
+        const pct = Math.round((state.done.length / w.steps.length) * 100);
+        holder.innerHTML = `<div class="active-workflow">
+   <div class="kicker">Active Workflow</div><h3>${w.title}</h3>
+   <div class="progress-row"><span>${state.done.length} of ${w.steps.length} steps complete</span><span>${pct}%</span></div>
+   <div class="workflow-progress"><div style="width:${pct}%"></div></div>
+   ${w.steps
+     .map(
+       (
+         s,
+         i,
+       ) => `<div class="workflow-task ${state.done.includes(i) ? "done" : ""}">
+     <div class="workflow-task-top"><div><strong>${i + 1}. ${s[0]}</strong><p>${s[1]}</p></div><button class="tiny-btn" onclick="toggleWorkflowTask(${i})">${state.done.includes(i) ? "Undo" : "Complete"}</button></div>
+     <button class="tiny-btn" onclick="coachWorkflowStep('${w.id}',${i})">Coach Me on This Step</button>
+   </div>`,
+     )
+     .join("")}
+ </div>`;
+      }
+      function coachWorkflow(id) {
+        const w = biz.find((x) => x.id === id);
+        if (!w) return;
+        const goal = document.getElementById("businessGoal").value.trim();
+        const prompt = `I am using this business workflow: ${w.title}.
+
+My goal:
+${goal || "[Describe your specific business goal]"}
+
+Workflow:
+${workflowText(w)}
+
+Coach me through this workflow one step at a time. Start with Step 1 only. Ask for any information you genuinely need for that step, help me complete it, and do not move to the next step until I say I am ready.`;
+        copyText(prompt);
+        toast("Coaching prompt copied. Paste it into ChatGPT.");
+      }
+      function coachWorkflowStep(id, index) {
+        const w = biz.find((x) => x.id === id);
+        if (!w) return;
+        const s = w.steps[index];
+        const goal = document.getElementById("businessGoal").value.trim();
+        const prompt = `Coach me through this exact business workflow step.
+
+Workflow: ${w.title}
+My goal: ${goal || "[My business goal]"}
+Current step: ${index + 1}. ${s[0]}
+What this step means: ${s[1]}
+
+Help me complete this step. Ask only for information necessary to finish it. Give me the next concrete action first, not the whole workflow.`;
+        copyText(prompt);
+        toast("Step coaching prompt copied.");
+      }
       function renderPractice() {
         document.getElementById("practiceGrid").innerHTML = practices
           .map(
@@ -5094,9 +5795,16 @@ ${audience ? `Audience:\n${audience}\n\n` : ""}${tone ? `Tone/style:\n${tone}\n\
       function renderBiz() {
         document.getElementById("bizGrid").innerHTML = biz
           .map(
-            (i) => `
- <article class="biz"><div class="n">${i[0]}</div><h3>${i[1]}</h3><p>${i[2]}</p>
- <button class="tiny-btn" onclick="copyText('${i[2].replace(/'/g, "\\'")}')">Copy Workflow</button></article>`,
+            (w) => `
+ <article class="biz">
+   <div class="n">${w.num}</div>
+   <h3>${w.title}</h3>
+   <p>${w.desc}</p>
+   <div class="biz-card-action">
+     <button class="tiny-btn" onclick="showWorkflow('${w.id}')">View Workflow</button>
+     <button class="tiny-btn" onclick="copyWorkflow('${w.id}')">Copy Workflow</button>
+   </div>
+ </article>`,
           )
           .join("");
       }
@@ -5758,6 +6466,7 @@ ${audience ? `Audience:\n${audience}\n\n` : ""}${tone ? `Tone/style:\n${tone}\n\
       renderLessons();
       renderPractice();
       renderBiz();
+      renderActiveWorkflow();
       renderQuiz();
       renderScenarios();
       renderGlossary();
