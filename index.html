@@ -2173,6 +2173,26 @@
           grid-template-columns: 1fr;
         }
       }
+
+      .track-result-bar {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
+        margin: 4px 0 14px;
+        padding: 12px 14px;
+        border-radius: 15px;
+        background: #f3f8fc;
+        border: 1px solid rgba(22, 143, 234, 0.12);
+      }
+      .track-result-bar strong {
+        font-size: 13px;
+        color: var(--deep);
+      }
+      .track-result-bar span {
+        font-size: 11px;
+        color: var(--muted);
+      }
     </style>
   </head>
   <body>
@@ -2341,6 +2361,10 @@
             </div>
           </div>
           <div class="path-grid" id="pathGrid"></div>
+          <div class="track-result-bar" id="trackResultBar">
+            <strong id="trackResultTitle">Showing All Lessons</strong>
+            <span id="trackResultCount"></span>
+          </div>
           <div class="filters">
             <input
               id="lessonSearch"
@@ -5228,6 +5252,16 @@
             currentTrack === "all" || l.level === currentTrack;
           return matchesSearch && matchesTrack;
         });
+        const statusTitle = document.getElementById("trackResultTitle");
+        const statusCount = document.getElementById("trackResultCount");
+        if (statusTitle)
+          statusTitle.textContent =
+            currentTrack === "all"
+              ? "Showing All Lessons"
+              : `Showing ${currentTrack} Lessons`;
+        if (statusCount)
+          statusCount.textContent = `${list.length} lesson${list.length === 1 ? "" : "s"}`;
+
         document.getElementById("lessonGrid").innerHTML =
           list
             .map(
@@ -5268,10 +5302,29 @@
       document.querySelectorAll(".track-btn").forEach((btn) =>
         btn.addEventListener("click", () => {
           currentTrack = btn.dataset.track;
+
           document
             .querySelectorAll(".track-btn")
             .forEach((x) => x.classList.toggle("active", x === btn));
-          renderLessons(document.getElementById("lessonSearch").value);
+
+          // Clear an old search/path filter so the level button always shows the full chosen level.
+          const search = document.getElementById("lessonSearch");
+          if (search) search.value = "";
+
+          renderLessons("");
+
+          // Move the learner directly to the filtered lesson cards so the result is obvious.
+          const resultBar = document.getElementById("trackResultBar");
+          if (resultBar) {
+            setTimeout(
+              () =>
+                resultBar.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                }),
+              50,
+            );
+          }
         }),
       );
       function updateProgress() {
