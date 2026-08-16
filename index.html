@@ -5492,7 +5492,7 @@
         box.innerHTML = `<div class="ai-coach-loading"><span class="ai-spinner"></span>Reading what you actually wrote and coaching this attempt…</div>`;
 
         try {
-          const res = await fetch("/.netlify/functions/coach", {
+          const res = await fetch("https://chatgpt-learning-hub.netlify.app/.netlify/functions/coach", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -6338,7 +6338,7 @@ Help me complete this step. Ask only for information necessary to finish it. Giv
         fb.innerHTML = `<div class="ai-coach-loading"><span class="ai-spinner"></span>AI Coach is reviewing this exact prompt…</div>`;
 
         try {
-          const res = await fetch("/.netlify/functions/coach", {
+          const res = await fetch("https://chatgpt-learning-hub.netlify.app/.netlify/functions/coach", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
