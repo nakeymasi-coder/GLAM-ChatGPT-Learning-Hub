@@ -141,7 +141,7 @@ ${attempt}`;
             schema
           }
         },
-        max_output_tokens: 1400
+        max_output_tokens: 4000
       })
     });
 
