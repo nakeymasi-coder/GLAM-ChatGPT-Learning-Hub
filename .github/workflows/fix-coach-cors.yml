@@ -1,0 +1,53 @@
+name: Fix Coach CORS
+
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-coach-cors.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add CORS support to coach function
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('netlify/functions/coach.js')
+          s = p.read_text(encoding='utf-8')
+
+          marker = 'const MODEL = process.env.OPENAI_COACH_MODEL || "gpt-5.6-luna";\n'
+          cors = '''const CORS_HEADERS = {\n  "Access-Control-Allow-Origin": "https://nakeymasi-coder.github.io",\n  "Access-Control-Allow-Headers": "Content-Type",\n  "Access-Control-Allow-Methods": "POST, OPTIONS",\n  "Content-Type": "application/json"\n};\n'''
+          if 'const CORS_HEADERS' not in s:
+              if marker not in s:
+                  raise SystemExit('MODEL marker not found')
+              s = s.replace(marker, marker + '\n' + cors, 1)
+
+          old_handler = '''exports.handler = async function(event) {\n  if (event.httpMethod !== "POST") {'''
+          new_handler = '''exports.handler = async function(event) {\n  if (event.httpMethod === "OPTIONS") {\n    return { statusCode: 204, headers: CORS_HEADERS, body: "" };\n  }\n\n  if (event.httpMethod !== "POST") {'''
+          if old_handler in s:
+              s = s.replace(old_handler, new_handler, 1)
+          elif 'event.httpMethod === "OPTIONS"' not in s:
+              raise SystemExit('Handler marker not found')
+
+          s = s.replace('headers: { "Content-Type": "application/json" }', 'headers: CORS_HEADERS')
+
+          old_success = '''headers: {\n        "Content-Type": "application/json",\n        "Cache-Control": "no-store"\n      },'''
+          new_success = '''headers: {\n        ...CORS_HEADERS,\n        "Cache-Control": "no-store"\n      },'''
+          if old_success in s:
+              s = s.replace(old_success, new_success, 1)
+
+          p.write_text(s, encoding='utf-8')
+          print('CORS support added to coach.js')
+          PY
+      - name: Commit fix
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add netlify/functions/coach.js
+          git commit -m "Fix AI Coach CORS for GitHub Pages"
+          git push
