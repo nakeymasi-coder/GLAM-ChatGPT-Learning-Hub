@@ -4,6 +4,13 @@
 const OPENAI_URL = "https://api.openai.com/v1/responses";
 const MODEL = process.env.OPENAI_COACH_MODEL || "gpt-5.6-luna";
 
+const CORS_HEADERS = {
+  "Access-Control-Allow-Origin": "https://nakeymasi-coder.github.io",
+  "Access-Control-Allow-Headers": "Content-Type",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Content-Type": "application/json"
+};
+
 const schema = {
   type: "object",
   properties: {
@@ -49,29 +56,33 @@ function getOutputText(payload) {
 }
 
 exports.handler = async function(event) {
+  if (event.httpMethod === "OPTIONS") {
+    return { statusCode: 204, headers: CORS_HEADERS, body: "" };
+  }
+
   if (event.httpMethod !== "POST") {
-    return { statusCode: 405, headers: { "Content-Type": "application/json" }, body: JSON.stringify({ error: "POST only." }) };
+    return { statusCode: 405, headers: CORS_HEADERS, body: JSON.stringify({ error: "POST only." }) };
   }
 
   if (!process.env.OPENAI_API_KEY) {
-    return { statusCode: 500, headers: { "Content-Type": "application/json" }, body: JSON.stringify({ error: "OPENAI_API_KEY is not configured in Netlify." }) };
+    return { statusCode: 500, headers: CORS_HEADERS, body: JSON.stringify({ error: "OPENAI_API_KEY is not configured in Netlify." }) };
   }
 
   let body;
   try {
     body = JSON.parse(event.body || "{}");
   } catch {
-    return { statusCode: 400, headers: { "Content-Type": "application/json" }, body: JSON.stringify({ error: "Invalid request." }) };
+    return { statusCode: 400, headers: CORS_HEADERS, body: JSON.stringify({ error: "Invalid request." }) };
   }
 
   const attempt = String(body.attempt || "").trim();
   const lesson = body.lesson || {};
 
   if (!attempt) {
-    return { statusCode: 400, headers: { "Content-Type": "application/json" }, body: JSON.stringify({ error: "No attempt was provided." }) };
+    return { statusCode: 400, headers: CORS_HEADERS, body: JSON.stringify({ error: "No attempt was provided." }) };
   }
   if (attempt.length > 8000) {
-    return { statusCode: 413, headers: { "Content-Type": "application/json" }, body: JSON.stringify({ error: "That attempt is too long for this coaching exercise." }) };
+    return { statusCode: 413, headers: CORS_HEADERS, body: JSON.stringify({ error: "That attempt is too long for this coaching exercise." }) };
   }
 
   const system = `You are the personalized Prompt Coach inside a beginner-friendly ChatGPT learning app.
@@ -140,14 +151,14 @@ ${attempt}`;
       console.error("OpenAI API error:", payload);
       return {
         statusCode: response.status >= 500 ? 502 : 500,
-        headers: { "Content-Type": "application/json" },
+        headers: CORS_HEADERS,
         body: JSON.stringify({ error: "The AI Coach could not generate feedback right now." })
       };
     }
 
     const outputText = getOutputText(payload);
     if (!outputText) {
-      return { statusCode: 502, headers: { "Content-Type": "application/json" }, body: JSON.stringify({ error: "The AI Coach returned an empty response." }) };
+      return { statusCode: 502, headers: CORS_HEADERS, body: JSON.stringify({ error: "The AI Coach returned an empty response." }) };
     }
 
     const coaching = JSON.parse(outputText);
@@ -158,7 +169,7 @@ ${attempt}`;
     return {
       statusCode: 200,
       headers: {
-        "Content-Type": "application/json",
+        ...CORS_HEADERS,
         "Cache-Control": "no-store"
       },
       body: JSON.stringify(coaching)
@@ -167,7 +178,7 @@ ${attempt}`;
     console.error(error);
     return {
       statusCode: 500,
-      headers: { "Content-Type": "application/json" },
+      headers: CORS_HEADERS,
       body: JSON.stringify({ error: "AI coaching is temporarily unavailable." })
     };
   }
