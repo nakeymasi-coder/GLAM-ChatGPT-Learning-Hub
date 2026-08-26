@@ -20,18 +20,8 @@ jobs:
       - name: Rebuild and apply GLAM patch
         shell: bash
         run: |
-          python - <<'PY'
-          from pathlib import Path
-          parts = sorted(Path('.glam-update').glob('part-*'))
-          out = b''
-          for i, part in enumerate(parts):
-              data = part.read_bytes()
-              if i < len(parts) - 1 and data.endswith(b'\n'):
-                  data = data[:-1]
-              out += data
-          Path('/tmp/glam.patch').write_bytes(out)
-          PY
-          git apply --check /tmp/glam.patch || git apply --3way --check /tmp/glam.patch
+          cat .glam-update/part-00 .glam-update/part-02 .glam-update/part-03 .glam-update/part-04 .glam-update/part-05 .glam-update/part-06 .glam-update/part-07 .glam-update/part-08 .glam-update/part-09 > /tmp/glam.patch
+          test "$(wc -c < /tmp/glam.patch)" -eq 75864
           if git apply --check /tmp/glam.patch; then
             git apply --whitespace=nowarn /tmp/glam.patch
           else
