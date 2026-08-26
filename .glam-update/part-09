@@ -1,0 +1,70 @@
+a.description;
+         document.getElementById("keywordVault").innerHTML = data.words
+           .map(
+             (w, i) =>
+@@ -6070,10 +6673,18 @@ Help me complete this step. Ask only for information necessary to finish it. Giv
+           ? selectedPowerWords.filter((x) => x !== word)
+           : [...selectedPowerWords, word];
+         renderWordStack();
++        const search = document.getElementById("powerWordSearch");
++        if (search && search.value.trim()) {
++          searchPowerWords(search.value);
++          return;
++        }
+         const active = [...document.querySelectorAll(".category-btn")].find(
+           (x) => x.classList.contains("active"),
+         );
+-        if (active) showPowerCategory(active.textContent);
++        if (active) {
++          const name = active.textContent.replace(/\s*\(\d+\)\s*$/, "");
++          showPowerCategory(name);
++        }
+       }
+       function renderWordStack() {
+         const el = document.getElementById("wordStack");
+@@ -6083,9 +6694,45 @@ Help me complete this step. Ask only for information necessary to finish it. Giv
+               .join("")
+           : `<span class="help">No words selected yet. Pick words that support the same visual direction.</span>`;
+       }
++      function searchPowerWords(query) {
++        const q = (query || "").trim().toLowerCase();
++        if (!q) {
++          const active = [...document.querySelectorAll(".category-btn")].find((x) => x.classList.contains("active"));
++          const fallback = active ? active.textContent.replace(/\s*\(\d+\)\s*$/, "") : Object.keys(powerWordData)[0];
++          showPowerCategory(fallback);
++          return;
++        }
++        const matches = [];
++        Object.entries(powerWordData).forEach(([cat, data]) => {
++          data.words.forEach((w, i) => {
++            if (`${cat} ${w[0]} ${w[1]}`.toLowerCase().includes(q)) matches.push({ cat, word: w, index: i });
++          });
++        });
++        document.querySelectorAll(".category-btn").forEach((x) => x.classList.remove("active"));
++        document.getElementById("powerKicker").textContent = `Search · ${matches.length} matches`;
++        document.getElementById("powerDescription").textContent = matches.length
++          ? `Showing matching terms from across all ${Object.keys(powerWordData).length} categories.`
++          : "No matching term yet. Try a broader word such as glossy, light, toy, skin, camera, fabric, depth, or editorial.";
++        document.getElementById("keywordVault").innerHTML = matches
++          .map(({cat, word, index}) => `<button class="keyword-chip ${selectedPowerWords.includes(word[0]) ? "selected" : ""}" onclick="inspectPowerWord('${cat.replace(/'/g, "\\'")}',${index},this)" title="${cat}">${word[0]}</button>`)
++          .join("");
++      }
++      document.getElementById("powerWordSearch").addEventListener("input", (e) => searchPowerWords(e.target.value));
++      document.getElementById("randomPowerStack").onclick = () => {
++        const preferred = ["Rendering & Quality","Lighting","Depth & Dimension","Materials & Finish","Detail & Output","Commercial & Editorial","Style","Prompt Guardrails"];
++        const shuffled = preferred.sort(() => Math.random() - 0.5).slice(0, 6);
++        selectedPowerWords = shuffled.map((cat) => {
++          const words = powerWordData[cat].words;
++          return words[Math.floor(Math.random() * words.length)][0];
++        });
++        renderWordStack();
++        toast("Fresh Power Word stack created.");
++      };
+       document.getElementById("clearWordStack").onclick = () => {
+         selectedPowerWords = [];
+         renderWordStack();
++        const search = document.getElementById("powerWordSearch");
++        if (search) search.value = "";
+         renderPowerCategories();
+       };
+       document.getElementById("copyWordStack").onclick = () =>
