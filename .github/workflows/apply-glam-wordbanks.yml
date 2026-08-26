@@ -17,12 +17,26 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Build and apply GLAM patch
+      - name: Rebuild and apply GLAM patch
         shell: bash
         run: |
-          cat .glam-update/part-* > /tmp/glam.patch
-          git apply --check /tmp/glam.patch
-          git apply --whitespace=nowarn /tmp/glam.patch
+          python - <<'PY'
+          from pathlib import Path
+          parts = sorted(Path('.glam-update').glob('part-*'))
+          out = b''
+          for i, part in enumerate(parts):
+              data = part.read_bytes()
+              if i < len(parts) - 1 and data.endswith(b'\n'):
+                  data = data[:-1]
+              out += data
+          Path('/tmp/glam.patch').write_bytes(out)
+          PY
+          git apply --check /tmp/glam.patch || git apply --3way --check /tmp/glam.patch
+          if git apply --check /tmp/glam.patch; then
+            git apply --whitespace=nowarn /tmp/glam.patch
+          else
+            git apply --3way --whitespace=nowarn /tmp/glam.patch
+          fi
 
       - name: Verify expanded Power Word Vault
         shell: bash
