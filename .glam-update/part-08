@@ -1,0 +1,102 @@
+stylized doll presentation"],
++            ["Beauty editorial", "Magazine-inspired beauty portrait style"],
++            ["High-fashion editorial", "Conceptual polished fashion-magazine treatment"],
++            ["Luxury campaign realism", "Realistic premium advertising look"],
++            ["Surreal advertising realism", "Impossible concept rendered as believable commercial photography"],
++            ["Pop-surreal commercial art", "Bold imaginative concept with polished advertising execution"],
++            ["Sculptural minimalism", "Simple forms treated like premium art objects"],
++            ["Neo-pop gloss", "Bright saturated glossy contemporary pop-art treatment"],
++            ["Y2K gloss", "Early-2000s inspired shine, chrome, candy color, and polished nostalgia"],
++            ["Retro-futurist glamour", "Vintage glamour mixed with speculative design cues without interface clutter"],
++            ["Editorial CGI", "Fashion/editorial imagery rendered with high-end computer graphics"],
++            ["Luxury product CGI", "Premium realistic computer-generated product visualization"],
++            ["Photographic illustration", "Illustration rendered with photographic light and material behavior"],
++            ["Airbrushed commercial art", "Smooth polished advertising-illustration treatment"],
++            ["Premium sticker art", "Bold cut-friendly illustration with dimensional polish"],
++            ["Mascot key art", "Hero brand-character illustration designed for repeated marketing use"],
++            ["Collector packaging art", "Visual language inspired by premium limited-edition product packaging"],
++          ],
++        },
++        "Motion & Pose": {
++          description: "Pose and motion terms make models and mascots feel active, intentional, and physically believable instead of stiffly standing in place.",
++          words: [
++            ["Confident contrapposto", "Natural weight shift through hips and shoulders"],
++            ["Editorial power pose", "Strong fashion-forward posture with deliberate angles"],
++            ["Relaxed luxury pose", "Polished posture that still feels natural"],
++            ["Mid-motion capture", "Subject photographed during an action rather than frozen posing"],
++            ["Walking stride", "Natural step with realistic limb movement"],
++            ["Hair in motion", "Hair responds visibly to movement or airflow"],
++            ["Fabric in motion", "Clothing drape and folds react to movement"],
++            ["Turning pose", "Body rotates through the frame for energy"],
++            ["Over-the-shoulder glance", "Body turned away while face returns toward camera"],
++            ["Hand-to-face beauty pose", "Controlled hand placement supporting beauty framing"],
++            ["Product interaction", "Hands physically use or hold the featured item"],
++            ["Two-handed product hold", "Product is securely and intentionally presented with both hands"],
++            ["Leaning pose", "Body interacts naturally with furniture, wall, or prop"],
++            ["Seated editorial pose", "Strong seated body geometry with fashion polish"],
++            ["Crossed-leg pose", "Controlled seated or standing leg placement"],
++            ["Shoulder-forward pose", "One shoulder angled toward camera for depth"],
++            ["Chin-down beauty angle", "Subtle head position emphasizing eyes"],
++            ["Chin-up hero angle", "Slightly elevated chin for confidence"],
++            ["Dynamic foreshortened gesture", "Hand or object reaches toward camera with believable perspective"],
++            ["Natural hand placement", "Fingers and wrists follow believable anatomy and contact"],
++            ["Weight-bearing posture", "Feet, hips, and torso reflect realistic balance"],
++            ["Interactive mascot pose", "Character appears to actively engage with the product or scene"],
++            ["Campaign hero stance", "Simple strong pose built for a primary brand image"],
++          ],
++        },
++        "Prompt Guardrails": {
++          description: "Guardrail phrases protect important details and stop the model from adding common unwanted extras. These are control phrases, not visual styles.",
++          words: [
++            ["Preserve the requested body type", "Do not change size or proportions from the brief"],
++            ["Preserve skin tone", "Keep the requested complexion consistent"],
++            ["Keep adults visibly adult", "Avoid de-aging adult characters into childlike faces or bodies"],
++            ["Preserve facial identity", "Maintain the same recognizable facial structure when a reference is used"],
++            ["Anatomically correct hands", "Avoid extra, merged, or malformed fingers"],
++            ["Natural body proportions", "Avoid warped limbs or implausible anatomy"],
++            ["Accurate scale", "Keep objects and people proportionally believable"],
++            ["Believable physical interaction", "Hands, clothing, props, and surfaces should make real contact"],
++            ["Preserve visible wording", "Keep requested text complete and unobstructed"],
++            ["Correct spelling", "Visible wording should be spelled exactly as provided"],
++            ["No unrelated clutter", "Do not add random props or decorative noise"],
++            ["No random floating icons", "Avoid unexplained interface-like or decorative symbols"],
++            ["No HUD overlays", "Avoid futuristic interface graphics over the image"],
++            ["No dashboards or analytics panels", "Do not add fake data-interface elements"],
++            ["No crowns or tiaras", "Exclude royal headpieces unless intentionally requested"],
++            ["No excessive sparkles", "Keep shine controlled and premium"],
++            ["No muddy colors", "Maintain clean intentional palette separation"],
++            ["No waxy skin blur", "Retain designed complexion detail rather than smeared smoothing"],
++            ["No warped text", "Avoid distorted or partially formed lettering"],
++            ["No duplicate objects", "Do not accidentally repeat key products or body parts"],
++            ["No extra limbs or fingers", "Protect anatomy from common generation artifacts"],
++            ["No background distractions", "Keep supporting elements subordinate to the hero subject"],
++            ["Keep composition intentional", "Every visible element should support the main concept"],
++            ["Maintain material realism", "Reflections, seams, folds, and surface behavior should match the stated materials"],
+           ],
+         },
+       };
+@@ -6037,12 +6639,14 @@ Help me complete this step. Ask only for information necessary to finish it. Giv
+         holder.innerHTML = names
+           .map(
+             (n, i) =>
+-              `<button class="category-btn ${i === 0 ? "active" : ""}" onclick="showPowerCategory('${n.replace(/'/g, "\\'")}',this)">${n}</button>`,
++              `<button class="category-btn ${i === 0 ? "active" : ""}" onclick="showPowerCategory('${n.replace(/'/g, "\\'")}',this)">${n} <span style="opacity:.62">(${powerWordData[n].words.length})</span></button>`,
+           )
+           .join("");
+         showPowerCategory(names[0]);
+       }
+       function showPowerCategory(name, btn) {
++        const search = document.getElementById("powerWordSearch");
++        if (search && search.value) search.value = "";
+         if (btn) {
+           document
+             .querySelectorAll(".category-btn")
+@@ -6050,9 +6654,8 @@ Help me complete this step. Ask only for information necessary to finish it. Giv
+           btn.classList.add("active");
+         }
+         const data = powerWordData[name];
+-        document.getElementById("powerKicker").textContent = name;
+-        document.getElementById("powerDescription").textContent =
+-          data.description;
++        document.getElementById("powerKicker").textContent = `${name} · ${data.words.length} terms`;
++        document.getElementById("powerDescription").textContent = dat
