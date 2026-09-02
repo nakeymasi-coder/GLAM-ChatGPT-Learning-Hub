@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>GLAM ChatGPT Learning Hub</title>
+  <meta name="description" content="An immersive interactive ChatGPT Learning Hub." />
+  <style>
+    :root{--blend:0;--sapphire:#168fea;--deep:#103b63;--black:#171a1e;--silver:#cfd8e1;--pan-x:0px;--pan-y:0px}
+    *{box-sizing:border-box}
+    html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#000;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    body{overscroll-behavior:none}
+    button,input{font:inherit}
+    #experience{position:fixed;inset:0;width:100vw;height:100dvh;overflow:hidden;background:#000;touch-action:none}
+    #sceneStage{position:absolute;left:50%;top:50%;width:1672px;height:941px;transform:translate3d(calc(-50% + var(--pan-x)),calc(-50% + var(--pan-y)),0);transform-origin:center center;will-change:width,height,transform}
+    .scene-media{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;user-select:none;-webkit-user-drag:none;backface-visibility:hidden;transform:translateZ(0)}
+    #dayLayer{opacity:calc(1 - var(--blend))}
+    #nightLayer{opacity:var(--blend)}
+    .smooth #dayLayer,.smooth #nightLayer{transition:opacity 1s ease-in-out}
+    .hotspot{position:absolute;border:0;background:transparent;padding:0;cursor:pointer;border-radius:22px;outline:none;z-index:5;color:transparent}
+    .hotspot::before{content:"";position:absolute;inset:-3px;border-radius:inherit;opacity:0;transition:opacity .18s ease,box-shadow .18s ease;border:1px solid rgba(255,255,255,0);box-shadow:0 0 0 rgba(22,143,234,0)}
+    .hotspot:hover::before,.hotspot:focus-visible::before{opacity:1;border-color:rgba(255,255,255,.28);box-shadow:0 0 24px rgba(22,143,234,.52),inset 0 0 18px rgba(22,143,234,.12)}
+    .hotspot:focus-visible{outline:3px solid rgba(255,255,255,.95);outline-offset:4px}
+    #timeControl{position:fixed;z-index:30;top:max(16px,env(safe-area-inset-top));right:max(16px,env(safe-area-inset-right));display:grid;grid-template-columns:auto minmax(110px,150px) auto;gap:9px;align-items:center;padding:10px 12px;border:1px solid rgba(255,255,255,.28);border-radius:999px;background:rgba(10,24,44,.44);box-shadow:0 12px 34px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.16);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);color:#fff}
+    .time-label{font-size:12px;font-weight:850;white-space:nowrap;text-shadow:0 1px 7px rgba(0,0,0,.45)}
+    #dayNight{width:100%;accent-color:var(--sapphire);cursor:pointer}
+    #dayNight:focus-visible{outline:3px solid #fff;outline-offset:4px;border-radius:999px}
+    #featureShell{position:fixed;inset:0;z-index:50;background:#fff;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .28s ease}
+    #featureShell.open{opacity:1;visibility:visible;pointer-events:auto}
+    #appFrame{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff}
+    #returnHub{position:fixed;z-index:60;top:max(16px,env(safe-area-inset-top));left:max(16px,env(safe-area-inset-left));display:none;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.34);border-radius:999px;padding:10px 14px;background:rgba(10,24,44,.78);color:#fff;font-weight:900;box-shadow:0 10px 28px rgba(0,0,0,.24);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);cursor:pointer}
+    #featureShell.open #returnHub{display:flex}
+    #returnHub:focus-visible{outline:3px solid #fff;outline-offset:3px}
+    @media(max-width:700px){#timeControl{top:max(10px,env(safe-area-inset-top));right:max(10px,env(safe-area-inset-right));grid-template-columns:auto minmax(88px,108px) auto;gap:6px;padding:9px 10px}.time-label{font-size:11px}.hotspot::before{display:none}#returnHub{top:max(10px,env(safe-area-inset-top));left:max(10px,env(safe-area-inset-left));padding:9px 12px;font-size:12px}}
+    @media(prefers-reduced-motion:reduce){.smooth #dayLayer,.smooth #nightLayer,#featureShell{transition-duration:.01ms}}
+  </style>
+</head>
+<body>
+  <main id="experience" aria-label="Interactive GLAM ChatGPT Learning Hub">
+    <div id="sceneStage" aria-label="Learning Hub environment">
+      <img id="dayLayer" class="scene-media" src="immersive-assets/day.webp" alt="" draggable="false" aria-hidden="true" />
+      <img id="nightLayer" class="scene-media" src="immersive-assets/night.webp" alt="" draggable="false" aria-hidden="true" />
+
+      <button class="hotspot" data-tab="academy" aria-label="Open Feature Academy" style="left:15.9%;top:7.4%;width:12.4%;height:16.8%"></button>
+      <button class="hotspot" data-tab="finder" aria-label="Open Feature Finder" style="left:26.0%;top:2.8%;width:12.7%;height:17.0%"></button>
+      <button class="hotspot" data-tab="coach" aria-label="Open Prompt Coach" style="left:37.0%;top:2.2%;width:10.7%;height:17.0%"></button>
+      <button class="hotspot" data-tab="characterlab" aria-label="Open Character Builder" style="left:46.6%;top:1.8%;width:9.6%;height:16.2%"></button>
+      <button class="hotspot" data-tab="environmentlab" aria-label="Open Background Builder" style="left:55.5%;top:2.7%;width:10.1%;height:16.5%"></button>
+      <button class="hotspot" data-tab="typographylab" aria-label="Open Typography Builder" style="left:64.8%;top:3.7%;width:11.0%;height:17.0%"></button>
+      <button class="hotspot" data-tab="business" aria-label="Open Business Lab" style="left:75.8%;top:7.4%;width:11.1%;height:18.3%"></button>
+      <button class="hotspot" data-tab="powerwords" aria-label="Open Power Words Lab" style="left:8.1%;top:22.4%;width:12.1%;height:18.7%"></button>
+      <button class="hotspot" data-tab="clinic" aria-label="Open Prompt Clinic" style="left:21.4%;top:22.8%;width:10.8%;height:18.2%"></button>
+      <button class="hotspot" data-tab="practice" aria-label="Open Practice Lab" style="left:65.0%;top:22.6%;width:10.6%;height:18.6%"></button>
+      <button class="hotspot" data-tab="scenarios" aria-label="Open Scenario Coach" style="left:78.6%;top:22.6%;width:11.1%;height:18.9%"></button>
+      <button class="hotspot" data-tab="researchlab" aria-label="Open Business Research Lab" style="left:12.9%;top:39.3%;width:14.5%;height:18.3%"></button>
+      <button class="hotspot" data-tab="playbook" aria-label="Open My Playbook" style="left:69.8%;top:39.1%;width:12.4%;height:18.1%"></button>
+      <button class="hotspot" data-tab="glossary" aria-label="Open Glossary" style="left:14.4%;top:55.0%;width:14.7%;height:19.0%"></button>
+      <button class="hotspot" data-tab="assessment" aria-label="Open Final Assessment" style="left:31.9%;top:55.1%;width:13.8%;height:18.6%"></button>
+      <button class="hotspot" data-tab="certificate" aria-label="Open Certificate" style="left:52.7%;top:55.0%;width:13.4%;height:18.8%"></button>
+      <button class="hotspot" data-tab="simulator" aria-label="Open Prompt Simulator" style="left:72.9%;top:54.8%;width:13.5%;height:19.2%"></button>
+      <button class="hotspot" data-tab="quiz" aria-label="Open Skill Check" style="left:45.4%;top:11.2%;width:9.1%;height:12.2%"></button>
+    </div>
+  </main>
+
+  <div id="timeControl" aria-label="Day and Night control">
+    <span class="time-label" aria-hidden="true">☀ Day</span>
+    <input id="dayNight" type="range" min="0" max="100" value="0" step="1" aria-label="Day and Night transition" />
+    <span class="time-label" aria-hidden="true">🌙 Night</span>
+  </div>
+
+  <section id="featureShell" aria-label="Learning Hub feature">
+    <button id="returnHub" type="button" aria-label="Return to Learning Hub">← Hub</button>
+    <iframe id="appFrame" src="index.html" title="GLAM ChatGPT Learning Hub feature"></iframe>
+  </section>
+
+  <script>
+    (()=>{
+      const W=1672,H=941;
+      const root=document.documentElement;
+      const stage=document.getElementById('sceneStage');
+      const experience=document.getElementById('experience');
+      const slider=document.getElementById('dayNight');
+      const shell=document.getElementById('featureShell');
+      const frame=document.getElementById('appFrame');
+      const returnHub=document.getElementById('returnHub');
+      let pendingTab='academy';
+      let panX=0,panY=0,drag=false,startX=0,startY=0,startPanX=0,startPanY=0;
+
+      function setBlend(v,smooth=false){
+        v=Math.max(0,Math.min(100,Number(v)||0));
+        document.body.classList.toggle('smooth',smooth);
+        root.style.setProperty('--blend',(v/100).toFixed(3));
+        slider.value=v;
+        if(smooth){clearTimeout(setBlend.t);setBlend.t=setTimeout(()=>document.body.classList.remove('smooth'),1050)}
+      }
+
+      function fitScene(){
+        const vw=window.innerWidth,vh=window.innerHeight;
+        const scale=Math.max(vw/W,vh/H);
+        const sw=W*scale,sh=H*scale;
+        stage.style.width=sw+'px';stage.style.height=sh+'px';
+        const overflowX=Math.max(0,(sw-vw)/2),overflowY=Math.max(0,(sh-vh)/2);
+        panX=Math.max(-overflowX,Math.min(overflowX,panX));
+        panY=Math.max(-overflowY,Math.min(overflowY,panY));
+        root.style.setProperty('--pan-x',panX+'px');root.style.setProperty('--pan-y',panY+'px');
+      }
+
+      function callTab(){
+        try{
+          const win=frame.contentWindow;
+          if(win&&typeof win.goTab==='function'){
+            win.goTab(pendingTab);
+            const doc=frame.contentDocument;
+            if(doc){const nav=doc.querySelector('.main-tabs');if(nav)nav.scrollIntoView({block:'start'})}
+          }
+        }catch(e){console.warn('Feature navigation waiting for app frame.',e)}
+      }
+
+      function openFeature(tab){
+        pendingTab=tab;
+        shell.classList.add('open');
+        shell.setAttribute('aria-hidden','false');
+        callTab();
+        setTimeout(callTab,120);
+        returnHub.focus({preventScroll:true});
+      }
+
+      function closeFeature(){shell.classList.remove('open');shell.setAttribute('aria-hidden','true')}
+
+      document.querySelectorAll('.hotspot').forEach(h=>h.addEventListener('click',()=>openFeature(h.dataset.tab)));
+      frame.addEventListener('load',callTab);
+      returnHub.addEventListener('click',closeFeature);
+      document.addEventListener('keydown',e=>{if(e.key==='Escape'&&shell.classList.contains('open'))closeFeature()});
+
+      slider.addEventListener('input',e=>setBlend(e.target.value,false));
+      slider.addEventListener('keydown',e=>{
+        if(e.key==='Home'){e.preventDefault();setBlend(0,true)}
+        if(e.key==='End'){e.preventDefault();setBlend(100,true)}
+      });
+
+      experience.addEventListener('pointerdown',e=>{
+        if(e.target.closest('.hotspot')||e.target.closest('#timeControl'))return;
+        drag=true;startX=e.clientX;startY=e.clientY;startPanX=panX;startPanY=panY;
+        experience.setPointerCapture(e.pointerId);
+      });
+      experience.addEventListener('pointermove',e=>{if(!drag)return;panX=startPanX+(e.clientX-startX);panY=startPanY+(e.clientY-startY);fitScene()});
+      experience.addEventListener('pointerup',e=>{drag=false;try{experience.releasePointerCapture(e.pointerId)}catch(_){}});
+      experience.addEventListener('pointercancel',()=>drag=false);
+
+      window.addEventListener('resize',fitScene,{passive:true});
+      window.addEventListener('orientationchange',()=>setTimeout(fitScene,120),{passive:true});
+      setBlend(0,false);fitScene();shell.setAttribute('aria-hidden','true');
+    })();
+  </script>
+</body>
+</html>
