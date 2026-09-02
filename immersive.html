@@ -14,11 +14,11 @@
     #experience{position:fixed;inset:0;width:100vw;height:100dvh;overflow:hidden;background:#000;touch-action:none}
     #sceneStage{position:absolute;left:50%;top:50%;width:1672px;height:941px;transform:translate3d(calc(-50% + var(--pan-x)),calc(-50% + var(--pan-y)),0);transform-origin:center center;will-change:width,height,transform}
     .scene-media{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;user-select:none;-webkit-user-drag:none;backface-visibility:hidden;transform:translateZ(0)}
-    #dayVideo{opacity:calc(1 - var(--blend))}
-    #nightVideo{opacity:var(--blend)}
-    .smooth #dayVideo,.smooth #nightVideo{transition:opacity 1s ease-in-out}
+    #dayLayer{opacity:calc(1 - var(--blend))}
+    #nightLayer{opacity:var(--blend)}
+    .smooth #dayLayer,.smooth #nightLayer{transition:opacity 1s ease-in-out}
     .hotspot{position:absolute;border:0;background:transparent;padding:0;cursor:pointer;border-radius:22px;outline:none;z-index:5;color:transparent}
-    .hotspot::before{content:"";position:absolute;inset:-3px;border-radius:inherit;opacity:0;transition:opacity .18s ease,box-shadow .18s ease;border:1px solid rgba(255,255,255,.0);box-shadow:0 0 0 rgba(22,143,234,0)}
+    .hotspot::before{content:"";position:absolute;inset:-3px;border-radius:inherit;opacity:0;transition:opacity .18s ease,box-shadow .18s ease;border:1px solid rgba(255,255,255,0);box-shadow:0 0 0 rgba(22,143,234,0)}
     .hotspot:hover::before,.hotspot:focus-visible::before{opacity:1;border-color:rgba(255,255,255,.28);box-shadow:0 0 24px rgba(22,143,234,.52),inset 0 0 18px rgba(22,143,234,.12)}
     .hotspot:focus-visible{outline:3px solid rgba(255,255,255,.95);outline-offset:4px}
     #timeControl{position:fixed;z-index:30;top:max(16px,env(safe-area-inset-top));right:max(16px,env(safe-area-inset-right));display:grid;grid-template-columns:auto minmax(110px,150px) auto;gap:9px;align-items:center;padding:10px 12px;border:1px solid rgba(255,255,255,.28);border-radius:999px;background:rgba(10,24,44,.44);box-shadow:0 12px 34px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.16);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);color:#fff}
@@ -32,18 +32,14 @@
     #featureShell.open #returnHub{display:flex}
     #returnHub:focus-visible{outline:3px solid #fff;outline-offset:3px}
     @media(max-width:700px){#timeControl{top:max(10px,env(safe-area-inset-top));right:max(10px,env(safe-area-inset-right));grid-template-columns:auto minmax(88px,108px) auto;gap:6px;padding:9px 10px}.time-label{font-size:11px}.hotspot::before{display:none}#returnHub{top:max(10px,env(safe-area-inset-top));left:max(10px,env(safe-area-inset-left));padding:9px 12px;font-size:12px}}
-    @media(prefers-reduced-motion:reduce){.smooth #dayVideo,.smooth #nightVideo,#featureShell{transition-duration:.01ms}.scene-media{animation:none!important}}
+    @media(prefers-reduced-motion:reduce){.smooth #dayLayer,.smooth #nightLayer,#featureShell{transition-duration:.01ms}}
   </style>
 </head>
 <body>
   <main id="experience" aria-label="Interactive GLAM ChatGPT Learning Hub">
     <div id="sceneStage" aria-label="Learning Hub environment">
-      <video id="dayVideo" class="scene-media" autoplay muted loop playsinline preload="auto" poster="immersive-assets/day.png" aria-hidden="true">
-        <source src="immersive-assets/day-scene.mp4" type="video/mp4" />
-      </video>
-      <video id="nightVideo" class="scene-media" autoplay muted loop playsinline preload="auto" poster="immersive-assets/night.png" aria-hidden="true">
-        <source src="immersive-assets/night-scene.mp4" type="video/mp4" />
-      </video>
+      <img id="dayLayer" class="scene-media" src="immersive-assets/day.webp" alt="" draggable="false" aria-hidden="true" />
+      <img id="nightLayer" class="scene-media" src="immersive-assets/night.webp" alt="" draggable="false" aria-hidden="true" />
 
       <button class="hotspot" data-tab="academy" aria-label="Open Feature Academy" style="left:15.9%;top:7.4%;width:12.4%;height:16.8%"></button>
       <button class="hotspot" data-tab="finder" aria-label="Open Feature Finder" style="left:26.0%;top:2.8%;width:12.7%;height:17.0%"></button>
@@ -87,8 +83,6 @@
       const shell=document.getElementById('featureShell');
       const frame=document.getElementById('appFrame');
       const returnHub=document.getElementById('returnHub');
-      const day=document.getElementById('dayVideo');
-      const night=document.getElementById('nightVideo');
       let pendingTab='academy';
       let panX=0,panY=0,drag=false,startX=0,startY=0,startPanX=0,startPanY=0;
 
@@ -117,10 +111,7 @@
           if(win&&typeof win.goTab==='function'){
             win.goTab(pendingTab);
             const doc=frame.contentDocument;
-            if(doc){
-              const nav=doc.querySelector('.main-tabs');
-              if(nav) nav.scrollIntoView({block:'start'});
-            }
+            if(doc){const nav=doc.querySelector('.main-tabs');if(nav)nav.scrollIntoView({block:'start'})}
           }
         }catch(e){console.warn('Feature navigation waiting for app frame.',e)}
       }
@@ -134,10 +125,7 @@
         returnHub.focus({preventScroll:true});
       }
 
-      function closeFeature(){
-        shell.classList.remove('open');
-        shell.setAttribute('aria-hidden','true');
-      }
+      function closeFeature(){shell.classList.remove('open');shell.setAttribute('aria-hidden','true')}
 
       document.querySelectorAll('.hotspot').forEach(h=>h.addEventListener('click',()=>openFeature(h.dataset.tab)));
       frame.addEventListener('load',callTab);
@@ -155,15 +143,10 @@
         drag=true;startX=e.clientX;startY=e.clientY;startPanX=panX;startPanY=panY;
         experience.setPointerCapture(e.pointerId);
       });
-      experience.addEventListener('pointermove',e=>{
-        if(!drag)return;
-        panX=startPanX+(e.clientX-startX);panY=startPanY+(e.clientY-startY);fitScene();
-      });
+      experience.addEventListener('pointermove',e=>{if(!drag)return;panX=startPanX+(e.clientX-startX);panY=startPanY+(e.clientY-startY);fitScene()});
       experience.addEventListener('pointerup',e=>{drag=false;try{experience.releasePointerCapture(e.pointerId)}catch(_){}});
       experience.addEventListener('pointercancel',()=>drag=false);
 
-      [day,night].forEach(v=>v.play().catch(()=>{}));
-      document.addEventListener('visibilitychange',()=>{if(!document.hidden)[day,night].forEach(v=>v.play().catch(()=>{}))});
       window.addEventListener('resize',fitScene,{passive:true});
       window.addEventListener('orientationchange',()=>setTimeout(fitScene,120),{passive:true});
       setBlend(0,false);fitScene();shell.setAttribute('aria-hidden','true');
