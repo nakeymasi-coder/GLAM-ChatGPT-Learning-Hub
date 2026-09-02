@@ -400,6 +400,150 @@
         display: block;
       }
 
+      /* Business Research Lab */
+      .research-session {
+        display: grid;
+        grid-template-columns: 1fr auto auto;
+        gap: 10px;
+        align-items: end;
+        background: #fff;
+        border: var(--border);
+        border-radius: 20px;
+        padding: 15px;
+        margin: 16px 0;
+        box-shadow: var(--shadow-sm);
+      }
+      .research-session .field-label { margin-top: 0; }
+      .result-return {
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px dashed rgba(16,59,99,.16);
+      }
+      .result-return textarea { min-height: 105px; }
+      .research-mini-help {
+        margin: 8px 0 0;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.5;
+      }
+      @media (max-width: 760px) {
+        .research-session { grid-template-columns: 1fr; }
+      }
+
+      .research-hero {
+        background: linear-gradient(145deg, #ffffff 0%, #edf7ff 62%, #dff2ff 100%);
+        border: 1px solid rgba(22, 143, 234, 0.2);
+        border-radius: 28px;
+        padding: 24px;
+        box-shadow: var(--shadow-sm);
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 18px;
+        align-items: center;
+      }
+      .research-hero h3 { margin: 6px 0 8px; font-size: 30px; letter-spacing: -0.04em; }
+      .research-flow {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+        margin-top: 14px;
+      }
+      .research-flow span {
+        background: #fff;
+        border: var(--border);
+        border-radius: 999px;
+        padding: 8px 10px;
+        font-size: 11px;
+        font-weight: 900;
+        color: var(--deep);
+      }
+      .research-note {
+        background: #fff;
+        border: var(--border);
+        border-radius: 20px;
+        padding: 18px;
+      }
+      .research-note strong { display: block; margin-bottom: 6px; }
+      .research-tool-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 15px;
+        margin-top: 22px;
+      }
+      .research-tool {
+        background: #fff;
+        border: var(--border);
+        border-radius: 22px;
+        padding: 18px;
+        box-shadow: var(--shadow-sm);
+      }
+      .research-tool .tool-step {
+        color: var(--sapphire);
+        font-size: 11px;
+        font-weight: 950;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+      }
+      .research-tool h4 { margin: 7px 0 6px; font-size: 20px; }
+      .research-tool p { margin: 0 0 13px; color: var(--muted); font-size: 13px; line-height: 1.55; }
+      .research-tool textarea,
+      .research-tool input {
+        width: 100%;
+        border: 1px solid rgba(16, 59, 99, 0.16);
+        border-radius: 14px;
+        background: #fbfdff;
+        padding: 12px 13px;
+        color: var(--ink);
+        outline: none;
+      }
+      .research-tool textarea { min-height: 92px; resize: vertical; }
+      .research-tool textarea:focus,
+      .research-tool input:focus { border-color: rgba(22,143,234,.55); box-shadow: 0 0 0 3px rgba(22,143,234,.08); }
+      .research-tool .field-label {
+        display: block;
+        margin: 10px 0 6px;
+        font-size: 11px;
+        font-weight: 900;
+        color: var(--deep);
+      }
+      .research-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+      .research-output {
+        display: none;
+        margin-top: 13px;
+        border-radius: 16px;
+        border: 1px solid rgba(22,143,234,.18);
+        background: var(--soft-blue);
+        padding: 13px;
+      }
+      .research-output.show { display: block; }
+      .research-output pre {
+        white-space: pre-wrap;
+        word-break: break-word;
+        margin: 0;
+        font: inherit;
+        font-size: 12px;
+        line-height: 1.6;
+        color: var(--ink);
+      }
+      .research-output .output-title {
+        font-size: 11px;
+        color: var(--sapphire);
+        font-weight: 950;
+        text-transform: uppercase;
+        letter-spacing: .09em;
+        margin-bottom: 8px;
+      }
+      .research-bottom {
+        margin-top: 20px;
+        padding: 18px;
+        background: #fff;
+        border: var(--border);
+        border-radius: 20px;
+      }
+      @media (max-width: 850px) {
+        .research-hero, .research-tool-grid { grid-template-columns: 1fr; }
+      }
+
       .path-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -2309,6 +2453,7 @@
           <button class="tab" data-tab="practice">Practice Lab</button>
           <button class="tab" data-tab="scenarios">Scenario Coach</button>
           <button class="tab" data-tab="business">Business Lab</button>
+          <button class="tab" data-tab="researchlab">Business Research Lab</button>
           <button class="tab" data-tab="glossary">Glossary</button>
           <button class="tab" data-tab="playbook">My Playbook</button>
           <button class="tab" data-tab="simulator">Prompt Simulator</button>
@@ -2917,6 +3062,166 @@
           </div>
           <div class="biz-grid" id="bizGrid"></div>
           <div id="activeWorkflowHolder"></div>
+        </div>
+
+
+        <div class="panel" id="panel-researchlab">
+          <div class="research-hero">
+            <div>
+              <div class="kicker">Work smarter, not harder</div>
+              <h3>Business Research Lab</h3>
+              <p class="help">
+                Stop guessing what people need. Build a research prompt here, take it into ChatGPT, and use current conversations, questions, and reviews to uncover problems worth solving.
+              </p>
+              <div class="research-flow">
+                <span>PERSON</span><span>→</span><span>PROBLEM</span><span>→</span><span>RESEARCH</span><span>→</span><span>PRODUCT</span><span>→</span><span>PICK ONE</span><span>→</span><span>BUILD IT</span>
+              </div>
+            </div>
+            <div class="research-note">
+              <strong>Important: ChatGPT is your research assistant — not a crystal ball.</strong>
+              <p class="help" style="margin:0">For research tools, tell ChatGPT to search current sources, cite what it finds, and separate verified findings from ideas or assumptions.</p>
+              <div class="card-actions" style="margin-top:12px">
+                <a class="btn primary" href="https://chatgpt.com/" target="_blank" rel="noopener">Open ChatGPT</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="research-session">
+            <div>
+              <label class="field-label" for="researchAudienceMaster">My person / audience for this research session</label>
+              <input id="researchAudienceMaster" placeholder="Example: new nail techs" />
+              <p class="research-mini-help">Enter it once. The Hub will carry it into the research tools below so you do not keep retyping it.</p>
+            </div>
+            <button class="btn secondary" type="button" onclick="saveResearchSession()">Save Session</button>
+            <button class="btn secondary" type="button" onclick="resetResearchLab()">Start Over</button>
+          </div>
+
+          <div class="research-tool-grid">
+            <div class="research-tool">
+              <div class="tool-step">Step 1 · Start from zero</div>
+              <h4>Find My People</h4>
+              <p>Use your real-life experience to uncover types of people you may naturally understand.</p>
+              <label class="field-label" for="rpExperience">What do you know, do, or have experience with?</label>
+              <textarea id="rpExperience" placeholder="Example: I worked in daycare for 8 years, I plan family parties, and people ask me for Canva help."></textarea>
+              <div class="research-actions"><button class="btn primary" onclick="buildResearchPrompt('people')">Build My Prompt</button></div>
+              <div class="research-output" id="researchOut-people"></div>
+            </div>
+
+            <div class="research-tool">
+              <div class="tool-step">Step 2 · Discover the problem</div>
+              <h4>Pain Point Finder</h4>
+              <p>Search for repeated frustrations, time-wasters, confusion, and problems your person is talking about.</p>
+              <label class="field-label" for="rpAudience">Who are you researching?</label>
+              <input id="rpAudience" placeholder="Example: new nail techs" />
+              <label class="field-label" for="rpAudienceContext">Anything specific you want to focus on?</label>
+              <textarea id="rpAudienceContext" placeholder="Optional: booking, clients, content, pricing, beginners, etc."></textarea>
+              <div class="research-actions"><button class="btn primary" onclick="buildResearchPrompt('pain')">Build Research Prompt</button></div>
+              <div class="research-output" id="researchOut-pain"></div>
+              <div class="result-return">
+                <label class="field-label" for="rpPainFindings">Bring your ChatGPT research back here</label>
+                <textarea id="rpPainFindings" placeholder="Paste ChatGPT's pain-point findings or summary here..."></textarea>
+                <div class="research-actions"><button class="tiny-btn" type="button" onclick="sendResearchFindingsToValidator('pain')">Send to Problem Validator</button></div>
+              </div>
+            </div>
+
+            <div class="research-tool">
+              <div class="tool-step">Step 3 · Mine real questions</div>
+              <h4>Question Miner</h4>
+              <p>Find the questions people keep asking — especially “How do I…?”, “What do you use?”, and beginner questions.</p>
+              <label class="field-label" for="rqAudience">Who is asking the questions?</label>
+              <input id="rqAudience" placeholder="Example: Etsy digital product sellers" />
+              <div class="research-actions"><button class="btn primary" onclick="buildResearchPrompt('questions')">Build Question-Mining Prompt</button></div>
+              <div class="research-output" id="researchOut-questions"></div>
+              <div class="result-return">
+                <label class="field-label" for="rqFindings">Bring your ChatGPT question research back here</label>
+                <textarea id="rqFindings" placeholder="Paste the repeated question themes here..."></textarea>
+                <div class="research-actions"><button class="tiny-btn" type="button" onclick="sendResearchFindingsToValidator('questions')">Add to Problem Validator</button></div>
+              </div>
+            </div>
+
+            <div class="research-tool">
+              <div class="tool-step">Step 4 · Find what is missing</div>
+              <h4>Review Miner</h4>
+              <p>Use lower-rated reviews and customer complaints to spot missing features, confusing instructions, and unmet expectations.</p>
+              <label class="field-label" for="rrProduct">What product, tool, or category should ChatGPT research?</label>
+              <input id="rrProduct" placeholder="Example: daycare enrollment templates" />
+              <label class="field-label" for="rrBuyer">Who buys or uses it?</label>
+              <input id="rrBuyer" placeholder="Example: new daycare owners" />
+              <div class="research-actions"><button class="btn primary" onclick="buildResearchPrompt('reviews')">Build Review-Mining Prompt</button></div>
+              <div class="research-output" id="researchOut-reviews"></div>
+              <div class="result-return">
+                <label class="field-label" for="rrFindings">Bring your ChatGPT review research back here</label>
+                <textarea id="rrFindings" placeholder="Paste the repeated review complaints and gaps here..."></textarea>
+                <div class="research-actions"><button class="tiny-btn" type="button" onclick="sendResearchFindingsToValidator('reviews')">Add to Problem Validator</button></div>
+              </div>
+            </div>
+
+            <div class="research-tool">
+              <div class="tool-step">Step 5 · Compare what you found</div>
+              <h4>Problem Validator</h4>
+              <p>Compare your researched pain points without pretending the score is scientific or guaranteeing sales.</p>
+              <label class="field-label" for="rvAudience">Audience</label>
+              <input id="rvAudience" placeholder="Example: new bakers" />
+              <label class="field-label" for="rvProblems">Paste the pain points or research notes</label>
+              <textarea id="rvProblems" placeholder="Paste your findings here..."></textarea>
+              <div class="research-actions"><button class="btn primary" onclick="buildResearchPrompt('validate')">Build Validation Prompt</button></div>
+              <div class="research-output" id="researchOut-validate"></div>
+            </div>
+
+            <div class="research-tool">
+              <div class="tool-step">Step 6 · Solve the problem</div>
+              <h4>Problem-to-Product Builder</h4>
+              <p>Turn one researched problem into specific, useful product possibilities — not random generic ideas.</p>
+              <label class="field-label" for="rppAudience">Person</label>
+              <input id="rppAudience" placeholder="Example: new nail techs" />
+              <label class="field-label" for="rppProblem">Confirmed or researched problem</label>
+              <textarea id="rppProblem" placeholder="Example: New clients keep asking the same booking and policy questions."></textarea>
+              <div class="research-actions"><button class="btn primary" onclick="buildResearchPrompt('products')">Build Product-Idea Prompt</button></div>
+              <div class="research-output" id="researchOut-products"></div>
+              <div class="result-return">
+                <label class="field-label" for="rppIdeasResult">Bring your ChatGPT product ideas back here</label>
+                <textarea id="rppIdeasResult" placeholder="Paste the product ideas ChatGPT generated here..."></textarea>
+                <div class="research-actions"><button class="tiny-btn" type="button" onclick="sendProductIdeasToPicker()">Send to Pick My Product</button></div>
+              </div>
+            </div>
+
+            <div class="research-tool">
+              <div class="tool-step">Step 7 · Stop idea overload</div>
+              <h4>Pick My Product</h4>
+              <p>Use your research to choose one strong beginner-friendly product instead of trying to build everything.</p>
+              <label class="field-label" for="rpickContext">Person + problem</label>
+              <textarea id="rpickContext" placeholder="Example: New nail techs need a clearer way to explain booking and policies to clients."></textarea>
+              <label class="field-label" for="rpickIdeas">Paste your product ideas</label>
+              <textarea id="rpickIdeas" placeholder="1. Booking guide
+2. Policy template kit
+3. New-client packet..."></textarea>
+              <div class="research-actions"><button class="btn primary" onclick="buildResearchPrompt('pick')">Build Pick-One Prompt</button></div>
+              <div class="research-output" id="researchOut-pick"></div>
+              <div class="result-return">
+                <label class="field-label" for="rpickWinner">What product did ChatGPT recommend / what did you choose?</label>
+                <input id="rpickWinner" placeholder="Example: New Nail Tech Booking Starter Kit" />
+                <div class="research-actions"><button class="tiny-btn" type="button" onclick="sendWinnerToPlan()">Send to Build My Product Plan</button></div>
+              </div>
+            </div>
+
+            <div class="research-tool">
+              <div class="tool-step">Step 8 · Finish it</div>
+              <h4>Build My Product Plan</h4>
+              <p>Turn the chosen idea into the smallest useful version you can realistically finish.</p>
+              <label class="field-label" for="rbpProduct">Chosen product</label>
+              <input id="rbpProduct" placeholder="Example: New Nail Tech Booking Starter Kit" />
+              <label class="field-label" for="rbpContext">Who it helps + the problem it solves</label>
+              <textarea id="rbpContext" placeholder="Example: Helps new nail techs reduce repeated booking questions and explain policies clearly."></textarea>
+              <div class="research-actions"><button class="btn primary" onclick="buildResearchPrompt('plan')">Build Product-Plan Prompt</button></div>
+              <div class="research-output" id="researchOut-plan"></div>
+            </div>
+          </div>
+
+          <div class="research-bottom">
+            <div class="kicker">Work-It-Out Wednesday shortcut</div>
+            <h3 style="margin:6px 0 8px">PERSON → PROBLEM → PRODUCT</h3>
+            <p class="help" style="margin:0">If you get overwhelmed, come back to three questions: <strong>Who?</strong> <strong>What is bothering them?</strong> <strong>What can we make that helps?</strong></p>
+          </div>
         </div>
 
         <div class="panel" id="panel-glossary">
@@ -7161,6 +7466,208 @@ Help me complete this step. Ask only for information necessary to finish it. Giv
           "Prompt Clinic Upgrade",
           document.getElementById("upgradedPrompt").innerText,
         );
+
+
+      const researchAudienceFields = ["rpAudience", "rqAudience", "rvAudience", "rppAudience"];
+      const researchSessionFieldIds = [
+        "researchAudienceMaster", "rpExperience", "rpAudience", "rpAudienceContext",
+        "rqAudience", "rrProduct", "rrBuyer", "rvAudience", "rvProblems",
+        "rppAudience", "rppProblem", "rpickContext", "rpickIdeas", "rbpProduct", "rbpContext",
+        "rpPainFindings", "rqFindings", "rrFindings", "rppIdeasResult", "rpickWinner"
+      ];
+
+      function syncResearchAudience(value) {
+        const v = (value || "").trim();
+        if (!v) return;
+        researchAudienceFields.forEach((id) => {
+          const el = document.getElementById(id);
+          if (el && !el.value.trim()) el.value = v;
+        });
+        const buyer = document.getElementById("rrBuyer");
+        if (buyer && !buyer.value.trim()) buyer.value = v;
+      }
+
+      function saveResearchSession(silent = false) {
+        const data = {};
+        researchSessionFieldIds.forEach((id) => {
+          const el = document.getElementById(id);
+          if (el) data[id] = el.value;
+        });
+        localStorage.setItem("glamResearchSession", JSON.stringify(data));
+        if (!silent) toast("Research session saved.");
+      }
+
+      function loadResearchSession() {
+        try {
+          const data = JSON.parse(localStorage.getItem("glamResearchSession") || "{}");
+          Object.entries(data).forEach(([id, value]) => {
+            const el = document.getElementById(id);
+            if (el && typeof value === "string") el.value = value;
+          });
+        } catch (_) {}
+        const master = document.getElementById("researchAudienceMaster");
+        if (master) syncResearchAudience(master.value);
+      }
+
+      function resetResearchLab() {
+        if (!confirm("Clear this Business Research Lab session and start over?")) return;
+        researchSessionFieldIds.forEach((id) => {
+          const el = document.getElementById(id);
+          if (el) el.value = "";
+        });
+        Object.keys(researchPromptCache).forEach((k) => delete researchPromptCache[k]);
+        document.querySelectorAll("#panel-researchlab .research-output").forEach((el) => {
+          el.classList.remove("show");
+          el.innerHTML = "";
+        });
+        localStorage.removeItem("glamResearchSession");
+        localStorage.removeItem("glamResearchLastPrompt");
+        toast("Research Lab cleared.");
+      }
+
+      function appendToValidator(text, label) {
+        const target = document.getElementById("rvProblems");
+        if (!target || !text.trim()) return;
+        const block = `${label ? label + ":\n" : ""}${text.trim()}`;
+        target.value = target.value.trim() ? `${target.value.trim()}\n\n${block}` : block;
+        saveResearchSession(true);
+      }
+
+      function sendResearchFindingsToValidator(type) {
+        const map = {
+          pain: ["rpPainFindings", "PAIN-POINT FINDINGS"],
+          questions: ["rqFindings", "QUESTION-MINING FINDINGS"],
+          reviews: ["rrFindings", "REVIEW-MINING FINDINGS"],
+        };
+        const config = map[type];
+        if (!config) return;
+        const text = researchValue(config[0]);
+        if (!text) return toast("Paste the ChatGPT findings first.");
+        appendToValidator(text, config[1]);
+        const audience = researchValue("researchAudienceMaster");
+        if (audience && !researchValue("rvAudience")) document.getElementById("rvAudience").value = audience;
+        toast("Added to Problem Validator.");
+      }
+
+      function sendProductIdeasToPicker() {
+        const ideas = researchValue("rppIdeasResult");
+        if (!ideas) return toast("Paste the ChatGPT product ideas first.");
+        document.getElementById("rpickIdeas").value = ideas;
+        const audience = researchValue("rppAudience") || researchValue("researchAudienceMaster");
+        const problem = researchValue("rppProblem");
+        if (!researchValue("rpickContext")) {
+          document.getElementById("rpickContext").value = [audience, problem].filter(Boolean).join(" — ");
+        }
+        saveResearchSession(true);
+        toast("Product ideas sent to Pick My Product.");
+      }
+
+      function sendWinnerToPlan() {
+        const winner = researchValue("rpickWinner");
+        if (!winner) return toast("Enter the product you chose first.");
+        document.getElementById("rbpProduct").value = winner;
+        if (!researchValue("rbpContext")) {
+          document.getElementById("rbpContext").value = researchValue("rpickContext");
+        }
+        saveResearchSession(true);
+        toast("Chosen product sent to Build My Product Plan.");
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        loadResearchSession();
+        const master = document.getElementById("researchAudienceMaster");
+        if (master) master.addEventListener("input", (e) => {
+          syncResearchAudience(e.target.value);
+          saveResearchSession(true);
+        });
+        researchSessionFieldIds.forEach((id) => {
+          const el = document.getElementById(id);
+          if (el && id !== "researchAudienceMaster") el.addEventListener("change", () => saveResearchSession(true));
+        });
+      });
+
+      const researchPromptTitles = {
+        people: "Business Research Lab — Find My People",
+        pain: "Business Research Lab — Pain Point Finder",
+        questions: "Business Research Lab — Question Miner",
+        reviews: "Business Research Lab — Review Miner",
+        validate: "Business Research Lab — Problem Validator",
+        products: "Business Research Lab — Problem-to-Product Builder",
+        pick: "Business Research Lab — Pick My Product",
+        plan: "Business Research Lab — Build My Product Plan",
+      };
+
+      function researchValue(id) {
+        const el = document.getElementById(id);
+        return el ? el.value.trim() : "";
+      }
+
+      function buildResearchPrompt(type) {
+        let prompt = "";
+        if (type === "people") {
+          const experience = researchValue("rpExperience");
+          if (!experience) return toast("Tell me a little about your experience first.");
+          prompt = `I am a complete beginner trying to figure out what kind of digital product, resource, template, tool, generator, guide, or other useful product I might be able to create.\n\nI do NOT know my niche or target audience yet.\n\nHere is what I know or have experience with:\n${experience}\n\nHelp me identify 10 types of people I may naturally understand or be able to create useful resources for. For each one, briefly explain WHY my experience may help me understand them. Keep the suggestions specific. Do not give me product ideas yet. Do not assume I am an expert. Include beginners and people who may simply be a few steps behind me.\n\nUse simple, beginner-friendly language.`;
+        }
+        if (type === "pain") {
+          const audience = researchValue("rpAudience");
+          const context = researchValue("rpAudienceContext");
+          if (!audience) return toast("Enter the person or audience you want to research.");
+          prompt = `Search the current web for real conversations from and about ${audience}. ${context ? `Pay special attention to: ${context}.` : ""}\n\nI want to understand what they are struggling with RIGHT NOW. Look for recent discussions, questions, complaints, repeated frustrations, time-consuming tasks, confusing situations, beginner mistakes, customer/client problems, and things they wish were easier.\n\nUse current sources such as Reddit, public forums, YouTube discussions, accessible social discussions, reviews, community posts, Q&A pages, and relevant articles with audience feedback.\n\nGive me:\n1. The 10 strongest repeated pain-point themes you find\n2. What people are actually saying about each theme, summarized in your own words\n3. Which themes appear across more than one source\n4. Which seem urgent versus merely annoying but common\n5. Which problems cost time, money, stress, missed sales, confusion, or repeated work\n6. Which could realistically be helped with a digital resource, template, tool, checklist, guide, generator, or other product\n7. Citations/links to the sources used\n\nSeparate CONFIRMED RESEARCH from IDEAS OR INFERENCES. Do not invent quotes, statistics, trends, or source details. If something cannot be verified, say so.`;
+        }
+        if (type === "questions") {
+          const audience = researchValue("rqAudience");
+          if (!audience) return toast("Enter the person or audience first.");
+          prompt = `Search current online discussions for questions repeatedly asked by ${audience}.\n\nLook especially for themes that begin with or resemble:\n- How do I...?\n- What should I...?\n- Where can I...?\n- What do you use...?\n- Does anyone have...?\n- How do you handle...?\n- What is the easiest way...?\n- I am new to...\n- Can somebody explain...?\n- Why does...?\n\nGive me 25 useful question themes. Group duplicates and closely related questions together instead of padding the list. For each theme, tell me what underlying problem the question suggests. Then identify which question themes could potentially become a useful digital product, template, checklist, guide, resource, generator, or tool.\n\nPrioritize current sources and cite them. Separate verified findings from your own inferences.`;
+        }
+        if (type === "reviews") {
+          const product = researchValue("rrProduct");
+          const buyer = researchValue("rrBuyer");
+          if (!product) return toast("Enter a product, tool, or category to research.");
+          prompt = `Research current reviews and customer discussions about ${product}${buyer ? ` used or purchased by ${buyer}` : ""}.\n\nFocus especially on lower-rated reviews (1-star, 2-star, and 3-star) and repeated complaints when accessible. I want to understand:\n1. What buyers expected\n2. What disappointed them\n3. What was missing\n4. What was confusing\n5. What took too much work\n6. What people repeatedly asked for\n7. What instructions or features they wished were included\n8. What gaps a better digital resource or tool might address\n\nSummarize recurring patterns; do not reproduce long reviews. Cite the sources you use. Distinguish recurring evidence from one-off complaints, and separate confirmed findings from inferences.`;
+        }
+        if (type === "validate") {
+          const audience = researchValue("rvAudience");
+          const problems = researchValue("rvProblems");
+          if (!problems) return toast("Paste your pain points or research notes first.");
+          prompt = `I am evaluating possible problems for ${audience || "my audience"}.\n\nHere are my research notes / pain points:\n${problems}\n\nHelp me compare them. For each problem, give a simple 1–5 directional score for:\n- Frequency: how often it appears in the evidence I provided\n- Frustration: how annoying or stressful it seems\n- Urgency: how quickly people seem to want help\n- Time cost\n- Money/business impact\n- Repetition: whether it happens over and over\n- Digital-product potential: whether a resource, template, guide, tool, generator, or similar product could realistically help\n\nIMPORTANT: These scores are NOT scientific and do not guarantee sales. Base them only on the evidence I provided. If I have not provided enough evidence to score something, mark it NEEDS MORE RESEARCH instead of guessing.\n\nThen recommend the top 3 problems worth exploring and explain why.`;
+        }
+        if (type === "products") {
+          const audience = researchValue("rppAudience");
+          const problem = researchValue("rppProblem");
+          if (!problem) return toast("Enter the problem you want to solve.");
+          prompt = `I want to create something useful for:\nPERSON: ${audience || "[PERSON]"}\nPROBLEM: ${problem}\n\nGenerate 15 specific products that could genuinely make this problem easier. Consider different formats such as checklists, templates, Canva templates, worksheets, workbooks, guides, printables, planners, forms, trackers, prompt packs, swipe files, client packets, starter kits, reference sheets, bundles, calculators, generators, mini apps, and interactive tools.\n\nFor every idea tell me:\n1. Product idea\n2. What it helps the user do\n3. What would be inside\n4. Beginner creation difficulty: Easy / Medium / Advanced\n5. Best creation tool\n6. Whether it is strong alone or better in a bundle\n\nDo not give me vague products. Make each idea specific to this exact person and problem. Prioritize usefulness over adding pages or features.`;
+        }
+        if (type === "pick") {
+          const context = researchValue("rpickContext");
+          const ideas = researchValue("rpickIdeas");
+          if (!ideas) return toast("Paste your product ideas first.");
+          prompt = `I need to choose ONE product to create first.\n\nPERSON + PROBLEM:\n${context || "[ADD PERSON AND PROBLEM]"}\n\nPRODUCT IDEAS:\n${ideas}\n\nEvaluate each idea based on:\n- clear problem solved\n- usefulness\n- specificity\n- beginner-friendly creation\n- time required to create a first version\n- how easy it is for the customer to understand\n- whether the customer would know why they need it\n- ability to create a small useful first version\n- potential to expand later\n- fit with any research evidence I provided\n\nGive each a simple 1–10 directional score and explain the tradeoffs. Then recommend ONE BEST FIRST PRODUCT. Tell me why it wins and which ideas I should save for later. Do not assume the highest score guarantees sales.`;
+        }
+        if (type === "plan") {
+          const product = researchValue("rbpProduct");
+          const context = researchValue("rbpContext");
+          if (!product) return toast("Enter the product you chose first.");
+          prompt = `Help me build the first version of this product.\n\nPRODUCT: ${product}\nWHO IT HELPS + PROBLEM: ${context || "[ADD AUDIENCE AND PROBLEM]"}\n\nCreate a beginner-friendly product plan containing:\n1. Product purpose\n2. Who it is for\n3. Exact problem it solves\n4. Desired result\n5. Best format\n6. Recommended creation tool\n7. Everything that needs to be included\n8. What NOT to include yet\n9. Page / screen / section outline\n10. The SMALLEST USEFUL VERSION I can finish\n11. Step-by-step creation checklist\n12. What I should create first\n13. What can be added later\n14. Possible bundle upgrades\n15. Final completion checklist\n\nKeep the first version realistic enough for a beginner to finish. Remove filler. Useful + finished is more important than huge + unfinished.`;
+        }
+        renderResearchPrompt(type, prompt);
+      }
+
+      function renderResearchPrompt(type, prompt) {
+        const out = document.getElementById("researchOut-" + type);
+        if (!out) return;
+        out.classList.add("show");
+        out.innerHTML = `<div class="output-title">Your ChatGPT prompt</div><pre>${escapeAttr(prompt)}</pre><div class="research-actions"><button class="tiny-btn" onclick="copyText(researchPromptCache['${type}'])">Copy Prompt</button><button class="tiny-btn" onclick="saveResearchPrompt('${type}')">Save to My Playbook</button><a class="tiny-btn" href="https://chatgpt.com/" target="_blank" rel="noopener">Open ChatGPT</a></div>`;
+        researchPromptCache[type] = prompt;
+        localStorage.setItem("glamResearchLastPrompt", JSON.stringify({ type, prompt, savedAt: new Date().toISOString() }));
+      }
+
+      const researchPromptCache = {};
+      function saveResearchPrompt(type) {
+        const prompt = researchPromptCache[type];
+        if (!prompt) return toast("Build the prompt first.");
+        saveCustomPlaybookV4(researchPromptTitles[type] || "Business Research Lab", prompt);
+      }
 
       function saveCustomPlaybookV4(title, content) {
         const id = "v4-" + Date.now();
