@@ -1,0 +1,44 @@
+name: Run September 2026 Hub Update
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  run-update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run prepared September updater
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          wf = Path('.github/workflows/september-2026-hub-update.yml').read_text(encoding='utf-8')
+          start_marker = "          python - <<'PY'\n"
+          start = wf.index(start_marker) + len(start_marker)
+          end = wf.index("\n          PY", start)
+          block = wf[start:end]
+          lines = block.splitlines()
+          cleaned = '\n'.join(line[10:] if line.startswith('          ') else line for line in lines)
+          Path('/tmp/september_update.py').write_text(cleaned + '\n', encoding='utf-8')
+          print('Prepared updater script.')
+          PY
+          python /tmp/september_update.py
+
+      - name: Verify update
+        run: |
+          grep -q 'SEPTEMBER 2026 CHATGPT UPDATE' index.html
+          grep -q 'temporarychat2026' index.html
+          grep -q 'browsertools2026' index.html
+          grep -q 'Plugin Directory' index.html
+
+      - name: Commit update
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Update Learning Hub for September 2026"
+          git push
