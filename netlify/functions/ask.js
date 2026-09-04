@@ -4,17 +4,9 @@
 const OPENAI_URL = "https://api.openai.com/v1/responses";
 const MODEL = process.env.OPENAI_COACH_MODEL || "gpt-5.6-luna";
 
-const ALLOWED_ORIGINS = new Set([
-  "https://nakeymasi-coder.github.io",
-  "https://chatgpt-learning-hub.netlify.app"
-]);
-
-function corsHeaders(event) {
-  const origin = event.headers?.origin || event.headers?.Origin || "";
+function corsHeaders() {
   return {
-    "Access-Control-Allow-Origin": ALLOWED_ORIGINS.has(origin)
-      ? origin
-      : "https://nakeymasi-coder.github.io",
+    "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Headers": "Content-Type",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Content-Type": "application/json"
@@ -59,7 +51,7 @@ function getOutputText(payload) {
 }
 
 exports.handler = async function(event) {
-  const headers = corsHeaders(event);
+  const headers = corsHeaders();
 
   if (event.httpMethod === "OPTIONS") {
     return { statusCode: 204, headers, body: "" };
