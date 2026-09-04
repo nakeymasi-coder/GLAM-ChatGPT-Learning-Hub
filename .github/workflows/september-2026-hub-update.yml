@@ -1,0 +1,301 @@
+name: September 2026 Learning Hub Update
+
+on:
+  push:
+    paths:
+      - '.github/workflows/september-2026-hub-update.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update-hub:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Update Learning Hub for September 2026
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+
+          # 1) Bright sapphire marquee at the very top
+          old_css = '''      .announce {
+        padding: 9px 16px;
+        text-align: center;
+        color: #fff;
+        background: linear-gradient(90deg, var(--deep), #092a46);
+        font-size: 12px;
+        font-weight: 750;
+        letter-spacing: 0.04em;
+      }'''
+          new_css = '''      .announce {
+        overflow: hidden;
+        white-space: nowrap;
+        color: #fff;
+        background: linear-gradient(90deg, #168fea 0%, #56b8ff 48%, #168fea 100%);
+        border-bottom: 1px solid rgba(255,255,255,.45);
+        box-shadow: 0 8px 24px rgba(22,143,234,.20);
+      }
+      .announce-track {
+        display: inline-block;
+        min-width: 100%;
+        padding: 10px 0;
+        font-size: 12px;
+        font-weight: 950;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        animation: glamMarquee 18s linear infinite;
+      }
+      .announce-track span { padding-left: 100%; }
+      @keyframes glamMarquee {
+        from { transform: translateX(0); }
+        to { transform: translateX(-100%); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .announce-track { animation: none; text-align: center; }
+        .announce-track span { padding-left: 0; }
+      }'''
+          if old_css not in s:
+              raise SystemExit('Could not find existing announcement CSS')
+          s = s.replace(old_css, new_css, 1)
+
+          old_banner = '''    <div class="announce">
+      Current-feature learning hub • Final build • August 14, 2026
+    </div>'''
+          new_banner = '''    <div class="announce" aria-label="September 2026 ChatGPT update">
+      <div class="announce-track"><span>✦ SEPTEMBER 2026 CHATGPT UPDATE • NEW FEATURES • UPDATED TOOLS • FRESH LESSONS ADDED THROUGHOUT THE GLAM CHATGPT LEARNING HUB • ✦</span></div>
+    </div>'''
+          if old_banner not in s:
+              raise SystemExit('Could not find existing announcement banner')
+          s = s.replace(old_banner, new_banner, 1)
+
+          # 2) Plugins are now the primary discovery surface; apps remain the connected integrations.
+          replacements = {
+            'Open Settings → Apps or the app directory/Apps area available in your ChatGPT experience.':
+              'Open the Plugin Directory to discover workflows. Plugins can package skills, apps, and app templates; apps remain the integrations that connect ChatGPT to outside data and actions.',
+            'Which apps and actions are available depends on your plan, workspace, app permissions, and the specific connected service.':
+              'As of July 2026, the Plugin Directory is the primary discovery surface. Installation and app actions still depend on your plan, region, workspace settings, role, and the permissions you grant.',
+            'Choose the supported app and review the permissions before connecting it.':
+              'Open a plugin listing, review the included capabilities and required apps, then connect the underlying app only after reviewing its permissions and privacy information.',
+            'Projects, Apps, and Work for bigger ongoing workflows.':
+              'Projects, Plugins, connected Apps, and Work for bigger ongoing workflows.',
+          }
+          for old, new in replacements.items():
+              if old in s:
+                  s = s.replace(old, new)
+
+          # 3) Update Scheduled Tasks wording with the new Work/webhook behavior without implying it is available to everyone.
+          s = s.replace(
+            'Ask ChatGPT to remind you later, repeat something on a schedule, or check periodically for an important change.',
+            'Ask ChatGPT to remind you later, repeat work on a schedule, watch for a future condition, and — on eligible Work/workspace plans — respond to supported app events.'
+          )
+          s = s.replace(
+            'Scheduled Tasks are plan-dependent. The Scheduled page and controls may differ by platform.',
+            'Scheduled Tasks are plan-dependent. Eligible Work/workspace plans can also use supported event-triggered tasks from apps such as Gmail, Slack, or GitHub, and some workspaces can share customizable task copies.'
+          )
+          marker = '''            [
+              "Manage your tasks",
+              "Use the Scheduled page to review, edit, pause, resume, or delete tasks available to your account.",
+            ],'''
+          if marker in s and 'Understand event-triggered tasks' not in s:
+              extra = '''            [
+              "Understand event-triggered tasks",
+              "On eligible Work/workspace plans, a supported app event — such as a new Gmail message, Slack channel message, or GitHub pull request change — can trigger a task. Availability is controlled by plan, workspace permissions, and app access.",
+            ],
+            [
+              "Share a task when available",
+              "In supported workspaces, another member can review and customize a shared task, connect their own apps, and schedule an independent copy.",
+            ],
+'''
+              s = s.replace(marker, extra + marker, 1)
+
+          # 4) Update Projects lesson with editable memory settings.
+          project_prompt = 'Help me set up a ChatGPT Project for [PROJECT]. Tell me what files to add, what project instructions would be useful, and what should stay out because it is temporary or unrelated.'
+          project_prompt_new = 'Help me set up a ChatGPT Project for [PROJECT]. Tell me what files to add, what project instructions would be useful, whether Default memory or Project-only memory fits best, and what should stay out because it is temporary or unrelated.'
+          s = s.replace(project_prompt, project_prompt_new)
+          project_marker = '''            [
+              "Name it clearly",
+              "Use a specific project name such as “Website Workshop” instead of “Stuff.”",
+            ],'''
+          if project_marker in s and 'Choose the memory boundary' not in s:
+              project_extra = '''            [
+              "Choose the memory boundary",
+              "For eligible unshared projects, open Project settings and choose Default memory or Project-only memory. Project-only memory keeps context inside that project; shared projects remain project-only.",
+            ],
+'''
+              s = s.replace(project_marker, project_marker + '\n' + project_extra, 1)
+
+          # 5) Add new September 2026 lessons before the lessons array closes.
+          if 'id: "temporarychat2026"' not in s:
+              insert_before = s.find('\n      const paths = [')
+              if insert_before == -1:
+                  raise SystemExit('Could not locate const paths after lessons array')
+              close = s.rfind('      ];', 0, insert_before)
+              if close == -1:
+                  raise SystemExit('Could not locate end of lessons array')
+
+              update_lessons = r'''
+        {
+          id: "temporarychat2026",
+          path: "Everyday Tools",
+          level: "Beginner",
+          time: "7 min",
+          title: "Temporary Chat — September 2026 Update",
+          desc: "Use Temporary Chat with more control: start non-personalized, optionally use your existing personalization, and save the conversation later if it becomes useful.",
+          tags: ["temporary chat", "privacy", "memory", "custom instructions", "plugins", "save chat"],
+          note: "Temporary Chat starts non-personalized by default. Personalized Temporary Chats can use existing memories, Custom Instructions, and plugins but do not create new memories while temporary.",
+          steps: [
+            ["Start Temporary Chat", "Open a new chat and choose Temporary before you begin."],
+            ["Choose personalization", "Decide at the start whether the temporary conversation should use your existing memories, Custom Instructions, and plugins. You cannot change this choice after the conversation begins."],
+            ["Know what stays temporary", "Unsaved Temporary Chats do not appear in history and do not create new memories. Account and workspace restrictions still apply."],
+            ["Save it if it becomes useful", "Saving converts the Temporary Chat into a regular chat, after which your normal account personalization and data controls apply."],
+          ],
+          use: "Private brainstorming, one-off questions, testing an idea without adding it to normal chat history, or temporarily avoiding regular personalization.",
+          mistake: "Assuming a personalized Temporary Chat creates new memories — it can reference existing memory but does not create or update memory while it remains temporary.",
+          prompt: "Start this as a temporary conversation. Help me with [TASK] using only the information I provide here unless I explicitly choose personalized Temporary Chat.",
+        },
+        {
+          id: "librarydrive2026",
+          path: "Everyday Tools",
+          level: "Beginner",
+          time: "8 min",
+          title: "Library + Google Drive",
+          desc: "Find and reuse saved files without hunting through old chats, and bring connected Google Drive files or folders into your work without uploading them again.",
+          tags: ["library", "files", "google drive", "folders", "documents", "reuse"],
+          note: "Library availability and Google Drive features depend on plan, platform, rollout, permissions, and workspace settings. Shared Drives are not part of the initial Drive-in-Library experience.",
+          steps: [
+            ["Open Library", "Use Library in the sidebar to browse files uploaded to or created in ChatGPT."],
+            ["Add from Library", "From the composer, choose Add from library and select one or more saved files instead of uploading duplicates."],
+            ["Connect Google Drive", "If available, connect Google Drive so supported Drive files and folders appear in Library alongside ChatGPT files."],
+            ["Work from the source", "Add a Drive file with Library, the composer, or @mentions. Where supported and authorized, ChatGPT can work with the connected source and may update it directly."],
+            ["Use folders for larger work", "Select a supported Drive folder and ask ChatGPT to work across the files it contains."],
+          ],
+          use: "Returning to saved documents, comparing files, working with connected Google Docs/Sheets/Slides, or keeping a reusable resource library.",
+          mistake: "Uploading the same file again and again when it is already in Library or available from a connected Drive account.",
+          prompt: "Use the files I selected from Library for [TASK]. Tell me which file supports each important conclusion and do not invent missing information.",
+        },
+        {
+          id: "voiceprojects2026",
+          path: "Everyday Tools",
+          level: "Intermediate",
+          time: "7 min",
+          title: "Voice + Files + Projects",
+          desc: "Use ChatGPT Voice for more than hands-free conversation: work with files and continue inside a Project using recent project context.",
+          tags: ["voice", "gpt-live", "files", "projects", "dictation"],
+          note: "GPT-Live in ChatGPT Voice supports file uploads and Projects where available. Platform, plan, and workspace controls can affect access.",
+          steps: [
+            ["Start Voice", "Open Voice when speaking is faster or more natural than typing."],
+            ["Bring in a file", "Upload a supported file during a Voice conversation and ask questions about its contents."],
+            ["Use Voice inside a Project", "Open Voice from a Project to continue work with recent project chats, project sources, and project instructions when supported."],
+            ["Switch modes when needed", "Move between voice, dictation, and typing depending on whether you need conversation, precise editing, or a long written prompt."],
+          ],
+          use: "Talking through a document, brainstorming while looking at project files, or continuing an ongoing project without re-explaining all the context.",
+          mistake: "Treating Voice as a separate blank conversation when you could use it inside the Project that already contains the right context.",
+          prompt: "Use the project context and the file I provided. Talk me through [GOAL] step by step, and stop to ask me a question whenever a decision depends on information you do not have.",
+        },
+        {
+          id: "browsertools2026",
+          path: "Everyday Tools",
+          level: "Intermediate",
+          time: "9 min",
+          title: "Built-in Browser + Site Tools",
+          desc: "Understand the difference between normal web help, the desktop built-in browser, and site tools that let ChatGPT work with supported websites directly.",
+          tags: ["browser", "site tools", "webmcp", "work", "desktop", "websites"],
+          note: "The built-in browser is available in supported ChatGPT desktop experiences. Site tools only appear when your account/model supports them and the open website provides a compatible tool.",
+          steps: [
+            ["Use the built-in browser", "In supported desktop Work or Codex experiences, open the browser when a task requires a live webpage, sign-in, multiple tabs, or downloads."],
+            ["Stay in control of access", "Review website permission prompts and confirmation requests before ChatGPT interacts with a signed-in site or takes a consequential action."],
+            ["Recognize site tools", "On supported websites, site tools can expose structured actions for searching, editing, or completing tasks directly on the current page."],
+            ["Know the boundary", "A site tool belongs to the webpage that provides it. If it is unavailable, ChatGPT may still use regular browsing capabilities instead."],
+          ],
+          use: "Working on live websites, navigating multiple tabs, handling signed-in browser tasks, or using a website's supported structured tools.",
+          mistake: "Assuming every website has site tools or that a site tool from one page automatically works on another website.",
+          prompt: "Use the current webpage to help me [GOAL]. Before any consequential action, tell me exactly what will happen and wait for the required confirmation.",
+        },
+        {
+          id: "interactivequizzes2026",
+          path: "Learn & Research",
+          level: "Beginner",
+          time: "5 min",
+          title: "Interactive Quizzes",
+          desc: "Ask ChatGPT to quiz you directly in the conversation so you can practice, answer, and get feedback instead of only reading explanations.",
+          tags: ["quiz", "study", "learning", "practice", "test"],
+          note: "Interactive quizzes are available on supported consumer ChatGPT plans and Edu on web and mobile, subject to rollout and plan availability.",
+          steps: [
+            ["Choose a topic", "Tell ChatGPT exactly what you want to practice and your current skill level."],
+            ["Ask for an interactive quiz", "Request one question at a time or a short set, then answer directly in the conversation."],
+            ["Use feedback", "Ask ChatGPT to explain why an answer is right or wrong and adapt the next questions to your weak spots."],
+          ],
+          use: "Studying a topic, checking understanding after a lesson, practicing terminology, or preparing for a test or certification.",
+          mistake: "Reading the answer key before attempting the question — the value comes from active recall and feedback.",
+          prompt: "Quiz me interactively on [TOPIC] at a [BEGINNER/INTERMEDIATE/ADVANCED] level. Ask one question at a time, wait for my answer, explain it, and adapt the next question to what I need to improve.",
+        },
+        {
+          id: "multigoogle2026",
+          path: "Organize",
+          level: "Intermediate",
+          time: "6 min",
+          title: "Multiple Google Accounts",
+          desc: "Connect more than one supported Google account so ChatGPT can help across personal and work Gmail, Calendar, or Contacts in the same conversation.",
+          tags: ["google", "gmail", "calendar", "contacts", "multiple accounts", "plugins"],
+          note: "Multiple Google account connections are available on supported paid plans and surfaces. Your access is still limited by the permissions of each connected account and workspace policies.",
+          steps: [
+            ["Connect each account", "Use the relevant plugin/app connection flow for Gmail, Google Calendar, or Google Contacts and add the accounts you are authorized to use."],
+            ["Be clear about scope", "When asking ChatGPT to search or plan, specify whether you mean your personal account, business account, or both."],
+            ["Review before acting", "For actions that change data or communicate externally, review the target account, recipients, time, and content before confirming."],
+          ],
+          use: "Comparing personal and work calendars, finding messages across connected inboxes, or resolving contacts without constantly switching accounts.",
+          mistake: "Forgetting which Google account an action will use. Always verify the account before a consequential action.",
+          prompt: "Check both of my connected calendars for [DATE/WINDOW]. Keep personal and business events labeled separately and show me conflicts before suggesting a plan.",
+        },
+        {
+          id: "sitesupdate2026",
+          path: "Create",
+          level: "Intermediate",
+          time: "6 min",
+          title: "ChatGPT Sites — URL + Sharing Update",
+          desc: "Manage a published ChatGPT Site after launch: change its hosted URL where supported and share it with specific outside viewers on eligible workspace plans.",
+          tags: ["sites", "website", "url", "share", "external viewer", "publish"],
+          note: "Changing a ChatGPT-hosted Site URL is available on supported Plus/Pro experiences. Named external viewers are available on eligible Business/Enterprise workspace configurations and permissions.",
+          steps: [
+            ["Change the hosted URL", "For supported Sites, open Site settings and use Change URL. The previous hosted address can redirect to the new one; custom domains are managed separately."],
+            ["Share with a named viewer", "On eligible workspace plans, open Share and invite an outside person by email as a viewer without making the Site public or giving edit access."],
+            ["Review access", "Confirm the intended audience after publishing or changing sharing. Remove external viewers when they no longer need access."],
+          ],
+          use: "Cleaning up a Site address after launch, giving a client or reviewer private view access, or managing who can see a published Site.",
+          mistake: "Assuming external viewer sharing makes someone a workspace member or editor — it is view-only access to that Site.",
+          prompt: "Help me review my ChatGPT Site before I share it. Give me a checklist for URL, mobile readability, links, privacy, audience, and the exact viewer access I intend to grant.",
+        },
+'''
+              s = s[:close] + update_lessons + s[close:]
+
+          # 6) Update feature finder language so plugin terminology appears in search/recommendations.
+          s = s.replace('Projects, Apps, and Work', 'Projects, Plugins, Apps, and Work')
+          s = s.replace('app directory', 'Plugin Directory')
+
+          # 7) Refresh the page metadata/date language where present.
+          s = s.replace('Final build • August 14, 2026', 'Updated • September 2026')
+
+          p.write_text(s, encoding='utf-8')
+          print('September 2026 Learning Hub update applied successfully.')
+          PY
+
+      - name: Sanity check updated HTML
+        run: |
+          grep -q 'SEPTEMBER 2026 CHATGPT UPDATE' index.html
+          grep -q 'temporarychat2026' index.html
+          grep -q 'browsertools2026' index.html
+          grep -q 'Plugin Directory' index.html
+          echo 'Update markers verified.'
+
+      - name: Commit Learning Hub update
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Update Learning Hub for September 2026"
+          git push
