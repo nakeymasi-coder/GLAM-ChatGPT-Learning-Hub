@@ -1,5 +1,5 @@
 // Netlify Function: /.netlify/functions/ask
-// Uses the same protected OPENAI_API_KEY as the Prompt Coach.
+// Protected OpenAI backend used by the Prompt Concierge and other intelligent Hub tools.
 
 const OPENAI_URL = "https://api.openai.com/v1/responses";
 const MODEL = process.env.OPENAI_COACH_MODEL || "gpt-5.6-luna";
@@ -50,6 +50,19 @@ function getOutputText(payload) {
   return "";
 }
 
+function modeInstructions(mode) {
+  if (mode === "prompt_builder") {
+    return `MODE: PROMPT BUILDER\nThe user is giving you rough, everyday-language instructions and wants a professionally rebuilt prompt.\n\nCRITICAL RULES:\n- DO NOT simply repeat, lightly edit, or wrap the user's wording.\n- Infer the real objective, structure the request, resolve obvious ambiguity when possible, and transform it into a substantially stronger copy-ready prompt.\n- Preserve every important fact and constraint the user supplied. Do not invent important facts.\n- Add useful structure, deliverables, quality checks, preservation rules, and output requirements that materially improve the result.\n- If the request depends on current facts, platform behavior, product capabilities, pricing, policies, or other changing information, use web search before finalizing.\n- If a truly blocking detail is missing, make the prompt instruct ChatGPT to ask only the minimum necessary clarifying question(s).\n- copyPrompt must contain the finished rebuilt prompt, not commentary about the prompt.\n- answer should briefly explain what you improved and why.`;
+  }
+  if (mode === "feature_finder") {
+    return `MODE: FEATURE FINDER\nAnalyze the user's actual goal instead of matching keywords. Recommend the simplest ChatGPT feature or workflow that genuinely fits. If current ChatGPT capabilities, plan availability, rollout, or UI behavior matters, use web search before recommending. Give practical steps and a tailored starter prompt. Do not default to generic normal chat unless it is truly the best option.`;
+  }
+  if (mode === "prompt_coach") {
+    return `MODE: PROMPT COACH\nThe user wants a weak or rough request transformed into a stronger prompt. DO NOT merely restate their wording. Diagnose what is missing, preserve their facts and constraints, and rebuild the request into a complete, practical, copy-ready prompt. Add structure only when it helps. If current facts or current product/platform behavior matters, use web search. In answer, briefly explain the main improvements. In copyPrompt, return only the finished improved prompt.`;
+  }
+  return `MODE: PROMPT CONCIERGE\nHelp the learner solve the actual task. Answer factual/how-to questions directly first, then route them to the best feature or lesson when useful. Use web search whenever the answer depends on current, changing, uncertain, or externally verifiable information.`;
+}
+
 exports.handler = async function(event) {
   const headers = corsHeaders();
 
@@ -58,56 +71,37 @@ exports.handler = async function(event) {
   }
 
   if (event.httpMethod !== "POST") {
-    return {
-      statusCode: 405,
-      headers,
-      body: JSON.stringify({ error: "POST only." })
-    };
+    return { statusCode: 405, headers, body: JSON.stringify({ error: "POST only." }) };
   }
 
   if (!process.env.OPENAI_API_KEY) {
-    return {
-      statusCode: 500,
-      headers,
-      body: JSON.stringify({ error: "OPENAI_API_KEY is not configured in Netlify." })
-    };
+    return { statusCode: 500, headers, body: JSON.stringify({ error: "OPENAI_API_KEY is not configured in Netlify." }) };
   }
 
   let body;
   try {
     body = JSON.parse(event.body || "{}");
   } catch {
-    return {
-      statusCode: 400,
-      headers,
-      body: JSON.stringify({ error: "Invalid request." })
-    };
+    return { statusCode: 400, headers, body: JSON.stringify({ error: "Invalid request." }) };
   }
 
   const question = String(body.question || "").trim();
+  const mode = String(body.mode || "concierge").trim().toLowerCase();
   const history = Array.isArray(body.history) ? body.history.slice(-8) : [];
   const catalog = Array.isArray(body.catalog) ? body.catalog.slice(0, 80) : [];
 
   if (!question) {
-    return {
-      statusCode: 400,
-      headers,
-      body: JSON.stringify({ error: "Type a question first." })
-    };
+    return { statusCode: 400, headers, body: JSON.stringify({ error: "Type a question first." }) };
   }
 
-  if (question.length > 5000) {
-    return {
-      statusCode: 413,
-      headers,
-      body: JSON.stringify({ error: "That question is too long." })
-    };
+  if (question.length > 12000) {
+    return { statusCode: 413, headers, body: JSON.stringify({ error: "That request is too long." }) };
   }
 
   const cleanHistory = history
     .map((m) => ({
       role: m && m.role === "assistant" ? "assistant" : "user",
-      content: String((m && m.content) || "").slice(0, 3000)
+      content: String((m && m.content) || "").slice(0, 5000)
     }))
     .filter((m) => m.content.trim());
 
@@ -120,32 +114,7 @@ exports.handler = async function(event) {
     }))
     .filter((item) => item.id && item.title);
 
-  const system = `You are the real-time Ask ChatGPT guide inside the GLAM ChatGPT Learning Hub.
-
-Your job is to help a learner who may not know where to start.
-
-STYLE:
-- Be beginner-friendly, clear, practical, and direct.
-- Never make the user feel stupid for not knowing terminology.
-- Do not expose hidden chain-of-thought.
-- Do not invent product features or claim a ChatGPT capability exists if it is uncertain.
-- When a feature may depend on plan, platform, region, workspace, or rollout, say so briefly.
-
-WHAT TO DO FOR EACH QUESTION:
-1. Identify what the learner is actually trying to accomplish.
-2. Recommend the best ChatGPT feature or workflow for that goal.
-3. Give 2-5 simple next steps.
-4. Give one ready-to-copy prompt tailored to the learner's goal.
-5. Recommend the closest Learning Hub lesson from the catalog below.
-6. End with one useful follow-up question that helps the learner continue.
-
-IMPORTANT:
-- If the user says they do not know where to start, help them narrow the goal before overloading them.
-- If the user asks a normal factual or how-to question, answer it first, then route them to the best feature/lesson if useful.
-- The recommended lessonId and lessonTitle MUST come from the supplied catalog when a suitable match exists. If no suitable lesson exists, return empty strings for both.
-
-LEARNING HUB CATALOG:
-${JSON.stringify(cleanCatalog)}`;
+  const system = `You are the intelligent backend for the GLAM ChatGPT Learning Hub.\n\nSTYLE:\n- Beginner-friendly, clear, practical, direct, and useful.\n- Never patronize the user.\n- Do not expose hidden chain-of-thought.\n- Never invent important facts, capabilities, policies, prices, or platform behavior.\n- Treat the user's everyday wording as source material to understand, not text to echo back.\n- When outside/current information would materially improve accuracy, use the web search tool.\n- Prefer authoritative and primary sources for current product/platform facts.\n- Do not search the web merely to decorate an answer when the task is purely creative or transformation-based.\n\n${modeInstructions(mode)}\n\nGENERAL OUTPUT REQUIREMENTS:\n1. Identify the user's real objective in whatYouNeed.\n2. Give a concise answer that actually helps.\n3. Put the best feature/workflow in bestFeature.\n4. Give 2-6 useful next steps.\n5. Put the strongest copy-ready prompt in copyPrompt when a prompt is useful; otherwise give a practical next-message prompt.\n6. Recommend a Learning Hub lesson only when relevant. lessonId and lessonTitle MUST match the supplied catalog; otherwise return empty strings.\n7. followUp should be one useful next question, or an empty string if no clarification is needed.\n\nLEARNING HUB CATALOG:\n${JSON.stringify(cleanCatalog)}`;
 
   const input = [
     { role: "system", content: system },
@@ -163,7 +132,9 @@ ${JSON.stringify(cleanCatalog)}`;
       body: JSON.stringify({
         model: MODEL,
         input,
-        reasoning: { effort: "low" },
+        tools: [{ type: "web_search" }],
+        tool_choice: "auto",
+        reasoning: { effort: "medium" },
         text: {
           format: {
             type: "json_schema",
@@ -172,7 +143,7 @@ ${JSON.stringify(cleanCatalog)}`;
             schema
           }
         },
-        max_output_tokens: 2200
+        max_output_tokens: 4000
       })
     });
 
@@ -183,33 +154,22 @@ ${JSON.stringify(cleanCatalog)}`;
       return {
         statusCode: response.status >= 500 ? 502 : 500,
         headers,
-        body: JSON.stringify({ error: "The Ask ChatGPT guide could not answer right now." })
+        body: JSON.stringify({ error: "The Learning Hub AI could not answer right now." })
       };
     }
 
     const outputText = getOutputText(payload);
     if (!outputText) {
-      return {
-        statusCode: 502,
-        headers,
-        body: JSON.stringify({ error: "The Ask ChatGPT guide returned an empty response." })
-      };
+      return { statusCode: 502, headers, body: JSON.stringify({ error: "The Learning Hub AI returned an empty response." }) };
     }
 
     return {
       statusCode: 200,
-      headers: {
-        ...headers,
-        "Cache-Control": "no-store"
-      },
+      headers: { ...headers, "Cache-Control": "no-store" },
       body: outputText
     };
   } catch (error) {
     console.error(error);
-    return {
-      statusCode: 500,
-      headers,
-      body: JSON.stringify({ error: "Ask ChatGPT is temporarily unavailable." })
-    };
+    return { statusCode: 500, headers, body: JSON.stringify({ error: "The Learning Hub AI is temporarily unavailable." }) };
   }
 };
