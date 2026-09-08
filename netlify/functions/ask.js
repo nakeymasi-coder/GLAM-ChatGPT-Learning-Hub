@@ -3,14 +3,70 @@
 
 const OPENAI_URL = "https://api.openai.com/v1/responses";
 const MODEL = process.env.OPENAI_COACH_MODEL || "gpt-5.6-luna";
+const APP_ID = "6a9aedd33cd938f0f47b9ff7";
+const BASE44_API = "https://base44.app/api";
+const TERMS_VERSION = "2026-09-07";
+const PRIVACY_VERSION = "2026-09-07";
+const ALLOWED_ORIGINS = new Set([
+  "https://chatgpt-learning-hub.base44.app",
+  "https://app.base44.com",
+  "https://nakeymasi-coder.github.io"
+]);
 
-function corsHeaders() {
-  return {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "Content-Type",
+function corsHeaders(event) {
+  const origin = event?.headers?.origin || event?.headers?.Origin || "";
+  const headers = {
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
+    "Cache-Control": "no-store",
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "no-referrer",
+    "Vary": "Origin"
   };
+  if (ALLOWED_ORIGINS.has(origin)) headers["Access-Control-Allow-Origin"] = origin;
+  return headers;
+}
+
+function getBearer(event) {
+  const value = event?.headers?.authorization || event?.headers?.Authorization || "";
+  return /^Bearer\s+\S+$/i.test(value) ? value : "";
+}
+
+function normalizeRecords(payload) {
+  if (Array.isArray(payload)) return payload;
+  if (Array.isArray(payload?.data)) return payload.data;
+  if (Array.isArray(payload?.items)) return payload.items;
+  if (Array.isArray(payload?.results)) return payload.results;
+  return [];
+}
+
+async function verifyHubAccess(event) {
+  const authorization = getBearer(event);
+  if (!authorization) return { ok: false, status: 401, error: "Authentication required." };
+
+  const me = await fetch(`${BASE44_API}/apps/${APP_ID}/entities/User/me`, {
+    headers: { Authorization: authorization, Accept: "application/json" }
+  });
+  if (!me.ok) return { ok: false, status: 401, error: "Your Hub session is not valid. Please sign in again." };
+
+  const user = await me.json();
+  if (!user?.id) return { ok: false, status: 401, error: "Your Hub session could not be verified." };
+
+  const legal = await fetch(`${BASE44_API}/apps/${APP_ID}/entities/LegalAcceptance?sort=-created_date&limit=50`, {
+    headers: { Authorization: authorization, Accept: "application/json" }
+  });
+  if (!legal.ok) return { ok: false, status: 403, error: "Legal acceptance could not be verified." };
+
+  const records = normalizeRecords(await legal.json());
+  const accepted = records.some((record) => {
+    const terms = record?.terms_version ?? record?.data?.terms_version;
+    const privacy = record?.privacy_version ?? record?.data?.privacy_version;
+    return terms === TERMS_VERSION && privacy === PRIVACY_VERSION;
+  });
+
+  if (!accepted) return { ok: false, status: 403, error: "Please accept the current Terms & Conditions and Privacy Policy before using AI features." };
+  return { ok: true, user };
 }
 
 const schema = {
@@ -25,16 +81,7 @@ const schema = {
     lessonId: { type: "string" },
     followUp: { type: "string" }
   },
-  required: [
-    "answer",
-    "whatYouNeed",
-    "bestFeature",
-    "nextSteps",
-    "copyPrompt",
-    "lessonTitle",
-    "lessonId",
-    "followUp"
-  ],
+  required: ["answer", "whatYouNeed", "bestFeature", "nextSteps", "copyPrompt", "lessonTitle", "lessonId", "followUp"],
   additionalProperties: false
 };
 
@@ -42,9 +89,7 @@ function getOutputText(payload) {
   if (typeof payload.output_text === "string") return payload.output_text;
   for (const item of payload.output || []) {
     for (const content of item.content || []) {
-      if (content.type === "output_text" && typeof content.text === "string") {
-        return content.text;
-      }
+      if (content.type === "output_text" && typeof content.text === "string") return content.text;
     }
   }
   return "";
@@ -64,18 +109,27 @@ function modeInstructions(mode) {
 }
 
 exports.handler = async function(event) {
-  const headers = corsHeaders();
+  const headers = corsHeaders(event);
 
-  if (event.httpMethod === "OPTIONS") {
-    return { statusCode: 204, headers, body: "" };
+  if (event.httpMethod === "OPTIONS") return { statusCode: 204, headers, body: "" };
+  if (event.httpMethod !== "POST") return { statusCode: 405, headers, body: JSON.stringify({ error: "POST only." }) };
+
+  const origin = event?.headers?.origin || event?.headers?.Origin || "";
+  if (origin && !ALLOWED_ORIGINS.has(origin)) {
+    return { statusCode: 403, headers, body: JSON.stringify({ error: "Origin not allowed." }) };
   }
 
-  if (event.httpMethod !== "POST") {
-    return { statusCode: 405, headers, body: JSON.stringify({ error: "POST only." }) };
+  let access;
+  try {
+    access = await verifyHubAccess(event);
+  } catch (error) {
+    console.error("Base44 access verification failed", error);
+    return { statusCode: 503, headers, body: JSON.stringify({ error: "Could not verify Hub access right now." }) };
   }
+  if (!access.ok) return { statusCode: access.status, headers, body: JSON.stringify({ error: access.error }) };
 
   if (!process.env.OPENAI_API_KEY) {
-    return { statusCode: 500, headers, body: JSON.stringify({ error: "OPENAI_API_KEY is not configured in Netlify." }) };
+    return { statusCode: 500, headers, body: JSON.stringify({ error: "AI service is not configured." }) };
   }
 
   let body;
@@ -90,19 +144,11 @@ exports.handler = async function(event) {
   const history = Array.isArray(body.history) ? body.history.slice(-8) : [];
   const catalog = Array.isArray(body.catalog) ? body.catalog.slice(0, 80) : [];
 
-  if (!question) {
-    return { statusCode: 400, headers, body: JSON.stringify({ error: "Type a question first." }) };
-  }
-
-  if (question.length > 12000) {
-    return { statusCode: 413, headers, body: JSON.stringify({ error: "That request is too long." }) };
-  }
+  if (!question) return { statusCode: 400, headers, body: JSON.stringify({ error: "Type a question first." }) };
+  if (question.length > 12000) return { statusCode: 413, headers, body: JSON.stringify({ error: "That request is too long." }) };
 
   const cleanHistory = history
-    .map((m) => ({
-      role: m && m.role === "assistant" ? "assistant" : "user",
-      content: String((m && m.content) || "").slice(0, 5000)
-    }))
+    .map((m) => ({ role: m && m.role === "assistant" ? "assistant" : "user", content: String((m && m.content) || "").slice(0, 5000) }))
     .filter((m) => m.content.trim());
 
   const cleanCatalog = catalog
@@ -125,49 +171,28 @@ exports.handler = async function(event) {
   try {
     const response = await fetch(OPENAI_URL, {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-        "Content-Type": "application/json"
-      },
+      headers: { Authorization: `Bearer ${process.env.OPENAI_API_KEY}`, "Content-Type": "application/json" },
       body: JSON.stringify({
         model: MODEL,
         input,
         tools: [{ type: "web_search" }],
         tool_choice: "auto",
         reasoning: { effort: "medium" },
-        text: {
-          format: {
-            type: "json_schema",
-            name: "learning_hub_answer",
-            strict: true,
-            schema
-          }
-        },
+        text: { format: { type: "json_schema", name: "learning_hub_answer", strict: true, schema } },
         max_output_tokens: 4000
       })
     });
 
     const payload = await response.json();
-
     if (!response.ok) {
       console.error("OpenAI API error:", payload);
-      return {
-        statusCode: response.status >= 500 ? 502 : 500,
-        headers,
-        body: JSON.stringify({ error: "The Learning Hub AI could not answer right now." })
-      };
+      return { statusCode: response.status >= 500 ? 502 : 500, headers, body: JSON.stringify({ error: "The Learning Hub AI could not answer right now." }) };
     }
 
     const outputText = getOutputText(payload);
-    if (!outputText) {
-      return { statusCode: 502, headers, body: JSON.stringify({ error: "The Learning Hub AI returned an empty response." }) };
-    }
+    if (!outputText) return { statusCode: 502, headers, body: JSON.stringify({ error: "The Learning Hub AI returned an empty response." }) };
 
-    return {
-      statusCode: 200,
-      headers: { ...headers, "Cache-Control": "no-store" },
-      body: outputText
-    };
+    return { statusCode: 200, headers, body: outputText };
   } catch (error) {
     console.error(error);
     return { statusCode: 500, headers, body: JSON.stringify({ error: "The Learning Hub AI is temporarily unavailable." }) };
