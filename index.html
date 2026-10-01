@@ -1,6 +1,60 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <script id="hub-continuity-bridge">
+/* Keep the original Netlify customer link usable without moving browser saves. */
+(function () {
+  'use strict';
+  if (location.hostname !== 'chatgpt-learning-hub.netlify.app' ||
+      !['/', '/index.html'].includes(location.pathname)) return;
+
+  var views = ['concierge', 'learn', 'academy', 'create', 'asklibrary', 'finder',
+    'coach', 'characterlab', 'environmentlab', 'typographylab', 'powerwords',
+    'clinic', 'practice', 'scenarios', 'business', 'researchlab', 'glossary',
+    'playbook', 'mystuff', 'history', 'simulator', 'assessment', 'certificate', 'quiz'];
+  var hash = location.hash;
+  var view = hash.indexOf('#/') === 0 ? hash.slice(2) : '';
+  if (hash === '#hub') view = 'academy';
+  if (hash === '#askChatgptHub') view = 'concierge';
+  if (hash.indexOf('#panel-') === 0) view = hash.slice(7);
+  var destination = 'https://chatgpt-learning-hub.com/hub.html' +
+    (views.includes(view) ? '#/' + view : '');
+
+  var savedKeys = ['glamPlaybook', 'glamHubCompleted', 'glamActiveWorkflow',
+    'glamPlaybookNotes', 'glamResearchSession', 'glamResearchLastPrompt',
+    'glamFinalAssessment', 'glamCertificateName'];
+  var keepOldPage = true;
+  try {
+    keepOldPage = savedKeys.some(function (key) { return localStorage.getItem(key) !== null; });
+  } catch (_) {
+    // When browser storage is blocked, keep the old page accessible rather than guessing.
+  }
+
+  if (!keepOldPage) {
+    location.replace(destination);
+    return;
+  }
+
+  function showMoveNotice() {
+    var notice = document.createElement('aside');
+    notice.id = 'hubMoveNotice';
+    notice.setAttribute('aria-label', 'Updated Learning Hub');
+    notice.style.cssText = 'box-sizing:border-box;max-width:1200px;margin:16px auto;padding:20px;border:2px solid #168fea;border-radius:16px;background:#edf7ff;color:#18212b;font-family:Arial,sans-serif;line-height:1.5';
+    var title = document.createElement('strong');
+    title.textContent = 'Your updated Learning Hub is ready';
+    var detail = document.createElement('p');
+    detail.textContent = 'Any older progress and notes saved in this browser are still available on this page. Opening the updated Hub will not move those saves automatically. You can keep using this page to view your older work.';
+    var link = document.createElement('a');
+    link.href = destination;
+    link.textContent = 'Open the updated Learning Hub';
+    link.style.cssText = 'display:inline-block;padding:10px 16px;border-radius:10px;background:#103b63;color:#fff;font-weight:bold;text-decoration:none';
+    notice.append(title, detail, link);
+    document.body.prepend(notice);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', showMoveNotice, { once: true });
+  else showMoveNotice();
+})();
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GLAM ChatGPT Learning Hub</title>
