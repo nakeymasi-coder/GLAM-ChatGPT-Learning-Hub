@@ -8,6 +8,7 @@ const BASE44_API = "https://base44.app/api";
 const TERMS_VERSION = "2026-09-07";
 const PRIVACY_VERSION = "2026-09-07";
 const ALLOWED_ORIGINS = new Set([
+  "https://chatgpt-learning-hub.com",
   "https://chatgpt-learning-hub.base44.app",
   "https://app.base44.com",
   "https://nakeymasi-coder.github.io"
